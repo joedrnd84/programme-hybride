@@ -29,7 +29,8 @@
 html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
 *,*::before,*::after{box-sizing:inherit}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;padding-bottom:96px}
-button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+html,body,button,summary,.card,.tabs,.days{touch-action:manipulation}
 button:focus-visible{outline:3px solid var(--lift);outline-offset:2px}
 .wrap{max-width:560px;margin:0 auto;padding:0 16px}
 
@@ -180,70 +181,212 @@ const rnd=(x,s)=>parseFloat((Math.round(x/s)*s).toFixed(1));
 const half=x=>Math.round(x*2)/2;
 
 /* ---------- séances de muscu ---------- */
-const LIFT={
-0:{title:'Haut du corps : force et pecs',goal:'Pousser lourd, tirer propre, dessiner les pecs.',dur:'65 min',
- warm:['5 min de rameur ou de vélo, facile','2 × 10 rotations d’épaules à l’élastique','Approche au développé couché : barre vide ×10, 50 % ×6, 70 % ×3'],
- ex:[
- {id:'bench',name:'Développé couché barre',ref:65,step:2.5,unit:'bar',sets:[3,4,4],reps:['10','6–8','5–6'],rest:150,cue:'Omoplates serrées et basses, pieds ancrés. Descente en 3 s, puis pousse en pensant « rapprocher les coudes ». Les bras suivent, les pecs mènent.'},
- {id:'pullup',name:'Tractions pronation',kind:'bw',sets:[3,4,4],reps:['5–8','6–10','6–10'],rest:120,cue:'Pars en abaissant les omoplates, coudes vers les poches. Pas d’élan. Trop dur ? Élastique ou tirage vertical. Lestage dès 4 × 10 propres.'},
- {id:'incdb',name:'Développé incliné haltères',ref:22,step:2,unit:'db',sets:[3,3,3],reps:['10–12','8–10','8–10'],rest:90,cue:'Banc à 30°, coudes à 45°. Serre les pecs en haut sans verrouiller les coudes.'},
- {id:'row',name:'Rowing buste penché',ref:55,step:2.5,unit:'bar',sets:[3,3,3],reps:['10–12','8–10','8–10'],rest:90,cue:'Tire avec les coudes vers les hanches, pas avec les mains. Sangles autorisées : l’avant-bras ne doit pas lâcher avant le dos.'},
- {id:'fly',name:'Écarté poulie vis-à-vis',ref:10,step:2.5,unit:'cable',sets:[2,3,3],reps:['12–15','12–15','12–15'],rest:60,note:'par côté',cue:'Bras légèrement fléchis et figés. Serre la poitrine comme pour presser un ballon.'},
- {id:'legraise',name:'Relevés de jambes suspendu',kind:'bw',sets:[3,3,3],reps:['8–10','10–12','10–15'],rest:60,cue:'Enroule le bassin vers les côtes. Pas de balancier. C’est ton bas du ventre qui travaille.'}
- ]},
-2:{title:'Jambes : force et explosivité',goal:'Jambes puissantes, tendons costauds, saut propre.',dur:'65 min',
- warm:['5 min de vélo, facile','Mobilité chevilles et hanches : 2 × 8 de chaque côté','Squat goblet léger 2 × 8','Approche au squat : barre vide ×8, 50 % ×5, 70 % ×3'],
- ex:[
- {id:'box',name:'Sauts sur box',kind:'plio',sets:[3,4,4],reps:['5','5','4'],rest:90,cue:'Frais, avant tout le reste. Réception silencieuse, genoux dans l’axe. Redescends en marchant.'},
- {id:'squat',name:'Squat barre',ref:75,step:2.5,unit:'bar',sets:[3,4,4],reps:['10','6–8','5–6'],rest:180,cue:'Descente en 2–3 s, cuisses sous le parallèle, genoux dans l’axe des pieds. Gainage serré.'},
- {id:'rdl',name:'Soulevé de terre roumain',ref:70,step:2.5,unit:'bar',sets:[3,3,3],reps:['10','8–10','8'],rest:120,cue:'Hanches en arrière, barre collée aux jambes, dos neutre. Tu sens les ischios s’étirer.'},
- {id:'bulg',name:'Fentes bulgares haltères',ref:14,step:2,unit:'db',sets:[2,3,3],reps:['8','8–10','8–10'],rest:90,note:'par jambe',cue:'Buste légèrement penché, genou avant stable. Descends lentement.'},
- {id:'calf',name:'Mollets debout, tempo lent',ref:20,step:2,unit:'db',sets:[3,4,4],reps:['15','12–15','12–15'],rest:60,cue:'3 s en montant, 1 s en haut, 3 s en descendant. C’est ton assurance tendons d’Achille.'},
- {id:'plank',name:'Planche',kind:'bw',sets:[3,3,3],reps:['40 s','45 s','60 s'],rest:45,cue:'Fesses serrées, côtes rentrées. Si le bas du dos creuse, arrête la série.'}
- ]},
-4:{title:'Hybride : explosivité et volume',goal:'Pousser vite, tirer, tenir sur une jambe, finir en résistance.',dur:'70 min',
- warm:['5 min de rameur','10 genoux hauts, 10 talons-fesses, 5 pompes lentes','1 série d’approche à chaque mouvement'],
- ex:[
- {id:'plyopush',name:'Pompes pliométriques',kind:'plio',sets:[3,3,3],reps:['5','6','6'],rest:90,cue:'Mains qui décollent. Si tu ne peux pas, pompes explosives sur les genoux.'},
- {id:'swing',name:'Swing kettlebell',ref:20,step:4,unit:'kb',sets:[3,4,4],reps:['12','15','15'],rest:75,cue:'Le mouvement vient des hanches, pas des bras. Le poids flotte à hauteur de poitrine.'},
- {id:'dips',name:'Dips buste penché',kind:'bw',sets:[3,3,4],reps:['5–8','6–10','8–10'],rest:120,cue:'Penche-toi en avant, coudes un peu écartés. Descends jusqu’à sentir l’étirement des pecs.'},
- {id:'crow',name:'Tirage horizontal poulie',ref:50,step:2.5,unit:'cable',sets:[3,3,3],reps:['12','10–12','10–12'],rest:90,cue:'Poitrine sortie, tire vers le nombril. Pause 1 s coudes en arrière.'},
- {id:'ohp',name:'Développé militaire haltères assis',ref:18,step:2,unit:'db',sets:[3,3,3],reps:['10','8–10','8–10'],rest:90,cue:'Pense épaules et haut des pecs. Gaine les abdos, ne cambre pas.'},
- {id:'stepup',name:'Step-ups haltères',ref:14,step:2,unit:'db',sets:[2,3,3],reps:['10','10','10'],rest:75,note:'par jambe',cue:'Box à hauteur de genou. Pousse avec la jambe du haut, pas d’élan avec l’autre.'},
- {id:'wheel',name:'Roue abdominale',kind:'bw',sets:[3,3,3],reps:['6–8','8–10','10–12'],rest:45,cue:'Genoux au sol. Bassin enroulé, amplitude contrôlée. Remplace par planche latérale 30 s si le dos tire.'},
- {id:'circuit',name:'Circuit résistance',kind:'bw',rounds:true,sets:[0,3,3],reps:['','15 pompes, 20 squats, planche 30 s','15 pompes, 20 squats, planche 30 s'],rest:60,cue:'Enchaîne sans pause, 1 min de repos entre les tours. Tu finis cuit, c’est voulu.'}
- ]}
+const LIB={
+bench:{n:'Développé couché barre',ref:65,step:2.5,unit:'bar',sets:[3,4,4],reps:['10','6–8','5–6'],rest:150,cue:'Omoplates serrées et basses, pieds ancrés. Descente en 3 s, puis pousse en pensant « rapprocher les coudes ». Les bras suivent, les pecs mènent.'},
+incbar:{n:'Développé incliné barre',ref:50,step:2.5,unit:'bar',sets:[3,3,3],reps:['10','8–10','6–8'],rest:120,cue:'Banc à 30°, barre vers le haut des pecs. Descente en 3 s, coudes à 45°.'},
+incdb:{n:'Développé incliné haltères',ref:22,step:2,unit:'db',sets:[3,3,3],reps:['10–12','8–10','8–10'],rest:90,cue:'Banc à 30°, coudes à 45°. Serre les pecs en haut sans verrouiller les coudes.'},
+benchdb:{n:'Développé couché haltères',ref:24,step:2,unit:'db',sets:[3,3,4],reps:['10–12','8–10','8–10'],rest:120,cue:'Amplitude maxi, étire les pecs en bas. Les haltères se rejoignent sans se toucher.'},
+floorpress:{n:'Développé au sol haltères',ref:22,step:2,unit:'db',sets:[3,3,3],reps:['10–12','10','8–10'],rest:90,cue:'Coudes à 45°, pause 1 s coudes au sol. Zéro élan, poitrine sortie.'},
+cablepress:{n:'Développé poulie vis-à-vis',ref:12,step:2.5,unit:'cable',sets:[3,3,3],reps:['12','12','10–12'],rest:75,note:'par main',cue:'Debout, un pas devant l’autre. Pousse en serrant les pecs, bras en arc.'},
+pushup:{n:'Pompes lentes',kind:'bw',sets:[3,3,4],reps:['8–12','12–15','15–20'],rest:75,cue:'Descente en 3 s, corps gainé comme une planche, poitrine au sol. Pense pecs.'},
+pushupfeet:{n:'Pompes pieds surélevés',kind:'bw',sets:[3,3,3],reps:['8–10','10–12','12–15'],rest:75,cue:'Pieds sur un banc : tu charges le haut des pecs. Gainage serré.'},
+fly:{n:'Écarté poulie vis-à-vis',ref:10,step:2.5,unit:'cable',sets:[2,3,3],reps:['12–15','12–15','12–15'],rest:60,note:'par côté',cue:'Bras légèrement fléchis et figés. Serre la poitrine comme pour presser un ballon.'},
+lowfly:{n:'Écarté poulie basse',ref:8,step:2.5,unit:'cable',sets:[2,3,3],reps:['12–15','12–15','12'],rest:60,note:'par côté',cue:'Pars du bas, remonte vers le menton. Tu viens chercher le haut des pecs.'},
+pecdeck:{n:'Pec deck',ref:40,step:5,unit:'mach',sets:[2,3,3],reps:['12–15','12','10–12'],rest:60,cue:'Dos plaqué, coudes à hauteur de poitrine. Pause 1 s en serrant.'},
+flydb:{n:'Écarté incliné haltères',ref:12,step:2,unit:'db',sets:[2,3,3],reps:['12–15','10–12','10–12'],rest:75,cue:'Banc à 30°, coudes légèrement fléchis. Étire sans forcer en bas.'},
+pullup:{n:'Tractions pronation',kind:'bw',sets:[3,4,4],reps:['5–8','6–10','6–10'],rest:120,cue:'Pars en abaissant les omoplates, coudes vers les poches. Pas d’élan. Trop dur ? Élastique ou tirage vertical.'},
+pullneutral:{n:'Tractions prise neutre',kind:'bw',sets:[3,4,4],reps:['5–8','6–10','6–10'],rest:120,cue:'Paumes face à face. Poitrine vers la barre, coudes vers les hanches.'},
+row:{n:'Rowing buste penché',ref:55,step:2.5,unit:'bar',sets:[3,3,3],reps:['10–12','8–10','8–10'],rest:90,cue:'Tire avec les coudes vers les hanches, pas avec les mains. Sangles autorisées : l’avant-bras ne doit pas lâcher avant le dos.'},
+dbrow:{n:'Rowing haltère unilatéral',ref:26,step:2,unit:'one',sets:[3,3,3],reps:['10–12','8–10','8–10'],rest:90,note:'par bras',cue:'Main sur un banc, tire le coude vers la hanche. L’omoplate glisse, le buste ne tourne pas.'},
+chestrow:{n:'Rowing poitrine appuyée',ref:20,step:2,unit:'db',sets:[3,3,3],reps:['12','10–12','10'],rest:90,cue:'Poitrine sur un banc incliné : zéro triche. Serre les omoplates en haut 1 s.'},
+lat:{n:'Tirage vertical prise large',ref:50,step:2.5,unit:'cable',sets:[3,3,3],reps:['12','10–12','8–10'],rest:90,cue:'Tire la barre vers le haut de la poitrine, coudes vers le sol. Épaules basses.'},
+crow:{n:'Tirage horizontal poulie',ref:50,step:2.5,unit:'cable',sets:[3,3,3],reps:['12','10–12','10–12'],rest:90,cue:'Poitrine sortie, tire vers le nombril. Pause 1 s coudes en arrière.'},
+straightarm:{n:'Pull-over poulie bras tendus',ref:20,step:2.5,unit:'cable',sets:[2,3,3],reps:['12–15','12','12'],rest:60,cue:'Bras presque tendus, tire vers les cuisses avec les dorsaux. Ventre gainé.'},
+facepull:{n:'Face pull',ref:18,step:2.5,unit:'cable',sets:[3,3,3],reps:['15','12–15','12–15'],rest:60,cue:'Corde au niveau du visage, tire vers le front, coudes hauts. Posture et épaules.'},
+revfly:{n:'Oiseau haltères',ref:8,step:2,unit:'db',sets:[2,3,3],reps:['15','12–15','12–15'],rest:60,cue:'Buste penché, ouvre les bras comme des ailes. Léger et propre.'},
+squat:{n:'Squat barre',ref:75,step:2.5,unit:'bar',sets:[3,4,4],reps:['10','6–8','5–6'],rest:180,cue:'Descente en 2–3 s, cuisses sous le parallèle, genoux dans l’axe des pieds. Gainage serré.'},
+bulg:{n:'Fentes bulgares haltères',ref:14,step:2,unit:'db',sets:[2,3,3],reps:['8','8–10','8–10'],rest:90,note:'par jambe',cue:'Buste légèrement penché, genou avant stable. Descends lentement.'},
+stepup:{n:'Step-ups haltères',ref:14,step:2,unit:'db',sets:[2,3,3],reps:['10','10','10'],rest:75,note:'par jambe',cue:'Box à hauteur de genou. Pousse avec la jambe du haut, pas d’élan avec l’autre.'},
+lungewalk:{n:'Fentes marchées haltères',ref:14,step:2,unit:'db',sets:[2,3,3],reps:['10','10','12'],rest:90,note:'par jambe',cue:'Grands pas, genou avant stable, buste droit. Tu imites la foulée.'},
+goblet:{n:'Squat goblet tempo',ref:24,step:2,unit:'one',sets:[3,3,3],reps:['10','10','8'],rest:75,cue:'3 s en descente, pause 1 s en bas, haltère contre la poitrine.'},
+rdl:{n:'Soulevé de terre roumain',ref:70,step:2.5,unit:'bar',sets:[3,3,3],reps:['10','8–10','8'],rest:120,cue:'Hanches en arrière, barre collée aux jambes, dos neutre. Tu sens les ischios s’étirer.'},
+hipthrust:{n:'Hip thrust barre',ref:80,step:2.5,unit:'bar',sets:[3,3,4],reps:['12','10','8–10'],rest:90,cue:'Dos sur un banc, menton rentré. Monte les hanches, serre les fessiers 1 s en haut.'},
+deadlift:{n:'Soulevé de terre',ref:90,step:2.5,unit:'bar',sets:[3,3,3],reps:['8','5','3–5'],rest:180,cue:'Barre collée aux jambes, dos plat. Pousse le sol, hanches et épaules montent ensemble.'},
+sldl:{n:'Soulevé de terre unilatéral',ref:14,step:2,unit:'db',sets:[2,3,3],reps:['8','8','8'],rest:75,note:'par jambe',cue:'Hanche en arrière, jambe libre tendue derrière. Équilibre = stabilité en course.'},
+nordic:{n:'Nordic curl (négatif)',kind:'bw',sets:[2,3,3],reps:['4','5','6'],rest:90,cue:'Genoux calés, descends le plus lentement possible, rattrape-toi avec les mains. Ischios et tendons.'},
+calf:{n:'Mollets debout, tempo lent',ref:20,step:2,unit:'db',sets:[3,4,4],reps:['15','12–15','12–15'],rest:60,cue:'3 s en montant, 1 s en haut, 3 s en descendant. C’est ton assurance tendons d’Achille.'},
+calfsit:{n:'Mollets assis (soléaire)',ref:30,step:2.5,unit:'one',sets:[3,3,4],reps:['15','12–15','12–15'],rest:60,cue:'Charge sur les genoux, 3 s en montant et 3 s en descendant. Le soléaire est le moteur de ta foulée.'},
+calfsl:{n:'Mollets unilatéraux',kind:'bw',sets:[2,3,3],reps:['10','12','12'],rest:60,note:'par jambe',cue:'Une jambe, main au mur. Amplitude complète, tempo lent.'},
+calfiso:{n:'Isométrique mollets (Achille)',kind:'time',sets:[3,3,3],reps:['30 s','40 s','45 s'],rest:45,cue:'Monte sur la pointe des pieds et tiens la position haute, mollets contractés. L’isométrie renforce les tendons.'},
+tib:{n:'Relevés de pointes (tibial)',kind:'bw',sets:[2,3,3],reps:['15','15','20'],rest:45,cue:'Dos au mur, talons à 30 cm. Relève les orteils. Ça protège tes tibias en course.'},
+copen:{n:'Copenhagen plank',kind:'time',sets:[2,3,3],reps:['15 s','20 s','25 s'],rest:45,note:'par côté',cue:'Jambe du haut sur un banc, hanche haute. Adducteurs et bassin stables.'},
+abduct:{n:'Marche latérale élastique',kind:'bw',sets:[2,3,3],reps:['12 pas','15 pas','15 pas'],rest:45,note:'par côté',cue:'Élastique aux genoux, bassin bas. Moyens fessiers : des hanches stables en course.'},
+glutebridge:{n:'Pont fessier unilatéral',kind:'bw',sets:[2,3,3],reps:['10','12','12'],rest:45,note:'par jambe',cue:'Pied à plat, bassin à l’horizontale. Fessiers et ischios, bassin qui ne tombe pas.'},
+airplane:{n:'Avion unipodal',kind:'bw',sets:[2,3,3],reps:['6','8','8'],rest:45,note:'par jambe',cue:'Sur une jambe, buste à l’horizontale, bras en croix. Hanche stable, bassin horizontal.'},
+balance:{n:'Équilibre unipodal instable',kind:'time',sets:[2,3,3],reps:['30 s','40 s','45 s'],rest:30,note:'par jambe',cue:'Sur un coussin ou un bosu, genou souple. Les chevilles apprennent à stabiliser.'},
+boxjump:{n:'Sauts sur box',kind:'plio',sets:[3,4,4],reps:['5','5','4'],rest:90,cue:'Frais, avant tout le reste. Réception silencieuse, genoux dans l’axe. Redescends en marchant.'},
+squatjump:{n:'Squat jump',kind:'plio',sets:[3,4,4],reps:['5','5','6'],rest:90,cue:'Quart de squat, saute le plus haut possible. Réception souple et silencieuse.'},
+splitjump:{n:'Fentes sautées',kind:'plio',sets:[3,3,3],reps:['6','8','8'],rest:90,note:'par jambe',cue:'Alterne les jambes en l’air. Réception contrôlée, buste droit.'},
+hurdle:{n:'Sauts de haies enchaînés',kind:'plio',sets:[3,3,4],reps:['4','5','6'],rest:90,note:'haies de 30–40 cm',cue:'Pieds joints, rebondis vite entre les haies. Pas de pause entre deux sauts.'},
+depth:{n:'Saut en contrebas puis rebond',kind:'plio',sets:[3,3,3],reps:['4','4','5'],rest:120,cue:'Descends d’un box bas (30 cm), rebondis tout de suite. Contact au sol très bref.'},
+pogo:{n:'Rebonds sur place (pogo)',kind:'plio',sets:[3,3,4],reps:['20','25','30'],rest:60,cue:'Chevilles raides, contacts très courts, genoux presque tendus. Tendons réactifs.'},
+skater:{n:'Bonds latéraux (skater)',kind:'plio',sets:[3,3,3],reps:['6','8','8'],rest:60,note:'par côté',cue:'Pousse sur une jambe, atterris sur l’autre, stabilise 1 s. Hanches et genoux solides.'},
+rope:{n:'Corde à sauter',kind:'time',sets:[3,3,3],reps:['1 min','1 min','90 s'],rest:45,cue:'Petits sauts sur l’avant-pied, poignets seuls. Échauffe mollets et tendons.'},
+broad:{n:'Sauts en longueur',kind:'plio',sets:[3,3,4],reps:['4','5','5'],rest:90,cue:'Saute le plus loin possible, réception stable 2 s, reviens en marchant.'},
+bounds:{n:'Foulées bondissantes',kind:'plio',sets:[3,3,3],reps:['20 m','25 m','30 m'],rest:90,cue:'Grandes foulées, genou haut, longue phase aérienne. La course, en plus explosif.'},
+swing:{n:'Swing kettlebell',ref:20,step:4,unit:'kb',sets:[3,4,4],reps:['12','15','15'],rest:75,cue:'Le mouvement vient des hanches, pas des bras. Le poids flotte à hauteur de poitrine.'},
+plyopush:{n:'Pompes pliométriques',kind:'plio',sets:[3,3,3],reps:['5','6','6'],rest:90,cue:'Les mains décollent. Si tu ne peux pas, pompes explosives sur les genoux.'},
+burpee:{n:'Burpees',kind:'bw',sets:[3,3,4],reps:['8','10','12'],rest:75,cue:'Rythme régulier, poitrine au sol, saut léger. Ton cardio et ta résistance.'},
+mbslam:{n:'Slams au sol (ballon lesté)',ref:6,step:2,unit:'one',sets:[3,3,3],reps:['10','10','12'],rest:60,cue:'Monte le ballon, claque-le au sol avec tout le corps. Explosivité et gainage.'},
+legraise:{n:'Relevés de jambes suspendu',kind:'bw',sets:[3,3,4],reps:['8–10','10–12','10–15'],rest:60,cue:'Enroule le bassin vers les côtes. Pas de balancier. C’est ton bas du ventre qui travaille.'},
+kneeraise:{n:'Relevés de genoux suspendu',kind:'bw',sets:[3,3,3],reps:['10–12','12–15','12–15'],rest:60,cue:'Enroule le bassin, genoux vers la poitrine. Descends lentement, sans balancier.'},
+vup:{n:'V-ups',kind:'bw',sets:[3,3,3],reps:['8','10','12'],rest:45,cue:'Mains et pieds se rejoignent en haut. Reste contrôlé, pas de rebond au sol.'},
+cablecrunch:{n:'Crunch poulie haute',ref:30,step:2.5,unit:'cable',sets:[3,3,3],reps:['12–15','12','10–12'],rest:60,cue:'À genoux, arrondis le dos en rapprochant les côtes du bassin. Les hanches ne bougent pas.'},
+revcrunch:{n:'Crunch inversé',kind:'bw',sets:[3,3,3],reps:['12','15','15–20'],rest:45,cue:'Allongé, relève le bassin en enroulant. Tu enroules, tu ne balances pas.'},
+wheel:{n:'Roue abdominale',kind:'bw',sets:[3,3,3],reps:['6–8','8–10','10–12'],rest:45,cue:'Genoux au sol. Bassin enroulé, amplitude contrôlée. Remplace par une planche si le dos tire.'},
+plank:{n:'Planche',kind:'time',sets:[3,3,3],reps:['40 s','45 s','60 s'],rest:45,cue:'Fesses serrées, côtes rentrées. Si le bas du dos creuse, arrête la série.'},
+deadbug:{n:'Dead bug',kind:'bw',sets:[3,3,3],reps:['8','10','12'],rest:45,note:'par côté',cue:'Lombaires plaquées au sol, bras et jambe opposés s’allongent lentement. Respire.'},
+hollow:{n:'Hollow hold',kind:'time',sets:[3,3,3],reps:['20 s','30 s','40 s'],rest:45,cue:'Lombaires collées au sol, bras et jambes tendus. Plus c’est bas, plus c’est dur.'},
+bodysaw:{n:'Planche dynamique (body saw)',kind:'bw',sets:[3,3,3],reps:['8','10','12'],rest:45,cue:'En planche sur les avant-bras, avance et recule le corps de 10 cm. Gainage maxi.'},
+pallof:{n:'Pallof press',ref:10,step:2.5,unit:'cable',sets:[3,3,3],reps:['10','10','12'],rest:45,note:'par côté',cue:'De profil à la poulie, pousse les mains devant toi sans te laisser tourner.'},
+woodchop:{n:'Bûcheron à la poulie',ref:12,step:2.5,unit:'cable',sets:[3,3,3],reps:['10','12','12'],rest:45,note:'par côté',cue:'Tire en diagonale, rotation du buste et des hanches. Les obliques travaillent, pas les bras.'},
+sideplank:{n:'Planche latérale',kind:'time',sets:[3,3,3],reps:['25 s','30 s','40 s'],rest:45,note:'par côté',cue:'Corps aligné, hanche haute. Coude sous l’épaule.'},
+russian:{n:'Russian twist',ref:8,step:2,unit:'one',sets:[3,3,3],reps:['12','16','20'],rest:45,cue:'Pieds décollés, buste incliné, tourne les épaules (pas les bras). Avec un disque ou une haltère.'},
+bicycle:{n:'Crunch vélo',kind:'bw',sets:[3,3,3],reps:['16','20','24'],rest:45,cue:'Coude vers le genou opposé, lentement. Épaules décollées en continu.'},
+climber:{n:'Mountain climbers',kind:'time',sets:[3,3,3],reps:['30 s','40 s','45 s'],rest:45,cue:'Position de pompe, genoux vers la poitrine, rythme rapide. Bassin bas.'},
+farmer:{n:'Marche du fermier',ref:24,step:2,unit:'db',sets:[3,3,3],reps:['30 m','40 m','40 m'],rest:60,cue:'Épaules basses, buste droit, pas courts. Gainage et solidité.'},
+suitcase:{n:'Marche valise',ref:20,step:2,unit:'one',sets:[3,3,3],reps:['25 m','30 m','30 m'],rest:60,note:'par côté',cue:'Une seule charge : résiste à l’inclinaison. Obliques en feu.'},
+taps:{n:'Planche avec taps d’épaules',kind:'bw',sets:[3,3,3],reps:['12','16','20'],rest:45,cue:'Bassin immobile, tape l’épaule opposée. Anti-rotation.'}
 };
+Object.keys(LIB).forEach(function(k){LIB[k].id=k;LIB[k].name=LIB[k].n});
+const UNITLAB={db:'par haltère',cable:'sur la poulie',kb:'kettlebell',one:'une seule charge',mach:'sur la machine',bar:'barre incluse'};
+const PLIO_V=[['boxjump',0],['squatjump',0],['splitjump',1],['hurdle',1],['depth',2]];
+const PLIO_H=[['pogo',0],['skater',0],['rope',0],['broad',1],['bounds',1]];
+const poolAt=function(list,b){return list.filter(function(x){return x[1]<=b}).map(function(x){return x[0]})};
+const P={
+  push:['bench','incdb','incbar','benchdb','floorpress'],
+  pull:['pullup','row','pullneutral','lat','dbrow','chestrow'],
+  pec:['fly','lowfly','pecdeck','flydb'],
+  back:['straightarm','facepull','revfly','crow'],
+  pushC:['pushupfeet','cablepress','floorpress','pushup','incdb','pecdeck'],
+  pullC:['crow','dbrow','chestrow','lat'],
+  legQ:['squat','bulg','stepup','lungewalk','goblet'],
+  legP:['rdl','hipthrust','deadlift','sldl','nordic'],
+  acc1:['calf','calfsit','calfsl','calfiso'],
+  acc2:['tib','copen','abduct','glutebridge','airplane','balance'],
+  power:['swing','plyopush','burpee','mbslam'],
+  flex:['legraise','kneeraise','vup','cablecrunch','revcrunch'],
+  anti:['wheel','plank','deadbug','hollow','bodysaw'],
+  rot:['pallof','woodchop','sideplank','russian','bicycle'],
+  dyn:['climber','farmer','suitcase','taps']
+};
+const GYM={
+  0:{title:'Pecs, dos et abdos',dur:'55 min',warm:['5 min de rameur ou de vélo, facile','2 × 10 rotations d’épaules à l’élastique','Approches sur le 1er exercice : barre vide ×10, 50 % ×6, 70 % ×3']},
+  2:{title:'Jambes : pliométrie et force spé course',dur:'70 min',warm:['5 min de vélo, facile','Mobilité chevilles et hanches : 2 × 8 de chaque côté','30 s de planche, 10 ponts fessiers','Avant la pliométrie : 2 sauts légers pour réveiller les tendons']},
+  4:{title:'Abdos à fond et hybride',dur:'60 min',warm:['5 min de rameur','10 genoux hauts, 10 talons-fesses, 5 pompes lentes','5 respirations abdominales, côtes basses rentrées']}
+};
+const LIFT=GYM;
+function gymSession(d,w){
+  var b=blockOf(w),used={},ids=[];
+  function take(pool,o,s){
+    for(var k=0;k<pool.length;k++){
+      var id=pool[((w-1)*s+o+k)%pool.length];
+      if(!used[id]){used[id]=1;ids.push(id);return}
+    }
+  }
+  var pick;
+  if(d===0){take(P.push,0,2);take(P.pull,1,1);take(P.pec,0,1);take(P.back,2,1);take(P.flex,1,2);take(P.anti,0,1);pick=[0,1,4]}
+  else if(d===2){take(poolAt(PLIO_V,b),0,1);take(poolAt(PLIO_H,b),1,1);take(P.legQ,0,2);take(P.legP,1,2);take(P.acc1,0,1);take(P.acc2,2,1);take(P.rot,3,2);pick=[0,2,3]}
+  else {take(P.power,0,1);take(P.pushC,1,1);take(P.pullC,0,1);take(P.flex,3,2);take(P.anti,2,2);take(P.rot,1,2);take(P.dyn,0,1);take(P.flex,0,3);pick=[0,3,4]}
+  var focus=pick.map(function(i){var n=LIB[ids[i]].name;return n.charAt(0).toLowerCase()+n.slice(1)}).join(', ');
+  var g=GYM[d];
+  return {title:g.title,dur:g.dur,warm:g.warm,focus:focus,goal:'Au programme : '+focus+'.',ex:ids.map(function(id){return LIB[id]})};
+}
 
 /* ---------- séances de course ---------- */
+const RUNQ=[
+ [
+  {t:'Fractionné court',m:['6 × 1 min rapide, 1 min 30 de trot','4 × 1 min rapide, 1 min 30 de trot'],km:[5,4],d:['35 min','30 min']},
+  {t:'Fartlek doux',m:['6 accélérations de 30 s quand tu veux, 2 min de footing entre chaque','4 accélérations de 30 s, 2 min de footing entre chaque'],km:[5,4],d:['35 min','30 min']},
+  {t:'Tempo court',m:['2 × 6 min soutenu (une phrase à la fois), 2 min de trot','2 × 4 min soutenu, 2 min de trot'],km:[5,4],d:['35 min','30 min']},
+  {t:'Foulées et lignes droites',m:['25 min de footing, puis 6 × 100 m progressives, retour en marchant','20 min de footing, puis 4 × 100 m progressives'],km:[5,4],d:['35 min','30 min']}
+ ],
+ [
+  {t:'Fractionné 400 m',m:['8 × 400 m rapide (allure 5 km), 200 m de trot','5 × 400 m rapide, 200 m de trot'],km:[7,5],d:['45 min','40 min']},
+  {t:'Côtes 45 s',m:['8 côtes de 45 s (pente 6–8 %), redescente en marchant','5 côtes de 45 s, redescente en marchant'],km:[6,5],d:['45 min','40 min']},
+  {t:'Seuil 3 × 8 min',m:['3 × 8 min allure semi (quelques mots possibles), 2 min de trot','2 × 8 min allure semi, 2 min de trot'],km:[8,6],d:['50 min','40 min']},
+  {t:'Pyramide',m:['200-400-600-800-600-400-200 m rapides, récup en trot égale à l’effort','200-400-600-400-200 m rapides, récup en trot égale'],km:[7,5],d:['45 min','40 min']},
+  {t:'Fartlek 10 × 1 min',m:['10 × 1 min vite, 1 min lent','6 × 1 min vite, 1 min lent'],km:[7,5],d:['45 min','35 min']},
+  {t:'4 × 1 000 m allure 10 km',m:['4 × 1 000 m allure 10 km, 2 min de trot','3 × 1 000 m allure 10 km, 2 min de trot'],km:[8,6],d:['50 min','40 min']}
+ ],
+ [
+  {t:'5 × 1 000 m allure 10 km',m:['5 × 1 000 m allure 10 km, 2 min de trot','3 × 1 000 m allure 10 km, 2 min de trot'],km:[9,6],d:['55 min','40 min']},
+  {t:'3 × 2 000 m allure semi',m:['3 × 2 000 m allure semi, 3 min de trot','2 × 2 000 m allure semi, 3 min de trot'],km:[11,7],d:['60 min','45 min']},
+  {t:'Seuil 2 × 15 min',m:['2 × 15 min allure semi, 3 min de trot','2 × 8 min allure semi, 3 min de trot'],km:[10,7],d:['55 min','45 min']},
+  {t:'Pyramide longue',m:['800-1 200-1 600-1 200-800 m allure 10 km, 2 min de trot','800-1 200-800 m allure 10 km, 2 min de trot'],km:[10,7],d:['60 min','45 min']},
+  {t:'Côtes longues',m:['6 côtes de 2 min (pente 4–6 %), redescente en trottant','4 côtes de 2 min, redescente en trottant'],km:[8,6],d:['50 min','40 min']},
+  {t:'Tempo continu 25 min',m:['25 min à allure semi, bien régulier','15 min à allure semi, bien régulier'],km:[10,7],d:['55 min','45 min']},
+  {t:'6 × 800 m allure 10 km',m:['6 × 800 m allure 10 km, 400 m de trot','4 × 800 m allure 10 km, 400 m de trot'],km:[8,6],d:['50 min','40 min']}
+ ]
+];
+const THU=[
+  {title:'Footing et lignes droites',h:'Lignes droites',t:'4 × 80 m progressives, 1 min de marche entre chaque.'},
+  {title:'Footing et éducatifs',h:'Éducatifs',t:'Montées de genoux, talons-fesses, pas chassés : 2 × 20 m de chaque.'},
+  {title:'Footing progressif',h:'Progression',t:'Le dernier tiers un peu plus soutenu, toujours en contrôle.'},
+  {title:'Footing et côte douce',h:'Côte douce',t:'6 × 20 s en côte légère, redescente en marchant.'},
+  {title:'Footing en nature',h:'Terrain',t:'Chemins, parc ou sentier : le terrain varié protège tes tendons.'},
+  {title:'Footing et foulées',h:'Foulées',t:'6 × 20 s de foulées rapides et relâchées, 1 min de trot entre chaque.'}
+];
+const SAT=[
+  {title:'Sortie longue facile',t:'Allure facile du début à la fin. Emporte de l’eau au-delà de 10 km.'},
+  {title:'Sortie longue progressive',t:'Facile sur les trois quarts, puis un cran plus vite sur le dernier quart.'},
+  {title:'Sortie longue en nature',t:'Chemins et terrain varié, allure facile. Marche les côtes si besoin.'},
+  {title:'Sortie longue avec blocs allure',t:'Facile, avec 3 blocs de 8 min à allure semi au milieu (2 min de trot entre chaque).'},
+  {title:'Sortie longue et fin rapide',t:'Facile, puis les 2 derniers km un peu plus vite si tu te sens bien.'},
+  {title:'Sortie longue vallonnée',t:'Parcours avec du dénivelé. Effort constant, pas d’allure fixe.'}
+];
+const MOB=[
+  {t:'Hanches ouvertes',i:['90/90 des hanches : 2 × 8 par côté','Fente basse + rotation du buste : 2 × 6 par côté','Grand écart facial assisté : 2 × 45 s','Position du pigeon : 2 × 45 s par côté','5 respirations lentes en position 90/90']},
+  {t:'Jambes libres',i:['Ischios assis : 2 × 40 s par jambe','Fente basse, genou arrière au sol : 2 × 40 s par côté','Quadriceps debout : 2 × 30 s par jambe','Mollets contre le mur : 2 × 40 s par jambe','Rouleau de massage sur les cuisses : 2 min']},
+  {t:'Haut du dos et épaules',i:['Open book thoracique : 2 × 8 par côté','Chat-vache : 2 × 10','Étirement des pecs au mur : 2 × 30 s par côté','Suspension à la barre : 3 × 20 s','Rotations d’épaules à l’élastique : 2 × 12']},
+  {t:'Chevilles et pieds',i:['Genou au mur : 2 × 10 par côté','Balle sous la voûte plantaire : 1 min par pied','Accroupi profond tenu : 3 × 30 s','Marche sur les talons puis sur les pointes : 2 × 20 m','Étirement du tibial à genoux : 2 × 30 s']},
+  {t:'Dos et bassin',i:['Posture de l’enfant : 2 × 45 s','Torsion allongée : 2 × 40 s par côté','Pont fessier : 2 × 12','Genoux à la poitrine : 2 × 30 s','Bird dog : 2 × 8 par côté']},
+  {t:'Routine complète',i:['Fente basse + rotation du buste : 2 × 6 par côté','90/90 des hanches : 2 × 8 par côté','Ischios : 2 × 40 s','Chevilles, genou au mur : 2 × 10 par côté','Open book thoracique : 2 × 8 par côté']}
+];
+const SUN=[
+  {h:'Marche 30 min',t:'À l’air libre, sans montre.'},
+  {h:'Vélo tranquille 30 min',t:'Jambes légères, aucun effort. Le sang circule.'},
+  {h:'Balade en nature 45 min',t:'Terrain varié, rythme cool. Tes tendons adorent.'},
+  {h:'Natation ou aquagym 30 min',t:'Sans impact : tu décharges les articulations.'},
+  {h:'Marche active 40 min',t:'Un peu de dénivelé, sans courir.'},
+  {h:'Automassage 20 min',t:'Rouleau sur cuisses, mollets et dos. Lent, sans douleur.'}
+];
+function mobHtml(M){return '– '+M.i.join('<br>– ')}
+function restInfo(w){
+  var M=MOB[(w+2)%MOB.length];
+  return {goal:'Pas de séance. Le corps construit pendant que tu ne fais rien.',a:SUN[(w-1)%SUN.length],m:{h:'Souplesse 10–15 min : '+M.t,t:mobHtml(M)}};
+}
 function runInfo(d,w){
-  const b=blockOf(w), dl=isDl(w);
+  var b=blockOf(w),dl=isDl(w)?1:0;
   if(d===1){
-    let title,main,km,dur;
-    if(b===0){const n=dl?4:6;title='Fractionné court';main=`${n} × 1 min rapide, 1 min 30 de trot`;km=dl?4:5;dur=dl?'30 min':'35 min';}
-    else if(b===1){
-      if(w%2===0){const n=dl?5:8;title='Côtes';main=`${n} côtes de 45 s (pente 6–8 %), redescente en marchant`;km=dl?5:6;dur=dl?'40 min':'45 min';}
-      else {const n=dl?5:8;title='Fractionné 400 m';main=`${n} × 400 m rapide (allure 5 km), 200 m de trot`;km=dl?5:7;dur=dl?'40 min':'45 min';}
-    } else {
-      if(w%2===0){const n=dl?3:5;title='Fractionné 1 000 m';main=`${n} × 1 000 m (allure 10 km), 2 min de trot`;km=dl?6:9;dur=dl?'45 min':'55 min';}
-      else {const n=dl?4:6;title='Fractionné 800 m';main=`${n} × 800 m (allure 10 km), 400 m de trot`;km=dl?6:8;dur=dl?'45 min':'50 min';}
-    }
-    return {title,km,dur,goal:'Ta qualité de la semaine : vitesse et explosivité en course.',
+    var L=RUNQ[b],q=L[(w-1)%L.length];
+    return {title:q.t,km:q.km[dl],dur:q.d[dl],goal:'Ta qualité de la semaine : un format différent à chaque fois.',
       steps:[{h:'Échauffement',t:'10 min de trot lent, puis 3 lignes droites progressives de 60 m.'},
-             {h:'Corps de séance',t:main+'. Rapide = tu ne peux dire que 2–3 mots.'},
+             {h:'Corps de séance',t:q.m[dl]+'.'},
              {h:'Retour au calme',t:'10 min de trot lent, puis marche 3 min.'}]};
   }
   if(d===3){
-    const raw=Math.min(9,4+0.15*(w-1)); let km=half(dl?raw*0.7:raw);
-    const steps=[{h:'Footing facile',t:'Allure conversationnelle : tu parles en phrases complètes (≈ 125–145 bpm).'}];
-    if(b>=1) steps.push({h:'Lignes droites',t:'4 × 80 m progressives, 1 min de marche entre chaque.'});
-    steps.push({h:'Après la course',t:'2 × 15 relevés de pointes de pied contre un mur (tibial), puis 10–15 min de souplesse (voir Règles).'});
-    return {title:'Footing facile et souplesse',km,dur:`${Math.round(km*6/5)*5}–${Math.round(km*6.8/5)*5} min`,goal:'Récupérer en courant, et travailler tes amplitudes.',steps};
+    var raw=Math.min(9,4+0.15*(w-1)),km=half(dl?raw*0.7:raw),V=THU[(w-1)%THU.length],M=MOB[(w-1)%MOB.length];
+    return {title:V.title,km:km,dur:(Math.round(km*6/5)*5)+'–'+(Math.round(km*6.8/5)*5)+' min',goal:'Récupérer en courant, et travailler tes amplitudes.',
+      steps:[{h:'Footing facile',t:'Allure conversationnelle : tu parles en phrases complètes (≈ 125–145 bpm).'},
+             {h:V.h,t:V.t},
+             {h:'Après la course : tibial',t:'2 × 15 relevés de pointes de pied contre un mur.'},
+             {h:'Souplesse : '+M.t,t:mobHtml(M)}]};
   }
-  const raw=Math.min(13,5+0.3*(w-1)); let km=half(dl?raw*0.7:raw);
-  const steps=[{h:'Sortie longue',t:'Allure facile du début à la fin. Emporte de l’eau si tu dépasses 10 km.'}];
-  if(b>=1 && !dl) steps.push({h:'Option',t:'Les 2 derniers km un peu plus vite, seulement si tu te sens bien.'});
-  return {title:'Sortie longue',km,dur:`${Math.round(km*6/5)*5}–${Math.round(km*6.8/5)*5} min`,goal:'Construire ton endurance de base, c’est ton moteur hybride.',steps};
+  var raw2=Math.min(15,5+0.32*(w-1)),km2=half(dl?raw2*0.7:raw2),pool=b===0?SAT.slice(0,3):SAT,S2=pool[(w-1)%pool.length];
+  if(dl&&S2.title.indexOf('blocs')>=0)S2=pool[0];
+  return {title:S2.title,km:km2,dur:(Math.round(km2*6/5)*5)+'–'+(Math.round(km2*6.8/5)*5)+' min',goal:'Construire ton endurance de base : c’est ton moteur hybride.',
+    steps:[{h:'Le plan du jour',t:S2.t},{h:'Pense à',t:'Boire avant et après, et manger dans l’heure qui suit.'}]};
 }
 
 /* ---------- état ---------- */
@@ -267,7 +410,7 @@ function loadText(ex,w){
 }
 function setsOf(ex,w){const n=ex.sets[blockOf(w)];if(!n)return 0;return isDl(w)?Math.max(2,n-1):n}
 const restTxt=s=>s<60?`${s} s`:`${Math.floor(s/60)} min${s%60?' '+(s%60):''}`;
-const dayTitle=(d,w)=>d===6?'Repos actif':LIFT[d]?LIFT[d].title:runInfo(d,w).title;
+const dayTitle=(d,w)=>d===6?'Repos actif':LIFT[d]?LIFT[d].title+' : '+gymSession(d,w).focus:runInfo(d,w).title;
 const weekKm=w=>[1,3,5].reduce((a,d)=>a+runInfo(d,w).km,0);
 
 /* ---------- rendu ---------- */
@@ -287,12 +430,12 @@ function renderSession(){
   if(S.pre) h+=`<div class="banner">Le programme démarre <b>lundi 12 octobre</b>. Voici la première séance.</div>`;
   if(isDl(w)) h+=`<div class="banner">Semaine allégée : une série en moins, charges −15 %. Tu récupères.</div>`;
   if(d===6){
-    h+=`<div class="card head" style="--c:${c}"><span class="chip">Repos</span><h2>Repos actif</h2><p class="meta">Pas de séance. Le corps construit pendant que tu ne fais rien.</p></div>
-    <div class="card"><p><b>Marche 30 min</b> à l’air libre, sans montre.</p><p><b>Souplesse 10–15 min</b> : routine dans l’onglet Règles.</p><p class="muted">Dors 7–8 h. C’est la séance la plus rentable de la semaine.</p></div>`;
+    const Rr=restInfo(w);
+    h+='<div class="card head" style="--c:'+c+'"><span class="chip">Repos</span><h2>Repos actif</h2><p class="meta">'+Rr.goal+'</p></div><div class="card"><div class="step"><b>'+Rr.a.h+'</b>'+Rr.a.t+'</div><div class="step"><b>'+Rr.m.h+'</b>'+Rr.m.t+'</div><p class="muted">Dors 7–8 h. C’est la séance la plus rentable de la semaine.</p></div>';
     return h+finishBtn(key,c);
   }
   if(LIFT[d]){
-    const L=LIFT[d]; let tot=0,dn=0;
+    const L=gymSession(d,w); let tot=0,dn=0;
     const exs=L.ex.map(ex=>({ex,n:setsOf(ex,w)})).filter(o=>o.n>0);
     exs.forEach(o=>{tot+=o.n;dn+=(log[`${w}-${d}-${o.ex.id}`]||[]).slice(0,o.n).filter(Boolean).length});
     h+=`<div class="card head" style="--c:${c}"><span class="chip">${tagOf(d)}</span><h2>${L.title}</h2><p class="meta">${L.goal} Environ ${L.dur}.</p><div class="bar"><div style="width:${tot?Math.round(dn/tot*100):0}%"></div></div></div>`;
@@ -347,15 +490,15 @@ function renderRules(){
   +sec('Pecs sans bras',`<ul><li>Pousser : omoplates serrées, coudes à 45°, pense « rapprocher les coudes ».</li><li>Tirer : coudes vers les hanches, sangles si l’avant-bras lâche avant le dos.</li><li>Aucune séance bras : ils travaillent déjà assez.</li></ul>`)
   +sec('Pliométrie et tendons',`<ul><li>Pliométrie en début de séance, toujours frais, jamais à froid.</li><li>Mollets lents, step-ups, fentes : ta protection pour la course.</li><li>Un tendon qui tire plus de 48 h : allège la semaine suivante. Si ça persiste, vois un pro.</li></ul>`)
   +sec('Course',`<ul><li>Facile : tu tiens une conversation (≈ 125–145 bpm).</li><li>Rapide : 2–3 mots maximum.</li><li>Allure 5 km : ce que tu tiendrais 20–25 min. Allure 10 km : un cran en dessous.</li><li>Pas de montre ? L’effort ressenti suffit.</li></ul>`)
-  +sec('Souplesse (10 min, chaque jour)',`<ul><li>Fente basse + rotation du buste : 2 × 6 par côté</li><li>Position 90/90 des hanches : 2 × 8 par côté</li><li>Ischios : 2 × 40 s par jambe</li><li>Grand écart facial assisté : 2 × 45 s</li><li>Chevilles, genou au mur : 2 × 10 par côté</li><li>Open book thoracique : 2 × 8 par côté</li></ul>`)
+  +sec('Souplesse : la base (jeudi et dimanche proposent une routine différente chaque semaine)',`<ul><li>Fente basse + rotation du buste : 2 × 6 par côté</li><li>Position 90/90 des hanches : 2 × 8 par côté</li><li>Ischios : 2 × 40 s par jambe</li><li>Grand écart facial assisté : 2 × 45 s</li><li>Chevilles, genou au mur : 2 × 10 par côté</li><li>Open book thoracique : 2 × 8 par côté</li></ul>`)
   +sec('Nutrition',`<ul><li>Protéines : 150–165 g par jour.</li><li>Semaines 1–4 : mange à la maintenance (≈ 2 700 kcal, estimation).</li><li>À partir de S5 : ≈ 300–400 kcal en dessous, soit ≈ 2 400 kcal. Perte visée : 0,3 à 0,5 kg par semaine.</li><li>Pèse-toi 3 matins par semaine, regarde la moyenne. Ajuste de 100–150 kcal si ça stagne 2 semaines.</li><li>Tour de taille et photos toutes les 2 semaines : plus fiables que la balance seule.</li><li>10–12 % se tient mieux à 12 %. 10 % est un pic, pas un état permanent.</li></ul>`)
   +sec('Le bas du ventre',`<p>Il part avec le déficit et la course, pas avec les abdos. Les abdos servent à ta force et à ta posture.</p>`)
   +sec('Machine prise ?',`<ul><li>Squat barre → presse + fentes marchées</li><li>Développé couché → haltères à plat</li><li>Tractions → tirage vertical, prise large</li><li>Box jumps → squat jumps</li></ul>`);
 }
 function renderSet(){
-  const all=[];Object.values(LIFT).forEach(L=>L.ex.forEach(ex=>{if(!ex.kind&&!all.find(a=>a.id===ex.id))all.push(ex)}));
+  const all=[];Object.keys(LIB).forEach(k=>{if(!LIB[k].kind)all.push(LIB[k])});
   let h=`<div class="card"><h3 class="sec">Charges de référence</h3><p class="muted">Ta charge de travail « normale ». Le plan l’adapte chaque semaine. Ajuste dès que c’est trop facile ou trop lourd.</p>`
-  +all.map(ex=>{const v=refs[ex.id]??ex.ref;return `<div class="ref"><div class="nm"><b>${ex.name}</b><span>${ex.unit==='db'?'par haltère':ex.unit==='cable'?'sur la poulie':ex.unit==='kb'?'kettlebell':'barre incluse'}</span></div><button data-a="ref" data-k="${ex.id}" data-dir="-1" data-s="${ex.step}" aria-label="Moins">−</button><output>${fmt(v)} kg</output><button data-a="ref" data-k="${ex.id}" data-dir="1" data-s="${ex.step}" aria-label="Plus">+</button></div>`}).join('')
+  +all.map(ex=>{const v=refs[ex.id]??ex.ref;return `<div class="ref"><div class="nm"><b>${ex.name}</b><span>${UNITLAB[ex.unit]||'barre incluse'}</span></div><button data-a="ref" data-k="${ex.id}" data-dir="-1" data-s="${ex.step}" aria-label="Moins">−</button><output>${fmt(v)} kg</output><button data-a="ref" data-k="${ex.id}" data-dir="1" data-s="${ex.step}" aria-label="Plus">+</button></div>`}).join('')
   +`<button class="btn" data-a="resetrefs">${S.confirm==='refs'?'Confirmer la remise à zéro':'Remettre les valeurs de départ'}</button></div>`;
   h+=`<div class="card"><h3 class="sec">Suivi</h3><p class="muted">Séries cochées et séances validées sont gardées sur cet appareil.</p><button class="btn" data-a="resetlog">${S.confirm==='log'?'Confirmer l’effacement':'Effacer le suivi'}</button></div>`;
   return h;
@@ -393,7 +536,7 @@ document.addEventListener('click',e=>{
     if(arr[i])startRest(+t.dataset.sec);
   }
   else if(a==='done'){const k=`${S.w}-${S.d}`;if(done[k])delete done[k];else done[k]=true;store.set('hyb.done',done)}
-  else if(a==='ref'){const k=t.dataset.k;const ex=Object.values(LIFT).flatMap(L=>L.ex).find(x=>x.id===k);const cur=refs[k]??ex.ref;refs[k]=Math.max(0,rnd(cur+t.dataset.dir*t.dataset.s,0.5));store.set('hyb.refs',refs)}
+  else if(a==='ref'){const k=t.dataset.k;const ex=LIB[k];const cur=refs[k]??ex.ref;refs[k]=Math.max(0,rnd(cur+t.dataset.dir*t.dataset.s,0.5));store.set('hyb.refs',refs)}
   else if(a==='resetrefs'){if(S.confirm==='refs'){refs={};store.set('hyb.refs',refs);S.confirm=''}else S.confirm='refs'}
   else if(a==='resetlog'){if(S.confirm==='log'){log={};done={};store.set('hyb.log',log);store.set('hyb.done',done);S.confirm=''}else S.confirm='log'}
   else if(a==='t+'){tEnd+=30000;tick();return}
