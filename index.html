@@ -366,6 +366,7 @@ function restInfo(w){
   var M=MOB[(w+2)%MOB.length];
   return {goal:'Pas de séance. Le corps construit pendant que tu ne fais rien.',a:SUN[(w-1)%SUN.length],m:{h:'Souplesse 10–15 min : '+M.t,t:mobHtml(M)}};
 }
+function durTxt(k){var lo=Math.round(k*6/5)*5,hi=Math.round(k*6.8/5)*5;if(hi<=lo)hi=lo+5;return lo+'–'+hi+' min'}
 function runInfo(d,w){
   var b=blockOf(w),dl=isDl(w)?1:0;
   if(d===1){
@@ -377,7 +378,7 @@ function runInfo(d,w){
   }
   if(d===3){
     var raw=Math.min(9,4+0.15*(w-1)),km=half(dl?raw*0.7:raw),V=THU[(w-1)%THU.length],M=MOB[(w-1)%MOB.length];
-    return {title:V.title,km:km,dur:(Math.round(km*6/5)*5)+'–'+(Math.round(km*6.8/5)*5)+' min',goal:'Récupérer en courant, et travailler tes amplitudes.',
+    return {title:V.title,km:km,dur:durTxt(km),goal:'Récupérer en courant, et travailler tes amplitudes.',
       steps:[{h:'Footing facile',t:'Allure conversationnelle : tu parles en phrases complètes (≈ 125–145 bpm).'},
              {h:V.h,t:V.t},
              {h:'Après la course : tibial',t:'2 × 15 relevés de pointes de pied contre un mur.'},
@@ -385,7 +386,7 @@ function runInfo(d,w){
   }
   var raw2=Math.min(15,5+0.32*(w-1)),km2=half(dl?raw2*0.7:raw2),pool=b===0?SAT.slice(0,3):SAT,S2=pool[(w-1)%pool.length];
   if(dl&&S2.title.indexOf('blocs')>=0)S2=pool[0];
-  return {title:S2.title,km:km2,dur:(Math.round(km2*6/5)*5)+'–'+(Math.round(km2*6.8/5)*5)+' min',goal:'Construire ton endurance de base : c’est ton moteur hybride.',
+  return {title:S2.title,km:km2,dur:durTxt(km2),goal:'Construire ton endurance de base : c’est ton moteur hybride.',
     steps:[{h:'Le plan du jour',t:S2.t},{h:'Pense à',t:'Boire avant et après, et manger dans l’heure qui suit.'}]};
 }
 
