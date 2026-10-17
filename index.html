@@ -144,9 +144,9 @@ h3.sec{font-family:var(--disp);font-size:24px;margin:0 0 6px;font-weight:700}
 .day.done::after{color:var(--on)}
 .day.on{outline:2px solid var(--ink);outline-offset:2px}
 .finish.undo{background:var(--rest);color:var(--on)}
-.mg{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--c);background:var(--soft);border-radius:999px;padding:3px 10px 3px 7px;margin:8px 0 0}
+.mg{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--c);background:var(--soft);border-radius:999px;padding:4px 12px 4px 9px;margin:8px 0 0}
 .mg svg{display:block}
-.mg .bd{fill:var(--muted);opacity:.4}
+.mg .bd{fill:var(--muted);opacity:.55}
 .mg .hl{fill:var(--c)}
 .mg .sp{stroke:var(--muted);stroke-width:1;fill:none}
 .mg .st{fill:none;stroke:var(--c);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -320,7 +320,7 @@ function mgIcon(g){
     plio:'<path class="hl" d="M12 2l6 7h-4v6h-4V9H6z"/><rect class="hl" x="5" y="20" width="14" height="2.4" rx="1.2"/><rect class="hl" x="5" y="25" width="14" height="2.4" rx="1.2" opacity=".5"/>',
     run:'<circle class="hl" cx="15" cy="4.5" r="2.4"/><path class="st" d="M13.2 9.2l-3 6.2 3.4 3-1.2 7M10.2 15.4l-4.4 1.6M13.2 9.2l4.6 3.4"/>'
   };
-  return '<svg viewBox="0 0 24 32" width="17" height="22" aria-hidden="true">'+(g==='plio'||g==='run'?'':base)+(H[g]||'')+'</svg>';
+  return '<svg viewBox="0 0 24 32" width="24" height="32" aria-hidden="true">'+(g==='plio'||g==='run'?'':base)+(H[g]||'')+'</svg>';
 }
 function mgChip(g){return g&&MGLAB[g]?'<span class="mg">'+mgIcon(g)+MGLAB[g]+'</span>':''}
 const UNITLAB={db:'par haltère',cable:'sur la poulie',kb:'kettlebell',one:'une seule charge',mach:'sur la machine',bar:'barre incluse'};
