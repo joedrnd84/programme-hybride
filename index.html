@@ -525,7 +525,7 @@ function prepRun(w,d){
 /* ---------- chronomètre ---------- */
 let CH=store.get('hyb.chrono',{run:false,start:0,acc:0,laps:[]});
 const chEl=()=>CH.acc+(CH.run?Date.now()-CH.start:0);
-const CHI={play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',pause:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>'};
+const CHI={stop:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>',play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',pause:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>'};
 function fmtMs(ms){var t=Math.floor(ms/10),cs=t%100,s=Math.floor(t/100)%60,m=Math.floor(t/6000);return (m<10?'0':'')+m+':'+(s<10?'0':'')+s+','+(cs<10?'0':'')+cs}
 function chSave(){store.set('hyb.chrono',CH)}
 function chLapsHtml(){
@@ -540,7 +540,7 @@ function chLapsHtml(){
 }
 function renderChrono(){
   var idle=!CH.run&&CH.acc===0;
-  return '<div class="chrono"><div class="ct" id="ct">'+fmtMs(chEl())+'</div><div class="cbtns"><button class="cb" data-a="chlap"'+(idle?' disabled':'')+'>'+(CH.run||idle?'Tour':'Arrêter')+'</button><button class="cb '+(CH.run?'pause':'go')+'" data-a="chgo" aria-label="'+(CH.run?'Pause':(CH.acc>0?'Reprendre':'Démarrer'))+'">'+(CH.run?CHI.pause:CHI.play)+'</button></div><div class="laps" id="laps">'+chLapsHtml()+'</div></div>';
+  return '<div class="chrono"><div class="ct" id="ct">'+fmtMs(chEl())+'</div><div class="cbtns"><button class="cb" data-a="chlap" aria-label="'+(CH.run||idle?'Tour':'Arrêter')+'"'+(idle?' disabled':'')+'>'+(CH.run||idle?'Tour':CHI.stop)+'</button><button class="cb '+(CH.run?'pause':'go')+'" data-a="chgo" aria-label="'+(CH.run?'Pause':(CH.acc>0?'Reprendre':'Démarrer'))+'">'+(CH.run?CHI.pause:CHI.play)+'</button></div><div class="laps" id="laps">'+chLapsHtml()+'</div></div>';
 }
 setInterval(function(){
   if(S.tab!=='chrono')return;
@@ -628,7 +628,7 @@ function renderSession(){
 }
 function finishBtn(key,c){
   const kc='k-'+kindOf(S.d);
-  return done[key]?'<button class="finish undo '+kc+'" style="--c:'+c+'" data-a="done">Séance validée. Annuler</button>':'<button class="finish '+kc+'" style="--c:'+c+'" data-a="done">Valider la séance</button>';
+  return done[key]?'<button class="finish undo '+kc+'" style="--c:'+c+'" data-a="done">Annuler</button>':'<button class="finish '+kc+'" style="--c:'+c+'" data-a="done">Valider la séance</button>';
 }
 function renderWeek(){
   const w=S.w;
