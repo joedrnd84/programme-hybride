@@ -639,7 +639,7 @@ function renderWeek(){
 function renderPlan(){
   let h=BLOCKS.map(function(b){
     const s=wkStart(b.from),e=new Date(wkStart(b.to).getTime()+6*DAY_MS);
-    return '<div class="card"><h3 class="sec"><i class="bdot" style="background:var(--'+b.col+')"></i>'+b.n+'</h3><p class="meta">Semaines '+b.from+' à '+b.to+', du '+fd(s)+' au '+fd(e)+'.</p><p>'+b.goal+'</p></div>';
+    return '<div class="card"><h3 class="sec"><i class="bdot" style="background:var(--'+b.col+')"></i>'+b.n+'</h3><p class="meta">Semaines '+b.from+' à '+b.to+', du '+fd(s)+' au '+fd(e)+'</p><p>'+b.goal+'</p></div>';
   }).join('');
   h+='<div class="card"><h3 class="sec">Toutes les semaines</h3><div class="grid">'+Array.from({length:WEEKS},function(_,i){return i+1}).map(function(w){return '<button class="wb b'+blockOf(w)+(isDl(w)?' dl':'')+(w===S.w?' cur':'')+'" data-a="goweek" data-w="'+w+'">'+w+'</button>'}).join('')+'</div><div class="legend"><span style="--c:var(--rest)">Prépa course</span><span style="--c:var(--lift)">Construction</span><span style="--c:var(--run)">Définition</span></div></div>';
   h+='<div class="card"><h3 class="sec">Fin du programme</h3><p>Semaine 33 : du '+fd(wkStart(33))+' au '+fd(new Date(wkStart(33).getTime()+6*DAY_MS))+' 2027. Juin sert à tenir le physique, pas à tout changer.</p></div>';
