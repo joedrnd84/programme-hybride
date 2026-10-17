@@ -45,7 +45,7 @@ button:focus-visible{outline:3px solid var(--lift);outline-offset:2px}
 .nav button.today{padding:0 12px}
 .nav button.theme{font-size:20px;padding:0}
 
-.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:12px 0 4px}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:10px 0 2px}
 .day{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 0 7px;text-align:center;position:relative;min-height:58px}
 .day small{display:block;font-size:12px;color:var(--muted);font-weight:600}
 .day i{display:block;width:8px;height:8px;border-radius:50%;margin:6px auto 0;background:var(--c)}
@@ -137,6 +137,35 @@ h3.sec{font-family:var(--disp);font-size:24px;margin:0 0 6px;font-weight:700}
 .tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
 .tabs button{border:0;background:none;min-height:60px;font-size:13px;font-weight:600;color:var(--muted);border-top:3px solid transparent}
 .tabs button.on{color:var(--ink);border-top-color:var(--ink)}
+.top .wrap#strip{display:block}
+.day.done{background:var(--rest);border-color:var(--rest);color:var(--on)}
+.day.done small{color:var(--on)}
+.day.done i{background:var(--on)}
+.day.done::after{color:var(--on)}
+.day.on{outline:2px solid var(--ink);outline-offset:2px}
+.finish.undo{background:var(--rest);color:var(--on)}
+.mg{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--c);background:var(--soft);border-radius:999px;padding:3px 10px 3px 7px;margin:8px 0 0}
+.mg svg{display:block}
+.mg .bd{fill:var(--muted);opacity:.4}
+.mg .hl{fill:var(--c)}
+.mg .sp{stroke:var(--muted);stroke-width:1;fill:none}
+.mg .st{fill:none;stroke:var(--c);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.head .mg{margin:0 0 0 6px}
+.chk{width:44px;height:44px;border-radius:12px;border:2px solid var(--line);background:transparent;font-size:22px;font-weight:700;color:transparent;flex:none;padding:0}
+.chk.on{background:var(--rest);border-color:var(--rest);color:var(--on)}
+.ex.ok{border-color:var(--rest);background:color-mix(in srgb,var(--rest) 12%,var(--surface))}
+.ex.ok .set.d{background:var(--rest);border-color:var(--rest)}
+.chrono{text-align:center;padding-top:8px}
+.ct{font-family:var(--disp);font-size:84px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums;margin:28px 0 28px}
+.cbtns{display:flex;justify-content:space-between;gap:16px;margin:0 8px}
+.cb{width:92px;height:92px;border-radius:50%;border:0;font-weight:700;font-size:17px;background:var(--soft);color:var(--ink);padding:0}
+.cb:disabled{opacity:.4}
+.cb.go{background:var(--rest);color:var(--on)}
+.cb.pause{background:var(--run);color:var(--on)}
+.laps{margin-top:24px;text-align:left}
+.lap{display:flex;justify-content:space-between;padding:12px 4px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums;font-size:17px}
+.lap.best{color:var(--rest)}
+.lap.worst{color:#E5484D}
 @media (prefers-reduced-motion: reduce){.bar div{transition:none}}
 </style>
 </head>
@@ -149,7 +178,7 @@ h3.sec{font-family:var(--disp);font-size:24px;margin:0 0 6px;font-weight:700}
     <button data-a="today" class="today">Auj.</button>
     <button data-a="next" aria-label="Semaine suivante">›</button>
   </div>
-</div></header>
+</div><div class="wrap" id="strip"></div></header>
 <div class="wrap"><main id="view"></main></div>
 <div id="timer"><div class="box"><span class="tm" id="tm"></span><button data-a="t+">+30 s</button><button data-a="t0">Passer</button></div></div>
 <nav class="tabs"><div class="in" id="tabs"></div></nav>
@@ -184,7 +213,7 @@ const half=x=>Math.round(x*2)/2;
 const LIB={
 bench:{n:'Développé couché barre',ref:65,step:2.5,unit:'bar',sets:[3,4,4],reps:['10','6–8','5–6'],rest:150,cue:'Omoplates serrées et basses, pieds ancrés. Descente en 3 s, puis pousse en pensant « rapprocher les coudes ». Les bras suivent, les pecs mènent.'},
 incbar:{n:'Développé incliné barre',ref:50,step:2.5,unit:'bar',sets:[3,3,3],reps:['10','8–10','6–8'],rest:120,cue:'Banc à 30°, barre vers le haut des pecs. Descente en 3 s, coudes à 45°.'},
-incdb:{n:'Développé incliné haltères',ref:22,step:2,unit:'db',sets:[3,3,3],reps:['10–12','8–10','8–10'],rest:90,cue:'Banc à 30°, coudes à 45°. Serre les pecs en haut sans verrouiller les coudes.'},
+incdb:{n:'Développé incliné haltères',ref:24,step:2,unit:'db',sets:[3,3,3],reps:['10–12','8–10','8–10'],rest:90,cue:'Banc à 30°, coudes à 45°. Serre les pecs en haut sans verrouiller les coudes.'},
 benchdb:{n:'Développé couché haltères',ref:24,step:2,unit:'db',sets:[3,3,4],reps:['10–12','8–10','8–10'],rest:120,cue:'Amplitude maxi, étire les pecs en bas. Les haltères se rejoignent sans se toucher.'},
 floorpress:{n:'Développé au sol haltères',ref:22,step:2,unit:'db',sets:[3,3,3],reps:['10–12','10','8–10'],rest:90,cue:'Coudes à 45°, pause 1 s coudes au sol. Zéro élan, poitrine sortie.'},
 cablepress:{n:'Développé poulie vis-à-vis',ref:12,step:2.5,unit:'cable',sets:[3,3,3],reps:['12','12','10–12'],rest:75,note:'par main',cue:'Debout, un pas devant l’autre. Pousse en serrant les pecs, bras en arc.'},
@@ -199,7 +228,7 @@ pullneutral:{n:'Tractions prise neutre',kind:'bw',sets:[3,4,4],reps:['5–8','6�
 row:{n:'Rowing buste penché',ref:55,step:2.5,unit:'bar',sets:[3,3,3],reps:['10–12','8–10','8–10'],rest:90,cue:'Tire avec les coudes vers les hanches, pas avec les mains. Sangles autorisées : l’avant-bras ne doit pas lâcher avant le dos.'},
 dbrow:{n:'Rowing haltère unilatéral',ref:26,step:2,unit:'one',sets:[3,3,3],reps:['10–12','8–10','8–10'],rest:90,note:'par bras',cue:'Main sur un banc, tire le coude vers la hanche. L’omoplate glisse, le buste ne tourne pas.'},
 chestrow:{n:'Rowing poitrine appuyée',ref:20,step:2,unit:'db',sets:[3,3,3],reps:['12','10–12','10'],rest:90,cue:'Poitrine sur un banc incliné : zéro triche. Serre les omoplates en haut 1 s.'},
-lat:{n:'Tirage vertical prise large',ref:50,step:2.5,unit:'cable',sets:[3,3,3],reps:['12','10–12','8–10'],rest:90,cue:'Tire la barre vers le haut de la poitrine, coudes vers le sol. Épaules basses.'},
+lat:{n:'Tirage vertical prise large',ref:36,step:2.5,unit:'cable',sets:[3,3,3],reps:['12','10–12','8–10'],rest:90,cue:'Tire la barre vers le haut de la poitrine, coudes vers le sol. Épaules basses.'},
 crow:{n:'Tirage horizontal poulie',ref:50,step:2.5,unit:'cable',sets:[3,3,3],reps:['12','10–12','10–12'],rest:90,cue:'Poitrine sortie, tire vers le nombril. Pause 1 s coudes en arrière.'},
 straightarm:{n:'Pull-over poulie bras tendus',ref:20,step:2.5,unit:'cable',sets:[2,3,3],reps:['12–15','12','12'],rest:60,cue:'Bras presque tendus, tire vers les cuisses avec les dorsaux. Ventre gainé.'},
 facepull:{n:'Face pull',ref:18,step:2.5,unit:'cable',sets:[3,3,3],reps:['15','12–15','12–15'],rest:60,cue:'Corde au niveau du visage, tire vers le front, coudes hauts. Posture et épaules.'},
@@ -260,6 +289,40 @@ suitcase:{n:'Marche valise',ref:20,step:2,unit:'one',sets:[3,3,3],reps:['25 m','
 taps:{n:'Planche avec taps d’épaules',kind:'bw',sets:[3,3,3],reps:['12','16','20'],rest:45,cue:'Bassin immobile, tape l’épaule opposée. Anti-rotation.'}
 };
 Object.keys(LIB).forEach(function(k){LIB[k].id=k;LIB[k].name=LIB[k].n});
+const MGLAB={pecs:'Pecs',dos:'Dos',epaules:'Épaules',jambes:'Jambes',ischios:'Ischios',fessiers:'Fessiers',mollets:'Mollets',plio:'Pliométrie',abdos:'Abdos',corps:'Corps entier',run:'Course'};
+const MGL={
+  pecs:['bench','incbar','incdb','benchdb','floorpress','cablepress','pushup','pushupfeet','fly','lowfly','pecdeck','flydb','plyopush'],
+  dos:['pullup','pullneutral','row','dbrow','chestrow','lat','crow','straightarm'],
+  epaules:['facepull','revfly'],
+  jambes:['squat','bulg','stepup','lungewalk','goblet','stepdown'],
+  ischios:['rdl','deadlift','sldl','nordic'],
+  fessiers:['hipthrust','glutebridge','abduct','airplane','copen'],
+  mollets:['calf','calfsit','calfsl','calfiso','tib','balance'],
+  plio:['boxjump','squatjump','splitjump','hurdle','depth','pogo','skater','rope','broad','bounds'],
+  abdos:['legraise','kneeraise','vup','cablecrunch','revcrunch','wheel','plank','deadbug','hollow','bodysaw','pallof','woodchop','sideplank','russian','bicycle','taps','climber'],
+  corps:['swing','burpee','mbslam','farmer','suitcase']
+};
+Object.keys(MGL).forEach(function(g){MGL[g].forEach(function(id){if(LIB[id])LIB[id].g=g})});
+function mgIcon(g){
+  var base='<circle class="bd" cx="12" cy="4" r="2.6"/><rect class="bd" x="7.5" y="8" width="9" height="11" rx="2"/><rect class="bd" x="4" y="8.5" width="3" height="9" rx="1.5"/><rect class="bd" x="17" y="8.5" width="3" height="9" rx="1.5"/><rect class="bd" x="8" y="19.5" width="3.6" height="11" rx="1.8"/><rect class="bd" x="12.4" y="19.5" width="3.6" height="11" rx="1.8"/>';
+  var sp='<path class="sp" d="M12 8.6v9.4"/>';
+  var legs='<rect class="hl" x="8" y="19.5" width="3.6" height="7.2" rx="1.8"/><rect class="hl" x="12.4" y="19.5" width="3.6" height="7.2" rx="1.8"/>';
+  var H={
+    pecs:'<rect class="hl" x="7.8" y="8.6" width="8.4" height="4.2" rx="1.6"/>',
+    abdos:'<rect class="hl" x="9.2" y="13.4" width="5.6" height="5.4" rx="1.4"/>',
+    epaules:'<circle class="hl" cx="6.2" cy="9.8" r="2.4"/><circle class="hl" cx="17.8" cy="9.8" r="2.4"/>',
+    jambes:legs,
+    mollets:'<rect class="hl" x="8" y="25" width="3.6" height="5.8" rx="1.8"/><rect class="hl" x="12.4" y="25" width="3.6" height="5.8" rx="1.8"/>',
+    dos:'<path class="hl" d="M7.8 8.6h8.4l-1.7 9H9.5z"/>'+sp,
+    ischios:legs+sp,
+    fessiers:'<rect class="hl" x="7.9" y="16.6" width="8.2" height="4.6" rx="2.2"/>'+sp,
+    corps:base.replace(/class="bd"/g,'class="hl"'),
+    plio:'<path class="hl" d="M12 2l6 7h-4v6h-4V9H6z"/><rect class="hl" x="5" y="20" width="14" height="2.4" rx="1.2"/><rect class="hl" x="5" y="25" width="14" height="2.4" rx="1.2" opacity=".5"/>',
+    run:'<circle class="hl" cx="15" cy="4.5" r="2.4"/><path class="st" d="M13.2 9.2l-3 6.2 3.4 3-1.2 7M10.2 15.4l-4.4 1.6M13.2 9.2l4.6 3.4"/>'
+  };
+  return '<svg viewBox="0 0 24 32" width="17" height="22" aria-hidden="true">'+(g==='plio'||g==='run'?'':base)+(H[g]||'')+'</svg>';
+}
+function mgChip(g){return g&&MGLAB[g]?'<span class="mg">'+mgIcon(g)+MGLAB[g]+'</span>':''}
 const UNITLAB={db:'par haltère',cable:'sur la poulie',kb:'kettlebell',one:'une seule charge',mach:'sur la machine',bar:'barre incluse'};
 const PLIO_V=[['boxjump',0],['squatjump',0],['splitjump',1],['hurdle',1],['depth',2]];
 const PLIO_H=[['pogo',0],['skater',0],['rope',0],['broad',1],['bounds',1]];
@@ -424,10 +487,10 @@ function prepGym(w,d){
 function prepRun(w,d){
   var R={
    '1-3':{title:'Footing 10,2 km à 6:00/km',km:10.2,dur:'1 h 02',goal:'Ta première longue sortie facile : la base pour le 7 novembre.',steps:[{h:'Allure',t:'6:00/km, régulier. Tu parles en phrases complètes (≈ 125–145 bpm).'},{h:'Eau',t:'Bois avant et après. Au-delà d’1 h, quelques gorgées en route.'},{h:'Après',t:'5 min de marche, puis 10 min de souplesse (jambes libres).'}]},
-   '1-5':{title:'Sortie vallonnée 8 km (D+ ~200 m)',km:8,dur:'55–60 min',goal:'Premier contact avec le dénivelé, en douceur.',steps:[{h:'Parcours',t:'Choisis un parcours avec des côtes. Marche celles qui dépassent 10 %, relance en haut.'},{h:'Montées',t:'Petits pas, buste droit, regard devant. Ne te mets jamais dans le rouge.'},{h:'Descentes',t:'Foulées courtes, pieds sous le bassin, bras relâchés. Tes quadriceps freinent : ça se travaille.'}]},
+   '1-5':{title:'Sortie vallonnée 8 km (D+ ~200 m)',km:8,dur:'55–60 min',goal:'Premier contact avec le dénivelé, en douceur.',steps:[{h:'Avant de partir',t:'Dernier repas 2 h 30 avant, léger et pauvre en fibres (riz, pâtes, banane). Passe aux toilettes avant de sortir.'},{h:'Parcours',t:'Choisis un parcours avec des côtes. Marche celles qui dépassent 10 %, relance en haut.'},{h:'Montées',t:'Petits pas, buste droit, regard devant. Ne te mets jamais dans le rouge.'},{h:'Descentes',t:'Foulées courtes, pieds sous le bassin, bras relâchés. Tes quadriceps freinent : ça se travaille.'}]},
    '2-1':{title:'Côtes courtes',km:7,dur:'50 min',goal:'Force et puissance en montée, sans fatigue inutile.',steps:[{h:'Échauffement',t:'10 min de trot lent, puis 3 lignes droites progressives.'},{h:'Corps de séance',t:'6 côtes de 1 min (pente 6–8 %), effort soutenu mais pas un sprint. Redescente en trottant doucement.'},{h:'Retour au calme',t:'10 min de trot lent, puis marche 3 min.'}]},
    '2-3':{title:'Footing facile et lignes droites',km:8,dur:'50 min',goal:'Récupérer en courant avant la sortie clé de samedi.',steps:[{h:'Footing facile',t:'6:00/km, tu parles en phrases complètes.'},{h:'Lignes droites',t:'4 × 80 m progressives, 1 min de marche entre chaque.'},{h:'Après la course',t:'2 × 15 relevés de pointes de pied, puis 10 min de souplesse.'}]},
-   '2-5':{title:'Sortie clé : 14 km, D+ ~400 m',km:14,dur:'1 h 30–1 h 45',goal:'Ta plus longue sortie avant la course : la répétition générale.',steps:[{h:'Allure',t:'Facile sur le plat (6:00–6:15/km). Marche les montées raides, ça fait partie du plan.'},{h:'Nutrition',t:'Teste ce que tu mangeras le jour J : 30 à 40 g de glucides par heure dès 40 min (gel, pâte de fruit, banane), 400–500 ml d’eau par heure.'},{h:'Matériel',t:'Mets les chaussures, le sac ou la ceinture et la tenue prévus pour la course.'},{h:'Après',t:'Marche 5 min, repas riche en glucides et protéines dans l’heure.'}]},
+   '2-5':{title:'Sortie clé : 14 km, D+ ~400 m',km:14,dur:'1 h 30–1 h 45',goal:'Ta plus longue sortie avant la course : la répétition générale.',steps:[{h:'Avant de partir',t:'Dernier repas 2 h 30 avant, léger et pauvre en fibres. Toilettes avant de sortir. Emporte un gel ou une banane.'},{h:'Allure',t:'Facile sur le plat (6:00–6:15/km). Marche les montées raides, ça fait partie du plan.'},{h:'Nutrition',t:'Teste ce que tu mangeras le jour J : 30 à 40 g de glucides par heure dès 40 min (gel, pâte de fruit, banane), 400–500 ml d’eau par heure.'},{h:'Matériel',t:'Mets les chaussures, le sac ou la ceinture et la tenue prévus pour la course.'},{h:'Après',t:'Marche 5 min, repas riche en glucides et protéines dans l’heure.'}]},
    '3-1':{title:'Allure course : 4 × 3 min',km:7,dur:'45 min',goal:'Mémoriser l’effort du jour J, sans te fatiguer.',steps:[{h:'Échauffement',t:'10 min de trot lent.'},{h:'Corps de séance',t:'4 × 3 min à allure course (soutenue mais maîtrisée, environ 5:50–6:00/km sur le plat), 2 min de trot entre chaque.'},{h:'Retour au calme',t:'10 min de trot lent.'}]},
    '3-3':{title:'Footing facile',km:6,dur:'35–40 min',goal:'Jambes légères : tu gardes la fraîcheur.',steps:[{h:'Footing facile',t:'6:00/km ou plus lent, aucun effort.'},{h:'Lignes droites',t:'4 × 80 m progressives.'}]},
    '3-5':{title:'Dernière sortie longue : 10 km, D+ ~200 m',km:10,dur:'1 h 05–1 h 15',goal:'Tu rentres dans l’affûtage. Facile, jamais essoufflé.',steps:[{h:'Allure',t:'Facile du début à la fin (6:10/km environ). Marche les côtes.'},{h:'Matériel',t:'Dernier test : chaussures, vêtements, gel. Rien de nouveau à partir de maintenant.'}]},
@@ -440,6 +503,31 @@ function prepRun(w,d){
   };
   return R[w+'-'+d]||null;
 }
+
+/* ---------- chronomètre ---------- */
+let CH=store.get('hyb.chrono',{run:false,start:0,acc:0,laps:[]});
+const chEl=()=>CH.acc+(CH.run?Date.now()-CH.start:0);
+function fmtMs(ms){var t=Math.floor(ms/10),cs=t%100,s=Math.floor(t/100)%60,m=Math.floor(t/6000);return (m<10?'0':'')+m+':'+(s<10?'0':'')+s+','+(cs<10?'0':'')+cs}
+function chSave(){store.set('hyb.chrono',CH)}
+function chLapsHtml(){
+  var L=CH.laps,cur=chEl(),times=[],i;
+  for(i=0;i<L.length;i++)times.push(L[i]-(i?L[i-1]:0));
+  var best=-1,worst=-1;
+  if(times.length>1){best=times.indexOf(Math.min.apply(null,times));worst=times.indexOf(Math.max.apply(null,times))}
+  var rows='';
+  if(CH.run||CH.acc>0)rows+='<div class="lap"><span>Tour '+(L.length+1)+'</span><span id="cl">'+fmtMs(cur-(L.length?L[L.length-1]:0))+'</span></div>';
+  for(i=times.length-1;i>=0;i--)rows+='<div class="lap'+(i===best?' best':i===worst?' worst':'')+'"><span>Tour '+(i+1)+'</span><span>'+fmtMs(times[i])+'</span></div>';
+  return rows;
+}
+function renderChrono(){
+  var idle=!CH.run&&CH.acc===0;
+  return '<div class="chrono"><div class="ct" id="ct">'+fmtMs(chEl())+'</div><div class="cbtns"><button class="cb" data-a="chlap"'+(idle?' disabled':'')+'>'+(CH.run||idle?'Tour':'Arrêter')+'</button><button class="cb '+(CH.run?'pause':'go')+'" data-a="chgo">'+(CH.run?'Pause':(CH.acc>0?'Reprendre':'Démarrer'))+'</button></div><div class="laps" id="laps">'+chLapsHtml()+'</div></div>';
+}
+setInterval(function(){
+  if(S.tab!=='chrono')return;
+  var a=document.getElementById('ct');if(a)a.textContent=fmtMs(chEl());
+  var b=document.getElementById('cl');if(b)b.textContent=fmtMs(chEl()-(CH.laps.length?CH.laps[CH.laps.length-1]:0));
+},50);
 
 /* ---------- état ---------- */
 const now=new Date();
@@ -469,7 +557,8 @@ const weekKm=w=>[1,3,5].reduce((a,d)=>a+runInfo(d,w).km,0);
 function head(){
   const b=BLOCKS[blockOf(S.w)], s=wkStart(S.w), e=new Date(s.getTime()+6*DAY_MS);
   document.getElementById('wk').innerHTML=`<b>Semaine ${S.w}</b><span>${b.n}${isDl(S.w)?', semaine allégée':''}, du ${fd(s)} au ${fd(e)}</span>`;
-  document.getElementById('tabs').innerHTML=[['session','Séance'],['week','Semaine'],['plan','Plan'],['rules','Règles'],['set','Réglages']]
+  document.getElementById('strip').innerHTML=S.tab==='session'?dayStrip():'';
+  document.getElementById('tabs').innerHTML=[['session','Séance'],['week','Semaine'],['plan','Plan'],['chrono','Chrono'],['set','Réglages']]
     .map(([k,l])=>`<button data-a="tab" data-v="${k}" class="${S.tab===k?'on':''}">${l}</button>`).join('');
 }
 function dayStrip(){
@@ -478,7 +567,7 @@ function dayStrip(){
 }
 function renderSession(){
   const d=S.d,w=S.w,c=colOf(d),key=`${w}-${d}`;
-  let h=dayStrip();
+  let h='';
   if(S.pre) h+=`<div class="banner">Le programme démarre <b>lundi 12 octobre</b>. Voici la première séance.</div>`;
   if(isDl(w)) h+=`<div class="banner">Semaine allégée : une série en moins, charges −15 %. Tu récupères.</div>`;
   if(d===6){
@@ -497,16 +586,17 @@ function renderSession(){
       const rep=ex.reps[blockOf(w)];
       const rx=ex.rounds?`${n} tours`:`${n} × ${rep}`;
       const load=ex.rounds?'':loadText(ex,w);
-      h+=`<div class="card ex" style="--c:${c}"><div class="row"><h3><span class="n">${i+1}</span>${ex.name}</h3></div>
+      const okEx=!!log[w+'-'+d+'-'+ex.id+'!'];
+      h+=`<div class="card ex ${okEx?'ok':''}" style="--c:${c}"><div class="row"><h3><span class="n">${i+1}</span>${ex.name}</h3><button class="chk ${okEx?'on':''}" data-a="exdone" data-id="${ex.id}" aria-pressed="${okEx}" aria-label="Exercice terminé">✓</button></div>${mgChip(ex.g)}
       <div class="rx"><span class="big">${rx}</span><span class="load">${load}</span></div>
       <p class="rest">${ex.rounds?rep+'. ':''}${ex.note?ex.note+'. ':''}Repos ${restTxt(ex.rest)}</p>
-      <div class="sets">${Array.from({length:n},(_,k)=>`<button class="set ${arr[k]?'d':''}" data-a="set" data-id="${ex.id}" data-i="${k}" data-sec="${ex.rest}" aria-label="Série ${k+1}">${k+1}</button>`).join('')}</div>
+      <div class="sets">${Array.from({length:n},(_,k)=>`<button class="set ${arr[k]?'d':''}" data-a="set" data-id="${ex.id}" data-i="${k}" data-sec="${ex.rest}" data-n="${n}" aria-label="Série ${k+1}">${k+1}</button>`).join('')}</div>
       <p class="cue">${ex.cue}</p></div>`;
     });
     return h+finishBtn(key,c);
   }
   const R=runInfo(d,w);
-  h+=`<div class="card head" style="--c:${c}"><span class="chip">${tagOf(d)}</span><h2>${R.title}</h2><p class="meta">${R.goal}</p>
+  h+=`<div class="card head" style="--c:${c}"><span class="chip">${tagOf(d)}</span>${mgChip('run')}<h2>${R.title}</h2><p class="meta">${R.goal}</p>
   <div class="km" style="margin-top:12px">${fmt(R.km)}<small>km</small></div><p class="meta">Environ ${R.dur}</p></div>
   <div class="card">${R.steps.map(s=>`<div class="step"><b>${s.h}</b>${s.t}</div>`).join('')}</div>`;
   return h+finishBtn(key,c);
@@ -537,7 +627,7 @@ function renderPlan(){
 }
 function renderRules(){
   const sec=(t,b)=>`<div class="card"><h3 class="sec">${t}</h3>${b}</div>`;
-  return sec('Course du 7 novembre : 20 km, D+ 700 m','<ul><li>Objectif réaliste : finir bien, en 2 h 30–2 h 50.</li><li>Départ prudent : les 5 premiers km doivent te sembler trop faciles.</li><li>Marche dès que la pente dépasse 10 % : c’est une stratégie, pas un échec.</li><li>Descentes : foulées courtes, pieds sous le bassin, regard 3 m devant.</li><li>30–40 g de glucides par heure dès 40 min, 400–500 ml d’eau par heure.</li><li>Rien de nouveau le jour J : chaussures, tenue et gels déjà testés.</li><li>Douleur qui augmente en courant (genou, tibia, tendon) : tu marches ou tu t’arrêtes.</li></ul>')
+  return sec('Course du 7 novembre : 20 km, D+ 700 m','<ul><li>Objectif réaliste : finir bien, en 2 h 30–2 h 50.</li><li>Départ prudent : les 5 premiers km doivent te sembler trop faciles.</li><li>Marche dès que la pente dépasse 10 % : c’est une stratégie, pas un échec.</li><li>Descentes : foulées courtes, pieds sous le bassin, regard 3 m devant.</li><li>30–40 g de glucides par heure dès 40 min, 400–500 ml d’eau par heure.</li><li>Veille et matin : repas léger et pauvre en fibres, toilettes avant le départ.</li><li>Rien de nouveau le jour J : chaussures, tenue et gels déjà testés.</li><li>Douleur qui augmente en courant (genou, tibia, tendon) : tu marches ou tu t’arrêtes.</li></ul>')
   +sec('Lire une séance',`<p>Les charges sont calculées pour la semaine en cours. Finis chaque série avec 1 à 3 répétitions en réserve.</p><p>Trop facile ou trop lourd ? Ajuste la charge de référence dans Réglages.</p>`)
   +sec('Semaines allégées',`<p>S4, S8, S12… : une série en moins, charges −15 %. Tu récupères, tu repars plus fort.</p>`)
   +sec('Pecs sans bras',`<ul><li>Pousser : omoplates serrées, coudes à 45°, pense « rapprocher les coudes ».</li><li>Tirer : coudes vers les hanches, sangles si l’avant-bras lâche avant le dos.</li><li>Aucune séance bras : ils travaillent déjà assez.</li></ul>`)
@@ -558,7 +648,7 @@ function renderSet(){
 }
 function render(){
   const y=window.scrollY;head();
-  document.getElementById('view').innerHTML=({session:renderSession,week:renderWeek,plan:renderPlan,rules:renderRules,set:renderSet})[S.tab]();
+  document.getElementById('view').innerHTML=({session:renderSession,week:renderWeek,plan:function(){return renderPlan()+renderRules()},chrono:renderChrono,set:renderSet})[S.tab]();
   window.scrollTo(0,y);
 }
 
@@ -584,10 +674,16 @@ document.addEventListener('click',e=>{
   else if(a==='open'){S.d=+t.dataset.d;S.tab='session';window.scrollTo(0,0)}
   else if(a==='goweek'){S.w=+t.dataset.w;S.tab='week';window.scrollTo(0,0)}
   else if(a==='set'){
-    const key=`${S.w}-${S.d}-${t.dataset.id}`,arr=log[key]||[],i=+t.dataset.i;
-    arr[i]=!arr[i];log[key]=arr;store.set('hyb.log',log);
-    if(arr[i])startRest(+t.dataset.sec);
+    const key=`${S.w}-${S.d}-${t.dataset.id}`,arr=log[key]||[],i=+t.dataset.i,nn=+t.dataset.n;
+    arr[i]=!arr[i];log[key]=arr;
+    const all=arr.slice(0,nn).filter(Boolean).length===nn;
+    if(all)log[key+'!']=true;
+    store.set('hyb.log',log);
+    if(arr[i]&&!all)startRest(+t.dataset.sec);
   }
+  else if(a==='exdone'){const k2=S.w+'-'+S.d+'-'+t.dataset.id+'!';log[k2]=!log[k2];store.set('hyb.log',log)}
+  else if(a==='chgo'){if(CH.run){CH.acc+=Date.now()-CH.start;CH.run=false}else{CH.start=Date.now();CH.run=true}chSave()}
+  else if(a==='chlap'){if(CH.run){CH.laps.push(chEl())}else{CH={run:false,start:0,acc:0,laps:[]}}chSave()}
   else if(a==='done'){const k=`${S.w}-${S.d}`;if(done[k])delete done[k];else done[k]=true;store.set('hyb.done',done)}
   else if(a==='ref'){const k=t.dataset.k;const ex=LIB[k];const cur=refs[k]??ex.ref;refs[k]=Math.max(0,rnd(cur+t.dataset.dir*t.dataset.s,0.5));store.set('hyb.refs',refs)}
   else if(a==='resetrefs'){if(S.confirm==='refs'){refs={};store.set('hyb.refs',refs);S.confirm=''}else S.confirm='refs'}
