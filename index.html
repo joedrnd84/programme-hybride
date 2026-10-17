@@ -228,7 +228,7 @@ const BLOCKS=[
 const blockOf=w=>w<=4?0:w<=16?1:2;
 const isDl=w=>w%4===0||w===5;
 const mult=w=>{const p=0.82+0.3*(1-Math.exp(-(w-1)/10));return isDl(w)?p*0.85:p};
-const wkStart=w=>new Date(START.getTime()+(w-1)*7*DAY_MS);
+const wkStart=w=>new Date(START.getFullYear(),START.getMonth(),START.getDate()+(w-1)*7);
 const fd=d=>d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
 const fmt=n=>String(n).replace('.',',');
 const rnd=(x,s)=>parseFloat((Math.round(x/s)*s).toFixed(1));
@@ -584,12 +584,13 @@ setInterval(function(){
 
 /* ---------- état ---------- */
 const now=new Date();
+const dayIdx=()=>Math.round((Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())-Date.UTC(2026,9,12))/DAY_MS);
 let S={tab:'session',w:1,d:0,pre:false,confirm:''};
 (function init(){
   if(now<START){S.pre=true;S.w=1;S.d=0}
-  else{S.w=Math.min(WEEKS,Math.floor((now-START)/(7*DAY_MS))+1);S.d=(now.getDay()+6)%7}
+  else{S.w=Math.min(WEEKS,Math.floor(dayIdx()/7)+1);S.d=(now.getDay()+6)%7}
 })();
-const todayKey=()=>{if(now<START||now>=new Date(START.getTime()+WEEKS*7*DAY_MS))return null;return `${Math.floor((now-START)/(7*DAY_MS))+1}-${(now.getDay()+6)%7}`};
+const todayKey=()=>{const di=dayIdx();if(di<0||di>=WEEKS*7)return null;return (Math.floor(di/7)+1)+'-'+((now.getDay()+6)%7)};
 
 const kindOf=d=>d===6?'rest':[0,2,4].includes(d)?'lift':'run';
 const colOf=d=>({lift:'var(--lift)',run:'var(--run)',rest:'var(--rest)'})[kindOf(d)];
@@ -615,7 +616,7 @@ const TI={
  set:'<svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>'
 };
 function head(){
-  const b=BLOCKS[blockOf(S.w)], s=wkStart(S.w), e=new Date(s.getTime()+6*DAY_MS);
+  const b=BLOCKS[blockOf(S.w)], s=wkStart(S.w), e=new Date(s.getFullYear(),s.getMonth(),s.getDate()+6);
   document.getElementById('wk').innerHTML='<b>Semaine '+S.w+'</b><span>'+b.n+(isDl(S.w)?', semaine allégée':'')+', du '+fd(s)+' au '+fd(e)+'</span>';
   document.getElementById('bprev').disabled=S.w<=1;document.getElementById('bnext').disabled=S.w>=WEEKS;
   document.getElementById('strip').innerHTML=S.tab==='session'?dayStrip():'';
@@ -625,7 +626,7 @@ function head(){
 function dayStrip(){
   const tk=todayKey(),s0=wkStart(S.w);
   return '<div class="days">'+DN.map(function(n,i){
-    const dt=new Date(s0.getTime()+i*DAY_MS).getDate();
+    const dt=new Date(s0.getFullYear(),s0.getMonth(),s0.getDate()+i).getDate();
     return '<button class="day k-'+kindOf(i)+(S.d===i?' on':'')+(done[S.w+'-'+i]?' done':'')+(tk===S.w+'-'+i?' istoday':'')+'" style="--c:'+colOf(i)+'" data-a="day" data-d="'+i+'" aria-label="'+DF[i]+'"><small>'+n+'</small><b>'+dt+'</b><i></i></button>';
   }).join('')+'</div>';
 }
