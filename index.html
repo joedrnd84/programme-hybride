@@ -311,7 +311,21 @@ bicycle:{n:'Crunch vélo',kind:'bw',sets:[3,3,3],reps:['16','20','24'],rest:45,c
 climber:{n:'Mountain climbers',kind:'time',sets:[3,3,3],reps:['30 s','40 s','45 s'],rest:45,cue:'Position de pompe, genoux vers la poitrine, rythme rapide. Bassin bas.'},
 farmer:{n:'Marche du fermier',ref:24,step:2,unit:'db',sets:[3,3,3],reps:['30 m','40 m','40 m'],rest:60,cue:'Épaules basses, buste droit, pas courts. Gainage et solidité.'},
 suitcase:{n:'Marche valise',ref:20,step:2,unit:'one',sets:[3,3,3],reps:['25 m','30 m','30 m'],rest:60,note:'par côté',cue:'Une seule charge : résiste à l’inclinaison. Obliques en feu.'},
-taps:{n:'Planche avec taps d’épaules',kind:'bw',sets:[3,3,3],reps:['12','16','20'],rest:45,cue:'Bassin immobile, tape l’épaule opposée. Anti-rotation.'}
+taps:{n:'Planche avec taps d’épaules',kind:'bw',sets:[3,3,3],reps:['12','16','20'],rest:45,cue:'Bassin immobile, tape l’épaule opposée. Anti-rotation.'},
+kbhalo:{n:'Halo kettlebell (à genoux)',ref:12,step:4,unit:'kb',sets:[4,4,5],reps:['10','10','10'],rest:30,cue:'À genoux, kettlebell tenue par les cornes. Fais-la tourner autour de la tête, coudes près du visage. Côtes rentrées, bassin fixe. Change de sens à mi-série.'},
+kbtrident:{n:'Iron trident (kettlebell)',ref:8,step:4,unit:'kb',sets:[4,4,5],reps:['10','10','10'],rest:30,cue:'Assis au sol, jambes écartées, kettlebell tenue des deux mains. Mouvement lent, buste gainé, bassin immobile. Trajectoire exacte : voir la vidéo du post.'},
+kblegs:{n:'Legs over KB',kind:'bw',sets:[4,4,5],reps:['10','10','10'],rest:30,cue:'Assis, kettlebell posée au sol à côté de toi. Passe les jambes par-dessus, d’un côté puis de l’autre, sans la toucher. Mains en appui, abdos contractés.'},
+kbscissors:{n:'Ciseaux (scissors)',kind:'bw',sets:[4,4,5],reps:['10','10','10'],rest:30,cue:'Jambes tendues, croise-les en ciseaux, lentement. Lombaires collées, abdos serrés. Plus les jambes sont basses, plus c’est dur.'},
+revlunge:{n:'Fentes arrière barre',ref:40,step:2.5,unit:'bar',sets:[3,3,3],reps:['8–10','8–10','8–10'],rest:90,note:'par jambe',cue:'Barre sur les épaules, grand pas en arrière, genou avant stable. Pousse sur le talon avant pour remonter.'},
+kbrdl:{n:'Soulevé de terre unilatéral kettlebell',ref:12,step:4,unit:'kb',sets:[3,3,3],reps:['8–12','8–12','8–12'],rest:75,note:'par jambe',cue:'Hanche en arrière, jambe libre tendue derrière, dos plat. Équilibre et ischios : la stabilité de ta foulée.'},
+hipflex:{n:'Relevés de genou kettlebell (fléchisseurs de hanche)',ref:8,step:4,unit:'kb',sets:[3,3,3],reps:['10–12','10–12','10–12'],rest:60,note:'par jambe',cue:'Kettlebell sur la cuisse, monte le genou lentement, bassin stable. Les fléchisseurs de hanche portent chaque foulée.'},
+calfw:{n:'Mollets lestés unilatéraux',ref:16,step:2,unit:'one',sets:[3,3,3],reps:['12–15','12–15','12–15'],rest:60,note:'par jambe',cue:'Une jambe, charge dans la main du même côté, main libre au mur. Montée lente, amplitude complète.'},
+latbend:{n:'Flexion latérale sur banc (hip-supported)',ref:12,step:2,unit:'one',sets:[2,2,2],reps:['12','12','12'],rest:30,note:'par côté',cue:'Hanche calée sur le banc, charge modérée. Reste lent et contrôlé : la tension va directement dans les obliques.'},
+plankdip:{n:'Plank dips lestés',kind:'bw',sets:[2,2,2],reps:['20','20','20'],rest:30,note:'par côté',cue:'En planche, fais descendre la hanche d’un côté puis de l’autre, avec une charge sur le dos si possible. Contrôle, pas d’élan.'},
+hkwood:{n:'Woodchop à demi-genou',ref:12,step:2.5,unit:'cable',sets:[2,2,2],reps:['12','12','12'],rest:30,note:'par côté',cue:'Un genou au sol, tire en diagonale en tournant le buste. Hanches stables, bras tendus.'},
+latdl:{n:'Lateral deadlift',ref:12,step:2,unit:'one',sets:[2,2,2],reps:['12','12','12'],rest:30,cue:'Charge modérée, mouvement lent et contrôlé : tu cherches les obliques sans contrainte sur le dos. Trajectoire exacte : voir la vidéo du post.'},
+starfish:{n:'Starfish hold',kind:'time',sets:[2,2,2],reps:['45 s','45 s','45 s'],rest:30,cue:'Gainage en position étoile : corps aligné, abdos et obliques serrés. Respire. Position exacte : voir la vidéo du post.'},
+pendulum:{n:'Pendulum lesté',ref:6,step:2,unit:'one',sets:[2,2,2],reps:['20','20','20'],rest:30,note:'au total',cue:'Bras au-dessus de la tête, alignés avec les oreilles : ça active les obliques et protège la colonne. Mouvement contrôlé.'}
 };
 Object.keys(LIB).forEach(function(k){LIB[k].id=k;LIB[k].name=LIB[k].n});
 const MGLAB={pecs:'Pecs',dos:'Dos',epaules:'Épaules',jambes:'Jambes',ischios:'Ischios',fessiers:'Fessiers',mollets:'Mollets',plio:'Pliométrie',abdos:'Abdos',corps:'Corps entier',run:'Course'};
@@ -319,12 +333,12 @@ const MGL={
   pecs:['bench','incbar','incdb','benchdb','floorpress','cablepress','pushup','pushupfeet','fly','lowfly','pecdeck','flydb','plyopush'],
   dos:['pullup','pullneutral','row','dbrow','chestrow','lat','crow','straightarm'],
   epaules:['facepull','revfly'],
-  jambes:['squat','bulg','stepup','lungewalk','goblet','stepdown'],
-  ischios:['rdl','deadlift','sldl','nordic'],
+  jambes:['squat','bulg','stepup','lungewalk','goblet','stepdown','revlunge','hipflex'],
+  ischios:['rdl','deadlift','sldl','nordic','kbrdl'],
   fessiers:['hipthrust','glutebridge','abduct','airplane','copen'],
-  mollets:['calf','calfsit','calfsl','calfiso','tib','balance'],
+  mollets:['calf','calfsit','calfsl','calfiso','tib','balance','calfw'],
   plio:['boxjump','squatjump','splitjump','hurdle','depth','pogo','skater','rope','broad','bounds'],
-  abdos:['legraise','kneeraise','vup','cablecrunch','revcrunch','wheel','plank','deadbug','hollow','bodysaw','pallof','woodchop','sideplank','russian','bicycle','taps','climber'],
+  abdos:['legraise','kneeraise','vup','cablecrunch','revcrunch','wheel','plank','deadbug','hollow','bodysaw','pallof','woodchop','sideplank','russian','bicycle','taps','climber','kbhalo','kbtrident','kblegs','kbscissors','latbend','plankdip','hkwood','latdl','starfish','pendulum'],
   corps:['swing','burpee','mbslam','farmer','suitcase']
 };
 Object.keys(MGL).forEach(function(g){MGL[g].forEach(function(id){if(LIB[id])LIB[id].g=g})});
@@ -375,8 +389,21 @@ const GYM={
   4:{title:'Abdos à fond et hybride',dur:'60 min',warm:['5 min de rameur','10 genoux hauts, 10 talons-fesses, 5 pompes lentes','5 respirations abdominales, côtes basses rentrées']}
 };
 const LIFT=GYM;
+function buildGym(title,dur,warm,ids,fids,extra){
+  var ex=ids.map(function(id){return LIB[id]});
+  var focus=(fids||ids).slice(0,3).map(function(id){var n=LIB[id].name;return n.charAt(0).toLowerCase()+n.slice(1)}).join(', ');
+  return {title:title,dur:dur,warm:warm,focus:focus,goal:'Au programme : '+focus+'. '+(extra||''),ex:ex};
+}
+function specialGym(d,w){
+  var c=w%4;
+  if(d===2&&w>=6&&c===2)return buildGym('Jambes du coureur','55 min',['5 min de vélo, facile','Mobilité chevilles et hanches : 2 × 8 de chaque côté','Approche : 1 série légère de chaque mouvement'],['copen','revlunge','kbrdl','hipflex','calfw'],null,'Du travail unilatéral pour des jambes et des hanches qui encaissent le kilométrage.');
+  if(d===4&&w>=7&&c===3)return buildGym('Kettlebell : core et hybride','50 min',['5 min de rameur','10 swings légers','5 respirations abdominales, côtes basses rentrées'],['swing','goblet','kbhalo','kbtrident','kblegs','kbscissors'],['kbhalo','kbtrident','kblegs'],'Circuit core : 5 tours de 10 répétitions, ou en EMOM 5 min (1 min par exercice).');
+  if(d===4&&w>=9&&c===1)return buildGym('Obliques : circuits','50 min',['5 min de rameur','Rotations du buste : 2 × 10 de chaque côté','5 respirations abdominales, côtes basses rentrées'],['lat','pushupfeet','latbend','plankdip','hkwood','latdl','starfish','pendulum'],['latbend','plankdip','hkwood'],'Deux circuits de 2 tours, charge modérée : tu cherches les obliques, pas le dos.');
+  return null;
+}
 function gymSession(d,w){
   var pg=prepGym(w,d);if(pg)return pg;
+  var sg=specialGym(d,w);if(sg)return sg;
   var b=blockOf(w),used={},ids=[];
   function take(pool,o,s){
     for(var k=0;k<pool.length;k++){
