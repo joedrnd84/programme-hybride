@@ -11,14 +11,14 @@
 <style>
 :root{
   --bg:#0B0B0F;--surface:#16161B;--surface2:#212129;--ink:#FFFFFF;--muted:#A4A7B5;--line:#2A2A33;--soft:#212129;
-  --blue:#142AF3;--acc:#8C97FF;--lift:#142AF3;--run:#FFFFFF;--rest:#C0C2B8;--ok:#2FD27C;
+  --blue:#142AF3;--acc:#8C97FF;--lift:#142AF3;--run:#FFFFFF;--rest:#C0C2B8;--ok:#9DF216;
   --bar:rgba(22,22,27,.92);--glow:.45;
   --disp:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
   --body:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
 }
 :root[data-theme="light"]{
   --bg:#ECEEF7;--surface:#FFFFFF;--surface2:#E2E5F3;--ink:#0B0B0F;--muted:#5D6173;--line:#D8DBEB;--soft:#E2E5F3;
-  --acc:#142AF3;--run:#0B0B0F;--rest:#B9BCC8;--ok:#1FA463;--bar:rgba(255,255,255,.94);--glow:.16;
+  --acc:#142AF3;--run:#0B0B0F;--rest:#B9BCC8;--ok:#9DF216;--bar:rgba(255,255,255,.94);--glow:.16;
 }
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
@@ -166,9 +166,12 @@ details.warm li{margin:4px 0}
 .cb:disabled{opacity:.4}
 .cb.go{background:var(--blue);color:#fff;box-shadow:0 10px 30px rgba(20,42,243,.45)}
 .cb.pause{background:var(--ink);color:var(--bg)}
+.cb svg{width:44px;height:44px;fill:currentColor;display:block;margin:0 auto}
+details.tips summary{cursor:pointer;font-weight:600;padding:14px 18px;background:var(--surface);border:1px solid var(--line);border-radius:22px;list-style:none;margin:12px 0}
+details.tips summary::-webkit-details-marker{display:none}
 .laps{margin-top:26px;text-align:left}
 .lap{display:flex;justify-content:space-between;padding:13px 4px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums;font-size:17px}
-.lap.best{color:var(--ok)}
+.lap.best span:last-child{background:var(--ok);color:#04210F;border-radius:999px;padding:0 10px}
 .lap.worst{color:#FF6B78}
 
 /* minuteur de repos + barre d'onglets */
@@ -522,6 +525,7 @@ function prepRun(w,d){
 /* ---------- chronomètre ---------- */
 let CH=store.get('hyb.chrono',{run:false,start:0,acc:0,laps:[]});
 const chEl=()=>CH.acc+(CH.run?Date.now()-CH.start:0);
+const CHI={play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',pause:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>'};
 function fmtMs(ms){var t=Math.floor(ms/10),cs=t%100,s=Math.floor(t/100)%60,m=Math.floor(t/6000);return (m<10?'0':'')+m+':'+(s<10?'0':'')+s+','+(cs<10?'0':'')+cs}
 function chSave(){store.set('hyb.chrono',CH)}
 function chLapsHtml(){
@@ -536,7 +540,7 @@ function chLapsHtml(){
 }
 function renderChrono(){
   var idle=!CH.run&&CH.acc===0;
-  return '<div class="chrono"><div class="ct" id="ct">'+fmtMs(chEl())+'</div><div class="cbtns"><button class="cb" data-a="chlap"'+(idle?' disabled':'')+'>'+(CH.run||idle?'Tour':'Arrêter')+'</button><button class="cb '+(CH.run?'pause':'go')+'" data-a="chgo">'+(CH.run?'Pause':(CH.acc>0?'Reprendre':'Démarrer'))+'</button></div><div class="laps" id="laps">'+chLapsHtml()+'</div></div>';
+  return '<div class="chrono"><div class="ct" id="ct">'+fmtMs(chEl())+'</div><div class="cbtns"><button class="cb" data-a="chlap"'+(idle?' disabled':'')+'>'+(CH.run||idle?'Tour':'Arrêter')+'</button><button class="cb '+(CH.run?'pause':'go')+'" data-a="chgo" aria-label="'+(CH.run?'Pause':(CH.acc>0?'Reprendre':'Démarrer'))+'">'+(CH.run?CHI.pause:CHI.play)+'</button></div><div class="laps" id="laps">'+chLapsHtml()+'</div></div>';
 }
 setInterval(function(){
   if(S.tab!=='chrono')return;
@@ -580,7 +584,7 @@ function head(){
   const b=BLOCKS[blockOf(S.w)], s=wkStart(S.w), e=new Date(s.getTime()+6*DAY_MS);
   document.getElementById('wk').innerHTML='<b>Semaine '+S.w+'</b><span>'+b.n+(isDl(S.w)?', semaine allégée':'')+', du '+fd(s)+' au '+fd(e)+'</span>';
   document.getElementById('strip').innerHTML=S.tab==='session'?dayStrip():'';
-  document.getElementById('tabs').innerHTML=[['session','Séance'],['week','Semaine'],['plan','Plan'],['chrono','Chrono'],['set','Réglages']]
+  document.getElementById('tabs').innerHTML=[['session','Séance'],['week','Semaine'],['chrono','Chrono'],['set','Réglages']]
     .map(function(t){return '<button data-a="tab" data-v="'+t[0]+'" class="'+(S.tab===t[0]?'on':'')+'">'+TI[t[0]]+'<span>'+t[1]+'</span></button>'}).join('');
 }
 function dayStrip(){
@@ -668,7 +672,7 @@ function renderSet(){
 }
 function render(){
   const y=window.scrollY;head();
-  document.getElementById('view').innerHTML=({session:renderSession,week:renderWeek,plan:function(){return renderPlan()+renderRules()},chrono:renderChrono,set:renderSet})[S.tab]();
+  document.getElementById('view').innerHTML=({session:renderSession,week:renderWeek,chrono:renderChrono,set:function(){return '<details class="tips"><summary>Conseils : course, nutrition, règles</summary>'+renderRules()+'</details>'+renderSet()}})[S.tab]();
   window.scrollTo(0,y);
 }
 
