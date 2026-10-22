@@ -835,7 +835,7 @@ function renderRoute(){
   +'<div class="map" id="map"></div>'
   +'<div class="rt-read" id="rread"></div>'
   +'<div class="prof" id="prof"></div>'
-  +'<p class="attr">Glisse le doigt sur le profil ou touche le tracé. Fond de carte © OpenStreetMap, © CARTO.</p></div>'
+  +'<p class="attr">Glisse le doigt sur le profil ou touche le tracé. Fond de carte © Esri, HERE, OpenStreetMap.</p></div>'
   +'<div class="card"><h3 class="sec">Les montées</h3><div class="clbs">'+cls+'</div></div>'
   +'<div class="card"><h3 class="sec">Ta stratégie</h3><ul>'
   +'<li>Les 5 derniers km concentrent 4 montées raides (≈ 300 m D+) : c’est là que la course se joue. Garde des forces jusqu’au km 14.</li>'
@@ -854,8 +854,8 @@ function drawRoute(){
   if(bh/bw<H/W){const nh=bw*H/W;y0-=(nh-bh)/2;bh=nh}else{const nw=bh*W/H;x0-=(nw-bw)/2;bw=nw}
   map.style.height=H+'px';
   const k=bw/W;let tiles='';
-  for(let tx=Math.floor(x0/256);tx<=Math.floor((x0+bw)/256);tx++)for(let ty=Math.floor(y0/256);ty<=Math.floor((y0+bh)/256);ty++)
-    tiles+='<image href="https://'+'abc'[(tx+ty)%3]+'.basemaps.cartocdn.com/'+(dark?'dark_all':'light_all')+'/14/'+tx+'/'+ty+'@2x.png" x="'+tx*256+'" y="'+ty*256+'" width="256" height="256" onerror="this.remove()"/>';
+  for(let tx=Math.floor(x0/128);tx<=Math.floor((x0+bw)/128);tx++)for(let ty=Math.floor(y0/128);ty<=Math.floor((y0+bh)/128);ty++)
+    tiles+='<image href="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_'+(dark?'Dark':'Light')+'_Gray_Base/MapServer/tile/15/'+ty+'/'+tx+'" x="'+tx*128+'" y="'+ty*128+'" width="128.5" height="128.5" onerror="this.remove()"/>';
   const pts=function(a,b){let s='';for(let i=a;i<=b;i++)s+=R.X[i].toFixed(1)+','+R.Y[i].toFixed(1)+' ';return s};
   let steep='',i=0;
   while(i<R.n){if(R.sl[i]>=10){let j=i;while(j<R.n-1&&R.sl[j+1]>=10)j++;if(j>i)steep+='<polyline points="'+pts(Math.max(0,i-1),j)+'" fill="none" stroke="var(--race)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>';i=j+1}else i++}
