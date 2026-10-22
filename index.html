@@ -103,19 +103,26 @@ details.warm ul{margin:0;padding:12px 18px 12px 38px;background:var(--surface);b
 details.warm li{margin:4px 0}
 
 /* exercices */
-.ex .row{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
-.ex h3{font-size:18px;font-weight:600;line-height:1.25;margin:2px 0 0}
-.ex .n{font-family:var(--disp);font-style:italic;font-weight:800;color:var(--muted);font-size:26px;margin-right:8px}
-.rx{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-top:10px;gap:6px 10px}
-.rx .big{font-family:var(--disp);font-style:italic;font-weight:800;font-size:clamp(48px,15vw,64px);line-height:.9;white-space:nowrap}
+.exh{display:grid;grid-template-columns:52px minmax(0,1fr) 44px;gap:12px;align-items:center}
+.tile{position:relative;width:52px;height:52px;border-radius:16px;overflow:hidden;background:var(--surface2);display:flex;align-items:center;justify-content:center}
+.tile .num{font-family:var(--disp);font-style:italic;font-weight:800;font-size:28px;line-height:1;color:var(--ink)}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile.has .num{display:none}
+.exm{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.ex h3{font-size:17px;font-weight:600;line-height:1.2;margin:0;text-wrap:balance}
+.rx{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 10px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.rx .big{font-family:var(--disp);font-style:italic;font-weight:800;font-size:clamp(44px,13vw,58px);line-height:.9;white-space:nowrap}
 .rx .load{font-variant-numeric:tabular-nums;background:var(--surface2);border-radius:999px;padding:6px 14px;font-weight:600;font-size:14px;white-space:nowrap}
 .rest{font-size:12.5px;color:var(--muted);margin:6px 0 0}
-.sets{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 6px}
+.sets{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 0}
 .set{width:52px;height:52px;border-radius:50%;border:2px solid var(--line);background:transparent;font-family:var(--disp);font-style:italic;font-weight:800;font-size:23px;padding:0}
 .set.d{background:var(--c);border-color:var(--c);color:var(--cc)}
-.cue{font-size:13px;color:var(--muted);margin:8px 0 0}
-.mg{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--cc);background:var(--c);border-radius:999px;padding:4px 13px 4px 9px;margin:10px 0 0}
-.mg svg{display:block}
+.cue{font-size:13px;color:var(--muted);margin:14px 0 0}
+.demo{display:inline-flex;align-items:center;gap:8px;min-height:40px;margin-top:12px;padding:0 14px;border-radius:999px;background:var(--surface2);color:var(--ink);font-size:13px;font-weight:600;text-decoration:none}
+.demo svg{width:12px;height:12px;fill:currentColor}
+.ex.cardio .tile{background:color-mix(in srgb,var(--race) 22%,var(--surface2))}
+.mg{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 11px 0 7px;font-size:12px;font-weight:600;line-height:1;color:var(--cc);background:var(--c);border-radius:999px;margin:0}
+.mg svg{display:block;width:13px;height:17px}
 .mg .bd{fill:currentColor;opacity:.35}
 .mg .hl{fill:currentColor}
 .mg .sp{stroke:currentColor;stroke-width:1;fill:none;opacity:.6}
@@ -178,24 +185,18 @@ details.tips summary::-webkit-details-marker{display:none}
 #timer button{border:0;background:rgba(255,255,255,.2);color:#fff;border-radius:999px;min-height:40px;padding:0 15px;font-weight:600}
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:7;padding:0 12px calc(10px + env(safe-area-inset-bottom,0px));pointer-events:none}
 .tabs .in{pointer-events:auto;max-width:520px;margin:0 auto;display:flex;gap:4px;background:var(--bar);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:38px;padding:6px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
-.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:58px;border:0;background:transparent;color:var(--muted);border-radius:32px;font-size:11.5px;font-weight:600;padding:0}
+.tabs .in{position:relative}
+.tabs .ind{position:absolute;top:6px;left:0;height:58px;width:0;border-radius:32px;background:var(--blue);z-index:0;pointer-events:none}
+.tabs .in.ready .ind{transition:transform .42s cubic-bezier(.22,1,.36,1),width .42s cubic-bezier(.22,1,.36,1)}
+.tabs button{flex:1;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:58px;border:0;background:transparent;color:var(--muted);border-radius:32px;font-size:11.5px;font-weight:600;padding:0;transition:color .25s ease}
 .tabs button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.tabs button.on{background:var(--blue);color:#fff}
+.tabs button.on{color:#fff}
+@media (prefers-reduced-motion: reduce){.tabs .in.ready .ind{transition:none}.tabs button{transition:none}}
 .k-race{--cc:#0B0B0F}
 .day.k-race:not(.on):not(.done){background:var(--race);color:#0B0B0F}
 .day.k-race:not(.on):not(.done) small{color:#0B0B0F;opacity:.75}
 .day.k-race:not(.on):not(.done) i{background:#0B0B0F}
 .hero.k-race{background:linear-gradient(135deg,#FFB41F 0%,#FF8A00 100%)}
-.exh{display:flex;gap:12px;align-items:flex-start}
-.exm{flex:1;min-width:0}
-.thumb{text-decoration:none;position:relative;flex:none;width:72px;height:72px;border-radius:20px;overflow:hidden;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--muted)}
-.thumb .ph{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--muted)}
-.thumb .ph svg{width:26px;height:26px;fill:var(--ink)}
-.thumb.has .ph{display:none}
-.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.thumb .play{display:none;position:absolute;right:5px;bottom:5px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.6)}
-.thumb.has .play{display:block}
-.thumb .play::before{content:"";position:absolute;left:9px;top:6px;border-left:9px solid #fff;border-top:6px solid transparent;border-bottom:6px solid transparent}
 .kmrow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:16px}
 .kmrow .km{margin-top:0}
 .elev{flex:0 1 150px;min-width:96px;text-align:right;padding-bottom:6px}
@@ -203,7 +204,45 @@ details.tips summary::-webkit-details-marker{display:none}
 .elev b{display:block;font-family:var(--disp);font-style:italic;font-weight:800;font-size:22px;line-height:1;margin-bottom:2px}
 .elev svg{width:100%;height:auto;aspect-ratio:160/70;display:block;margin-left:auto;fill:none;stroke:var(--cc);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .elev .fill{fill:var(--cc);opacity:.14;stroke:none}
+.tipline{font-size:13px;color:var(--muted);margin:4px 4px 0;display:flex;gap:8px;align-items:flex-start}
+.tipline b{color:var(--ink);font-weight:600}
+.missed{background:color-mix(in srgb,var(--race) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--race) 45%,transparent)}
 .wlnote{font-size:12px;color:var(--muted);margin:16px 8px 0}
+.routebtn{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-top:14px;padding:0 18px;border:0;border-radius:999px;background:var(--cc);color:var(--c);font-weight:600;font-size:14px}
+.routebtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.back{display:inline-flex;align-items:center;gap:4px;min-height:44px;padding:0 16px 0 10px;margin-top:4px;border:0;border-radius:999px;background:var(--surface2);font-weight:600}
+.back svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.rt{padding:18px 0 14px;overflow:hidden}
+.rt>.rt-stats,.rt>.rt-read,.rt>.attr{margin-left:18px;margin-right:18px}
+.rt h2{font-family:var(--disp);font-style:italic;font-weight:800;font-size:clamp(30px,9vw,38px);line-height:.95;text-transform:uppercase;margin:0 18px 14px;text-wrap:balance}
+.rt-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.rt-stats b,.rt-read b{display:block;font-family:var(--disp);font-style:italic;font-weight:800;font-size:26px;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rt-stats span,.rt-read span{display:block;font-size:11px;color:var(--muted);margin-top:3px}
+.map{position:relative;background:var(--surface2)}
+.map svg{display:block;width:100%;height:100%;touch-action:manipulation;cursor:crosshair}
+.map .tiles image{opacity:.9}
+.rt-read{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px}
+.rt-read b{font-size:22px}
+.rt-read .up b{color:var(--race)}
+.prof{position:relative;margin-top:10px;touch-action:pan-y;cursor:ew-resize;user-select:none;-webkit-user-select:none}
+.prof svg{display:block;width:100%;overflow:visible}
+.prof .area{fill:var(--acc);opacity:.18}
+.prof .line{fill:none;stroke:var(--acc);stroke-width:2}
+.prof .clz{fill:var(--race);opacity:.16}
+.prof .clz.sel{opacity:.38}
+.prof .cln{font:700 11px var(--body);fill:var(--race);text-anchor:middle}
+.prof .ax{font:500 10.5px var(--body);fill:var(--muted)}
+.prof .grid{stroke:var(--line);stroke-width:1}
+.prof .cur{stroke:var(--ink);stroke-width:1.5}
+.prof .dot{fill:var(--ink);stroke:var(--bg);stroke-width:2}
+.attr{font-size:10.5px;color:var(--muted);margin-top:10px}
+.clbs{display:flex;flex-direction:column;gap:8px}
+.clb{display:grid;grid-template-columns:36px minmax(0,1fr);gap:12px;align-items:center;width:100%;min-height:56px;padding:8px 12px;border:1px solid var(--line);border-radius:18px;background:transparent;text-align:left}
+.clb .cn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--race) 22%,transparent);color:var(--race);font-family:var(--disp);font-style:italic;font-weight:800;font-size:19px}
+.clb b{display:block;font-weight:600;font-size:14.5px}
+.clb small{display:block;font-size:12.5px;color:var(--muted)}
+.clb.steep .cn{background:var(--race);color:#0B0B0F}
+.clb.sel{border-color:var(--race)}
 @media (prefers-reduced-motion: reduce){.bar div{transition:none}}
 </style>
 </head>
@@ -340,10 +379,14 @@ plankdip:{n:'Plank dips lestés',kind:'bw',sets:[2,2,2],reps:['20','20','20'],re
 hkwood:{n:'Woodchop à demi-genou',ref:12,step:2.5,unit:'cable',sets:[2,2,2],reps:['12','12','12'],rest:30,note:'par côté',cue:'Un genou au sol, tire en diagonale en tournant le buste. Hanches stables, bras tendus.'},
 latdl:{n:'Lateral deadlift',ref:12,step:2,unit:'one',sets:[2,2,2],reps:['12','12','12'],rest:30,cue:'Charge modérée, mouvement lent et contrôlé : tu cherches les obliques sans contrainte sur le dos. Trajectoire exacte : voir la vidéo du post.'},
 starfish:{n:'Starfish hold',kind:'time',sets:[2,2,2],reps:['45 s','45 s','45 s'],rest:30,cue:'Gainage en position étoile : corps aligné, abdos et obliques serrés. Respire. Position exacte : voir la vidéo du post.'},
-pendulum:{n:'Pendulum lesté',ref:6,step:2,unit:'one',sets:[2,2,2],reps:['20','20','20'],rest:30,note:'au total',cue:'Bras au-dessus de la tête, alignés avec les oreilles : ça active les obliques et protège la colonne. Mouvement contrôlé.'}
+pendulum:{n:'Pendulum lesté',ref:6,step:2,unit:'one',sets:[2,2,2],reps:['20','20','20'],rest:30,note:'au total',cue:'Bras au-dessus de la tête, alignés avec les oreilles : ça active les obliques et protège la colonne. Mouvement contrôlé.'},
+finincl:{n:'Finisher : tapis incliné',kind:'time',fixed:1,sets:[1,1,1],reps:['12 min','15 min','15 min'],rest:0,note:'Marche rapide, pente 10–12 %',cue:'Ne te tiens pas aux barres. Mollets, fessiers et cœur : idéal pour le trail et pour brûler des calories sans abîmer les jambes.'},
+finrow:{n:'Finisher : rameur',kind:'time',fixed:1,sets:[1,1,1],reps:['8 × 40 s','10 × 40 s','10 × 40 s'],rest:0,note:'40 s fort, 20 s facile',cue:'Fort mais tenable du premier au dernier tour. Pousse avec les jambes, puis le dos, puis les bras.'},
+finbike:{n:'Finisher : vélo',kind:'time',fixed:1,sets:[1,1,1],reps:['10 min','12 min','12 min'],rest:0,note:'Au seuil, 85–95 tr/min',cue:'Tu peux dire quelques mots, pas plus. Tu dois finir en sueur.'},
+finrope:{n:'Finisher : corde à sauter',kind:'time',fixed:1,sets:[1,1,1],reps:['8 × 45 s','10 × 45 s','10 × 45 s'],rest:0,note:'15 s de pause entre chaque',cue:'Petits sauts sur l’avant-pied, épaules relâchées, rythme régulier.'}
 };
 Object.keys(LIB).forEach(function(k){LIB[k].id=k;LIB[k].name=LIB[k].n});
-const MGLAB={pecs:'Pecs',dos:'Dos',epaules:'Épaules',jambes:'Jambes',ischios:'Ischios',fessiers:'Fessiers',mollets:'Mollets',plio:'Pliométrie',abdos:'Abdos',corps:'Corps entier',run:'Course'};
+const MGLAB={cardio:'Cardio',pecs:'Pecs',dos:'Dos',epaules:'Épaules',jambes:'Jambes',ischios:'Ischios',fessiers:'Fessiers',mollets:'Mollets',plio:'Pliométrie',abdos:'Abdos',corps:'Corps entier',run:'Course'};
 const MGL={
   pecs:['bench','incbar','incdb','benchdb','floorpress','cablepress','pushup','pushupfeet','fly','lowfly','pecdeck','flydb','plyopush'],
   dos:['pullup','pullneutral','row','dbrow','chestrow','lat','crow','straightarm'],
@@ -354,7 +397,8 @@ const MGL={
   mollets:['calf','calfsit','calfsl','calfiso','tib','balance','calfw'],
   plio:['boxjump','squatjump','splitjump','hurdle','depth','pogo','skater','rope','broad','bounds'],
   abdos:['legraise','kneeraise','vup','cablecrunch','revcrunch','wheel','plank','deadbug','hollow','bodysaw','pallof','woodchop','sideplank','russian','bicycle','taps','climber','kbhalo','kbtrident','kblegs','kbscissors','latbend','plankdip','hkwood','latdl','starfish','pendulum'],
-  corps:['swing','burpee','mbslam','farmer','suitcase']
+  corps:['swing','burpee','mbslam','farmer','suitcase'],
+  cardio:['finincl','finrow','finbike','finrope']
 };
 Object.keys(MGL).forEach(function(g){MGL[g].forEach(function(id){if(LIB[id])LIB[id].g=g})});
 function mgIcon(g){
@@ -374,7 +418,7 @@ function mgIcon(g){
     plio:'<path class="hl" d="M12 2l6 7h-4v6h-4V9H6z"/><rect class="hl" x="5" y="20" width="14" height="2.4" rx="1.2"/><rect class="hl" x="5" y="25" width="14" height="2.4" rx="1.2" opacity=".5"/>',
     run:'<circle class="hl" cx="15" cy="4.5" r="2.4"/><path class="st" d="M13.2 9.2l-3 6.2 3.4 3-1.2 7M10.2 15.4l-4.4 1.6M13.2 9.2l4.6 3.4"/>'
   };
-  return '<svg viewBox="0 0 24 32" width="24" height="32" aria-hidden="true">'+(g==='plio'||g==='run'?'':base)+(H[g]||'')+'</svg>';
+  return '<svg viewBox="0 0 24 32" width="24" height="32" aria-hidden="true">'+(g==='plio'||g==='run'||g==='cardio'?'':base)+(g==='cardio'?'<path class="hl" d="M12 28s-9-5.6-9-12.2A5 5 0 0 1 12 12.6a5 5 0 0 1 9 3.2C21 22.4 12 28 12 28z"/>':(H[g]||''))+'</svg>';
 }
 function mgChip(g){return g&&MGLAB[g]?'<span class="mg">'+mgIcon(g)+MGLAB[g]+'</span>':''}
 const UNITLAB={db:'par haltère',cable:'sur la poulie',kb:'kettlebell',one:'une seule charge',mach:'sur la machine',bar:'barre incluse'};
@@ -416,9 +460,15 @@ function specialGym(d,w){
   if(d===4&&w>=9&&c===1)return buildGym('Obliques : circuits','50 min',['5 min de rameur','Rotations du buste : 2 × 10 de chaque côté','5 respirations abdominales, côtes basses rentrées'],['lat','pushupfeet','latbend','plankdip','hkwood','latdl','starfish','pendulum'],['latbend','plankdip','hkwood'],'Deux circuits de 2 tours, charge modérée : tu cherches les obliques, pas le dos.');
   return null;
 }
+function withFin(L,d,w){
+  if(w<5)return L;
+  const F=['finincl','finrow','finbike','finrope'][(w+d)%4];
+  L.ex=L.ex.concat([LIB[F]]);L.fin=F;L.dur=(parseInt(L.dur,10)+12)+' min';
+  return L;
+}
 function gymSession(d,w){
   var pg=prepGym(w,d);if(pg)return pg;
-  var sg=specialGym(d,w);if(sg)return sg;
+  var sg=specialGym(d,w);if(sg)return withFin(sg,d,w);
   var b=blockOf(w),used={},ids=[];
   function take(pool,o,s){
     for(var k=0;k<pool.length;k++){
@@ -432,7 +482,7 @@ function gymSession(d,w){
   else {take(P.power,0,1);take(P.pushC,1,1);take(P.pullC,0,1);take(P.flex,3,2);take(P.anti,2,2);take(P.rot,1,2);take(P.dyn,0,1);take(P.flex,0,3);pick=[0,3,4]}
   var focus=pick.map(function(i){var n=LIB[ids[i]].name;return n.charAt(0).toLowerCase()+n.slice(1)}).join(', ');
   var g=GYM[d];
-  return {title:g.title,dur:g.dur,warm:g.warm,focus:focus,goal:'Au programme : '+focus+'.',ex:ids.map(function(id){return LIB[id]})};
+  return withFin({title:g.title,dur:g.dur,warm:g.warm,focus:focus,goal:'Au programme : '+focus+'.',ex:ids.map(function(id){return LIB[id]})},d,w);
 }
 
 /* ---------- séances de course ---------- */
@@ -539,7 +589,7 @@ function prepGym(w,d){
    '1-4':gx('Abdos et haut du corps, jambes au repos','Après 10 km, tu ménages les jambes et tu travailles le tronc.','45 min',WA,[['lat',3,'10'],['incdb',3,'10'],['kneeraise',3,'12'],['hollow',3,'25 s'],['sideplank',3,'30 s'],['pallof',3,'10'],['tib',2,'15']]),
    '2-0':gx('Pecs, dos et abdos, jambes préservées','Haut du corps et tronc, pendant que les jambes encaissent le volume de course.','55 min',WA,[['bench',3,'8'],['pullup',3,'6–8'],['row',3,'10'],['fly',2,'12–15'],['legraise',3,'10–12'],['plank',3,'45 s']]),
    '2-2':gx('Jambes spé trail : force et mollets','Ta dernière vraie séance de jambes : force, mollets et tendons. Pas d’excentrique : tu as des côtes jeudi.','60 min',WB,[['pogo',3,'20'],['goblet',3,'10'],['stepup',3,'8'],['hipthrust',3,'10'],['calf',3,'12'],['tib',2,'15'],['copen',2,'20 s']]),
-   '2-4':gx('Abdos à fond, jambes au repos','Gainage et tronc : ce qui te garde stable dans les descentes.','50 min',WC,[['legraise',3,'10–12'],['bodysaw',3,'10'],['woodchop',3,'10'],['sideplank',3,'30 s'],['calfiso',3,'35 s'],['tib',2,'15']]),
+   '2-6':gx('Maison : haut du corps, gainage et cardio','Lendemain de sortie longue, à la maison avec tes 2 haltères de 10 kg et ton tapis. Les jambes se reposent, le reste travaille. Puis 30 min de marche dehors.','40 min',['5 min de marche rapide sur place, genoux hauts','Rotations d’épaules et de hanches : 10 de chaque'],[['floorpress',3,'12–15',{load:'2 × 10 kg'}],['dbrow',3,'12–15',{load:'10 kg',note:'par bras'}],['pushup',3,'10–12'],['revcrunch',3,'15'],['sideplank',3,'30 s'],['deadbug',3,'10'],['climber',4,'40 s']]),
    '3-0':gx('Gainage et stabilité trail','Tronc, hanches et chevilles : ce qui te garde propre dans les descentes.','40 min',WC,[['plank',3,'45 s'],['sideplank',3,'30 s'],['deadbug',3,'8'],['glutebridge',3,'10'],['abduct',2,'12 pas'],['balance',2,'30 s']]),
    '3-2':gx('Jambes légères : dernier rappel','Dernier travail de jambes. Charges légères, aucune fatigue à emporter.','40 min',WB,[['pogo',2,'15'],['goblet',2,'8',{mul:0.8}],['stepup',2,'8'],['calf',2,'12'],['tib',2,'15'],['copen',2,'15 s']]),
    '3-4':gx('Abdos courts','Trente minutes de gainage, rien d’autre.','30 min',WC,[['kneeraise',2,'12'],['hollow',2,'25 s'],['sideplank',2,'25 s'],['pallof',2,'10'],['tib',2,'15']]),
@@ -554,18 +604,19 @@ function prepRun(w,d){
   var R={
    '1-3':{title:'Footing à 6:00/km',km:10.2,dur:'1 h 02',goal:'Ta première longue sortie facile : la base pour le 7 novembre.',steps:[{h:'Allure',t:'6:00/km, régulier. Tu parles en phrases complètes (≈ 125–145 bpm).'},{h:'Eau',t:'Bois avant et après. Au-delà d’1 h, quelques gorgées en route.'},{h:'Après',t:'5 min de marche, puis 10 min de souplesse (jambes libres).'}]},
    '1-5':{title:'Sortie vallonnée',km:8,dplus:200,dur:'55–60 min',goal:'Premier contact avec le dénivelé, en douceur.',steps:[{h:'Avant de partir',t:'Dernier repas 2 h 30 avant, léger et pauvre en fibres (riz, pâtes, banane). Passe aux toilettes avant de sortir.'},{h:'Parcours',t:'Choisis un parcours avec des côtes. Marche celles qui dépassent 10 %, relance en haut.'},{h:'Montées',t:'Petits pas, buste droit, regard devant. Ne te mets jamais dans le rouge.'},{h:'Descentes',t:'Foulées courtes, pieds sous le bassin, bras relâchés. Tes quadriceps freinent : ça se travaille.'}]},
-   '2-1':{title:'Côtes courtes',km:7,dplus:80,dur:'50 min',goal:'Force et puissance en montée, sans fatigue inutile.',steps:[{h:'Échauffement',t:'10 min de trot lent, puis 3 lignes droites progressives.'},{h:'Corps de séance',t:'6 côtes de 1 min (pente 6–8 %), effort soutenu mais pas un sprint. Redescente en trottant doucement.'},{h:'Retour au calme',t:'10 min de trot lent, puis marche 3 min.'}]},
-   '2-3':{title:'Côtes et descentes',km:7,dplus:100,dur:'50 min',goal:'Ta séance de côtes de mardi, avec le travail de descente en plus.',steps:[{h:'Échauffement',t:'10 min de trot lent, puis 3 lignes droites progressives.'},{h:'Côtes',t:'4 côtes de 1 min en courant (pente 6–8 %), puis 2 côtes en marche rapide : mains sur les cuisses, petits pas. C’est ta vraie tactique de course sur les pentes raides.'},{h:'Descentes',t:'Redescends en foulées courtes, pieds sous le bassin, regard 3 m devant. Pas de freinage brutal.'},{h:'Retour au calme',t:'10 min de trot lent, puis 2 × 15 relevés de pointes de pied.'}]},
-   '2-5':{title:'Sortie clé',km:14,dplus:400,dur:'1 h 30–1 h 45',goal:'Ta plus longue sortie avant la course : la répétition générale.',steps:[{h:'Avant de partir',t:'Dernier repas 2 h 30 avant, léger et pauvre en fibres. Toilettes avant de sortir. Emporte un gel ou une banane.'},{h:'Allure',t:'Facile sur le plat (6:00–6:15/km). Marche les montées raides, ça fait partie du plan.'},{h:'Nutrition',t:'Teste ce que tu mangeras le jour J : 30 à 40 g de glucides par heure dès 40 min (gel, pâte de fruit, banane), 400–500 ml d’eau par heure.'},{h:'Matériel',t:'Mets les chaussures, le sac ou la ceinture et la tenue prévus pour la course.'},{h:'Si les jambes sont lourdes',t:'Raccourcis à 12 km. Ce n’est pas un échec : le plus important est d’arriver frais le 7.'},{h:'Après',t:'Marche 5 min, repas riche en glucides et protéines dans l’heure.'}]},
-   '3-1':{title:'Allure course : 4 × 3 min',km:7,dur:'45 min',goal:'Mémoriser l’effort du jour J, sans te fatiguer.',steps:[{h:'Échauffement',t:'10 min de trot lent.'},{h:'Corps de séance',t:'4 × 3 min à allure course (soutenue mais maîtrisée, environ 5:50–6:00/km sur le plat), 2 min de trot entre chaque.'},{h:'Retour au calme',t:'10 min de trot lent.'}]},
-   '3-3':{title:'Footing facile',km:6,dur:'35–40 min',goal:'Jambes légères : tu gardes la fraîcheur.',steps:[{h:'Footing facile',t:'6:00/km ou plus lent, aucun effort.'},{h:'Lignes droites',t:'4 × 80 m progressives.'}]},
-   '3-5':{title:'Dernière sortie longue',km:10,dplus:200,dur:'1 h 05–1 h 15',goal:'Tu rentres dans l’affûtage. Facile, jamais essoufflé.',steps:[{h:'Allure',t:'Facile du début à la fin (6:10/km environ). Marche les côtes.'},{h:'Matériel',t:'Dernier test : chaussures, vêtements, gel. Rien de nouveau à partir de maintenant.'}]},
+   '2-1':{missed:'Séance non faite : rattrapée le mardi 27 octobre (« Côtes du parcours »).',title:'Côtes courtes',km:7,dplus:80,dur:'50 min',goal:'Force et puissance en montée, sans fatigue inutile.',steps:[{h:'Échauffement',t:'10 min de trot lent, puis 3 lignes droites progressives.'},{h:'Corps de séance',t:'6 côtes de 1 min (pente 6–8 %), effort soutenu mais pas un sprint. Redescente en trottant doucement.'},{h:'Retour au calme',t:'10 min de trot lent, puis marche 3 min.'}]},
+   '2-3':{missed:'Séance non faite : rattrapée le mardi 27 octobre (« Côtes du parcours »).',title:'Côtes et descentes',km:7,dplus:100,dur:'50 min',goal:'Ta séance de côtes de mardi, avec le travail de descente en plus.',steps:[{h:'Échauffement',t:'10 min de trot lent, puis 3 lignes droites progressives.'},{h:'Côtes',t:'4 côtes de 1 min en courant (pente 6–8 %), puis 2 côtes en marche rapide : mains sur les cuisses, petits pas. C’est ta vraie tactique de course sur les pentes raides.'},{h:'Descentes',t:'Redescends en foulées courtes, pieds sous le bassin, regard 3 m devant. Pas de freinage brutal.'},{h:'Retour au calme',t:'10 min de trot lent, puis 2 × 15 relevés de pointes de pied.'}]},
+   '2-4':{title:'Reprise et lignes droites',km:6,dur:'35–40 min',goal:'Tu n’as pas couru depuis dimanche : tu réveilles les jambes sans les fatiguer, la sortie clé est demain.',steps:[{h:'Footing facile',t:'5 km à 6:00–6:15/km, en aisance respiratoire.'},{h:'Lignes droites',t:'6 × 80 m progressives sur du plat, retour en marchant.'},{h:'Marche en côte',t:'Si tu croises une pente raide : 2 × 1 min de marche rapide, mains sur les cuisses. C’est ta technique pour les murs du parcours.'},{h:'Ce soir, sur le tapis',t:'10 min de gainage : 3 × 40 s de planche, 3 × 30 s de planche latérale par côté.'}]},
+   '2-5':{title:'Sortie clé',km:14,dplus:400,route:1,dur:'1 h 30–1 h 45',goal:'Ta plus longue sortie avant la course : la répétition générale, sur le terrain de la course.',steps:[{h:'Où courir',t:'Sur les pentes de Fourvière : reprends une partie du tracé (bouton « Voir le parcours »), idéalement 2 ou 3 des montées des km 14 à 19.'},{h:'Avant de partir',t:'Dernier repas 2 h 30 avant, léger et pauvre en fibres. Toilettes avant de sortir. Emporte un gel ou une banane.'},{h:'Allure',t:'Facile sur le plat (6:00–6:15/km). Marche les montées raides, ça fait partie du plan.'},{h:'Nutrition',t:'Teste ce que tu mangeras le jour J : 30 à 40 g de glucides par heure dès 40 min (gel, pâte de fruit, banane), 400–500 ml d’eau par heure.'},{h:'Matériel',t:'Mets les chaussures, le sac ou la ceinture et la tenue prévus pour la course.'},{h:'Si les jambes sont lourdes',t:'Raccourcis à 12 km. Ce n’est pas un échec : le plus important est d’arriver frais le 7.'},{h:'Après',t:'Marche 5 min, repas riche en glucides et protéines dans l’heure.'}]},
+   '3-1':{title:'Côtes du parcours',km:7,dplus:180,route:1,dur:'50 min',goal:'Tes deux séances de côtes manquées, rattrapées en une : les murs du parcours, avec la bonne technique.',steps:[{h:'Échauffement',t:'15 min de trot facile, puis 3 lignes droites.'},{h:'Corps de séance',t:'6 × 1 min 30 dans une côte raide (12–18 %) : 3 en courant à petits pas, 3 en marche active, mains sur les cuisses. Compare tes temps : marcher vite est souvent aussi rapide.'},{h:'Descentes',t:'Redescends en foulées courtes, pieds sous le bassin, regard 3 m devant.'},{h:'Retour au calme',t:'10 min de trot lent, puis 2 × 15 relevés de pointes de pied.'}]},
+   '3-3':{title:'Footing et allure course',km:7,dur:'45 min',goal:'Mémoriser l’effort du jour J, sans te fatiguer.',steps:[{h:'Échauffement',t:'10 min de trot lent.'},{h:'Corps de séance',t:'3 × 4 min à allure course (environ 6:00/km sur le plat), 2 min de trot entre chaque.'},{h:'Retour au calme',t:'10 min de trot lent.'}]},
+   '3-5':{title:'Reconnaissance du parcours',km:11,dplus:250,route:1,dur:'1 h 10–1 h 20',goal:'Ta dernière sortie longue : facile, et sur la fin du tracé pour connaître les montées décisives.',steps:[{h:'Parcours',t:'Si tu peux, enchaîne la fin du tracé (km 14 à 19) : ce sont les 4 montées les plus raides. Ouvre « Voir le parcours » pour les repérer.'},{h:'Allure',t:'Facile du début à la fin. Marche les montées à plus de 12 %.'},{h:'Matériel',t:'Dernier test : chaussures, vêtements, gel. Rien de nouveau à partir de maintenant.'}]},
    '4-1':{title:'Rappels d’allure : 4 × 1 min',km:5,dur:'30–35 min',goal:'Réveiller les jambes. Pas plus.',steps:[{h:'Footing',t:'15 min facile.'},{h:'Rappels',t:'4 × 1 min à allure course, 1 min 30 de trot entre chaque.'},{h:'Retour au calme',t:'5 min de trot lent.'}]},
    '4-3':{title:'Dernier footing très facile',km:4,dur:'25 min',goal:'Se dérouiller, sans fatigue.',steps:[{h:'Footing',t:'20 min très facile, plus lent que d’habitude.'},{h:'Lignes droites',t:'4 × 60 m relâchées.'},{h:'Ce soir',t:'Prépare ta tenue, ton dossard, ton sac et tes gels.'}]},
    '5-1':{title:'Footing de récupération',km:4,dur:'25–30 min',goal:'Trois jours après la course : tu fais circuler le sang, rien de plus.',steps:[{h:'Footing',t:'Très lent et très facile. Si les jambes sont lourdes, marche.'},{h:'Après',t:'10 min de souplesse douce.'}]},
    '5-3':{title:'Footing facile',km:5,dur:'30–35 min',goal:'Tu retrouves les sensations. Aucun chrono.',steps:[{h:'Footing facile',t:'6:15/km ou plus lent, tu parles sans effort.'},{h:'Après',t:'2 × 15 relevés de pointes de pied, puis 10 min de souplesse.'}]},
    '5-5':{title:'Reprise douce',km:6,dur:'35–40 min',goal:'Une semaine après la course, tu reprends en douceur avant la suite du plan.',steps:[{h:'Footing facile',t:'Allure conversationnelle, terrain plat ou peu vallonné.'},{h:'Pense à',t:'Dors bien, mange assez : tu reprends le programme normal.'}]},
-   '4-5':{title:'Jour J',km:20,dplus:700,dur:'2 h 30–2 h 50',goal:'Le jour J. Tu as fait le travail, tu profites.',steps:[{h:'Avant',t:'Petit-déjeuner 3 h avant (glucides, rien de nouveau). 10 min de trot et 3 lignes droites avant le départ.'},{h:'Départ',t:'Les 5 premiers km doivent te sembler trop faciles (6:15/km ou plus lent). Laisse partir les autres.'},{h:'Montées',t:'Marche dès que la pente dépasse 10 %, petits pas, mains sur les cuisses si besoin. Marcher bien vaut mieux que courir mal.'},{h:'Descentes',t:'Foulées courtes, pieds sous le bassin, regard 3 m devant. Relâche les épaules.'},{h:'Ravitaillement',t:'30 à 40 g de glucides par heure dès 40 min, 400–500 ml d’eau par heure. Mange avant d’avoir faim.'},{h:'Dernier tiers',t:'Si les jambes répondent, accélère doucement. Sinon, tiens ton rythme et finis propre.'},{h:'Après',t:'Marche 10 min, mange, bois et couvre-toi. Pas de course demain.'}]}
+   '4-5':{title:'Jour J',km:20,dplus:700,route:1,dur:'2 h 30–2 h 50',goal:'Le jour J. Tu as fait le travail, tu profites.',steps:[{h:'Avant',t:'Petit-déjeuner 3 h avant (glucides, rien de nouveau). 10 min de trot et 3 lignes droites avant le départ.'},{h:'Départ',t:'Les 5 premiers km doivent te sembler trop faciles (6:15/km ou plus lent). Laisse partir les autres.'},{h:'Montées',t:'Marche dès que la pente dépasse 10 %, petits pas, mains sur les cuisses si besoin. Marcher bien vaut mieux que courir mal.'},{h:'Descentes',t:'Foulées courtes, pieds sous le bassin, regard 3 m devant. Relâche les épaules.'},{h:'Ravitaillement',t:'30 à 40 g de glucides par heure dès 40 min, 400–500 ml d’eau par heure. Mange avant d’avoir faim.'},{h:'Dernier tiers',t:'Si les jambes répondent, accélère doucement. Sinon, tiens ton rythme et finis propre.'},{h:'Après',t:'Marche 10 min, mange, bois et couvre-toi. Pas de course demain.'}]}
   };
   return R[w+'-'+d]||null;
 }
@@ -606,26 +657,28 @@ setInterval(function(){
 /* ---------- état ---------- */
 const now=new Date();
 const dayIdx=()=>Math.round((Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())-Date.UTC(2026,9,12))/DAY_MS);
-let S={tab:'session',w:1,d:0,pre:false,confirm:''};
+let S={tab:'session',w:1,d:0,pre:false,confirm:'',view:''};
 (function init(){
   if(now<START){S.pre=true;S.w=1;S.d=0}
   else{S.w=Math.min(WEEKS,Math.floor(dayIdx()/7)+1);S.d=(now.getDay()+6)%7}
 })();
 const todayKey=()=>{const di=dayIdx();if(di<0||di>=WEEKS*7)return null;return (Math.floor(di/7)+1)+'-'+((now.getDay()+6)%7)};
 
-const kindOf=d=>d===6?'rest':[0,2,4].includes(d)?'lift':'run';
+const KOVR={'2-4':'run','2-6':'lift'};
+const kindOf=(d,w)=>{w=w||S.w;return KOVR[w+'-'+d]||(d===6?'rest':[0,2,4].includes(d)?'lift':'run')};
 const colOf=d=>raceDay(S.w,d)?'var(--race)':({lift:'var(--lift)',run:'var(--run)',rest:'var(--rest)'})[kindOf(d)];
 
 /* ---------- utilitaires charges ---------- */
 function loadText(ex,w){
-  if(ex.kind) return 'Poids du corps';
+  if(ex.load) return ex.load;
+  if(ex.kind) return ex.g==='cardio'?'':'Poids du corps';
   const base=refs[ex.id]??ex.ref, v=fmt(rnd(base*(ex.mul||mult(w)),ex.step));
   return ex.unit==='db'?`2 × ${v} kg`:`${v} kg`;
 }
 function setsOf(ex,w){const n=ex.sets[blockOf(w)];if(!n)return 0;if(ex.fixed)return n;return isDl(w)?Math.max(2,n-1):n}
 const restTxt=s=>s<60?`${s} s`:`${Math.floor(s/60)} min${s%60?' '+(s%60):''}`;
-const dayTitle=(d,w)=>d===6?'Repos actif':LIFT[d]?gymSession(d,w).title+' : '+gymSession(d,w).focus:runInfo(d,w).title;
-const weekKm=w=>[1,3,5].reduce((a,d)=>a+runInfo(d,w).km,0);
+const dayTitle=(d,w)=>{const k=kindOf(d,w);if(k==='rest')return 'Repos actif';if(k==='lift'){const g=gymSession(d,w);return g.title+' : '+g.focus}const r=runInfo(d,w);return r.title+(r.missed?' · non faite':'')};
+const weekKm=w=>[0,1,2,3,4,5,6].filter(d=>kindOf(d,w)==='run').reduce((a,d)=>a+runInfo(d,w).km,0);
 
 /* ---------- rendu ---------- */
 const TI={
@@ -638,22 +691,31 @@ function head(){
   const b=BLOCKS[blockOf(S.w)], s=wkStart(S.w), e=new Date(s.getFullYear(),s.getMonth(),s.getDate()+6);
   document.getElementById('wk').innerHTML='<b>Semaine '+S.w+'</b><span>'+b.n+(isDl(S.w)?', semaine allégée':'')+', du '+fd(s)+' au '+fd(e)+'</span>';
   document.getElementById('bprev').disabled=S.w<=1;document.getElementById('bnext').disabled=S.w>=WEEKS;
-  document.getElementById('strip').innerHTML=S.tab==='session'?dayStrip():'';
-  document.getElementById('tabs').innerHTML=[['session','Séance'],['week','Semaine'],['chrono','Chrono'],['set','Réglages']]
-    .map(function(t){return '<button data-a="tab" data-v="'+t[0]+'" class="'+(S.tab===t[0]?'on':'')+'"'+(S.tab===t[0]?' aria-current="page"':'')+'>'+TI[t[0]]+'<span>'+t[1]+'</span></button>'}).join('');
+  document.getElementById('strip').innerHTML=S.tab==='session'&&S.view!=='route'?dayStrip():'';
+  const tb=document.getElementById('tabs');
+  if(!tb.dataset.built){
+    tb.innerHTML='<span class="ind" aria-hidden="true"></span>'+[['session','Séance'],['week','Semaine'],['chrono','Chrono'],['set','Réglages']].map(function(t){return '<button data-a="tab" data-v="'+t[0]+'">'+TI[t[0]]+'<span>'+t[1]+'</span></button>'}).join('');
+    tb.dataset.built='1';
+  }
+  tb.querySelectorAll('button').forEach(function(b){const on=b.dataset.v===S.tab;b.classList.toggle('on',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+  moveInd();
+  if(!tb.classList.contains('ready'))requestAnimationFrame(function(){requestAnimationFrame(function(){tb.classList.add('ready')})});
 }
+function moveInd(){const tb=document.getElementById('tabs');if(!tb||!tb.querySelector)return;const b=tb.querySelector('button.on'),ind=tb.querySelector('.ind');if(!b||!ind)return;ind.style.width=b.offsetWidth+'px';ind.style.transform='translateX('+b.offsetLeft+'px)'}
 function raceDay(w,d){return w===4&&d===5}
 const ICN={check:'<svg class="icn" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',sun:'<svg class="icn" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>',moon:'<svg class="icn" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>'};
 const IMG={miss:{},ok:{},off:false,fails:0};
 function imgOk(el){IMG.ok[el.dataset.id]=el.getAttribute('src');IMG.fails=0;el.parentNode.classList.add('has')}
 function imgFail(el){var n=(+el.dataset.n||0)+1,ext=['jpg','webp','png'];if(n<ext.length){el.dataset.n=n;el.src='img/'+el.dataset.id+'.'+ext[n]}else{IMG.miss[el.dataset.id]=1;if(++IMG.fails>=4&&!Object.keys(IMG.ok).length)IMG.off=true;el.remove()}}
-function thumbHtml(ex){
-  var q=encodeURIComponent(ex.name+' exercice technique');
-  return '<a class="thumb" href="https://www.youtube.com/results?search_query='+q+'" target="_blank" rel="noopener" aria-label="Voir la démo : '+ex.name+'"><span class="ph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Démo</span>'+(IMG.off||IMG.miss[ex.id]?'':'<img src="'+(IMG.ok[ex.id]||'img/'+ex.id+'.jpg')+'" data-id="'+ex.id+'" data-n="0" alt="" loading="lazy" onload="imgOk(this)" onerror="imgFail(this)">')+'<i class="play"></i></a>';
+function tileHtml(ex,i){
+  return '<div class="tile"><span class="num">'+(i+1)+'</span>'+(IMG.off||IMG.miss[ex.id]?'':'<img src="'+(IMG.ok[ex.id]||'img/'+ex.id+'.jpg')+'" data-id="'+ex.id+'" data-n="0" alt="" loading="lazy" onload="imgOk(this)" onerror="imgFail(this)">')+'</div>';
+}
+function demoHtml(ex){
+  return '<a class="demo" href="https://www.youtube.com/results?search_query='+encodeURIComponent(ex.name.replace(/^Finisher : /,'')+' exercice technique')+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>Voir la démo</a>';
 }
 const METT={'Pecs, dos et abdos':4.5,'Jambes : pliométrie et force spé course':5.5,'Abdos à fond et hybride':5,'Kettlebell : core et hybride':6,'Jambes du coureur':5,'Obliques : circuits':4.5,'Jambes spé trail : force et mollets':5};
 function kcalRun(km,dp){return Math.round((KG*km+KG*0.0095*(dp||0))/10)*10}
-function kcalGym(L){var m=parseInt(L.dur,10)||50,met=METT[L.title]||(m<=30?3.5:4.2);return Math.round(met*KG*m/60/10)*10}
+function kcalGym(L){var m=parseInt(L.dur,10)||50,met=METT[L.title]||(m<=30?3.5:/^Maison/.test(L.title)?5:4.2),k=met*KG*m/60;if(L.fin)k+=(9-met)*KG*12/60;return Math.round(k/10)*10}
 function elevSvg(dp){
   var h=Math.max(8,Math.round(52*Math.min(dp,700)/700)),p='',i,n=26,t,x,y;
   for(i=0;i<=n;i++){t=i/n;x=6+148*t;y=64-h*t-(t>0&&t<1?Math.sin(t*14)*Math.min(5,2+h/12):0);p+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)}
@@ -671,17 +733,18 @@ function renderSession(){
   let h='';
   if(S.pre) h+='<div class="banner">Le programme démarre <b>lundi 12 octobre</b>. Voici la première séance.</div>';
   if(isDl(w)) h+='<div class="banner">Semaine allégée : une série en moins, charges −15\u00a0%. Tu récupères.</div>';
-  if(d===6){
+  const kd=kindOf(d);
+  if(kd==='rest'){
     const Rr=restInfo(w),kr=Math.round(3.5*KG*0.5/10)*10;
     h+='<div class="card hero '+kc+'" style="--c:'+c+'"><h2>Repos actif</h2><p class="meta">'+Rr.goal+'</p><div class="pills"><span>≈ '+kr+' kcal</span></div></div><div class="card"><div class="step"><b>'+Rr.a.h+'</b>'+Rr.a.t+'</div><div class="step"><b>'+Rr.m.h+'</b>'+Rr.m.t+'</div><p class="muted">Dors 7–8 h. C’est la séance la plus rentable de la semaine.</p></div>';
     return h+finishBtn(key,c);
   }
-  if(LIFT[d]){
+  if(kd==='lift'){
     const L=gymSession(d,w);let tot=0,dn=0;
     const exs=L.ex.map(function(ex){return {ex:ex,n:setsOf(ex,w)}}).filter(function(o){return o.n>0});
     exs.forEach(function(o){tot+=o.n;dn+=(log[w+'-'+d+'-'+o.ex.id]||[]).slice(0,o.n).filter(Boolean).length});
-    h+='<div class="card hero '+kc+'" style="--c:'+c+'"><h2>'+L.title+'</h2><p class="meta">'+L.goal+'</p><div class="pills"><span>'+L.dur+'</span><span>'+exs.length+' exercices</span><span>'+tot+' séries</span><span>≈ '+kcalGym(L)+' kcal</span></div><div class="bar"><div style="width:'+(tot?Math.round(dn/tot*100):0)+'%"></div></div></div>';
-    h+='<details class="warm"><summary>Échauffement (5–8 min)</summary><ul>'+L.warm.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></details>';
+    h+='<div class="card hero '+kc+'" style="--c:'+c+'"><h2>'+L.title+'</h2><p class="meta">'+L.goal+'</p><div class="pills"><span>'+L.dur+'</span><span>'+exs.length+' exercices</span>'+(L.fin?'<span>+ finisher cardio</span>':'')+'<span>'+tot+' séries</span><span>≈ '+kcalGym(L)+' kcal</span></div><div class="bar"><div style="width:'+(tot?Math.round(dn/tot*100):0)+'%"></div></div></div>';
+    h+='<details class="warm"><summary>Échauffement (5–8 min)</summary><ul>'+L.warm.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></details>'+(L.fin?'<p class="tipline"><span><b>Entre les séries :</b> 30 s de corde ou de vélo léger, le cœur reste haut sans fatiguer les muscles. Et un finisher cardio pour finir en sueur.</span></p>':'');
     exs.forEach(function(o,i){
       const ex=o.ex,n=o.n,arr=log[w+'-'+d+'-'+ex.id]||[];
       const rep=ex.reps[blockOf(w)];
@@ -690,12 +753,14 @@ function renderSession(){
       const okEx=!!log[w+'-'+d+'-'+ex.id+'!'];
       let sets='';
       for(let k=0;k<n;k++)sets+='<button class="set '+(arr[k]?'d':'')+'" data-a="set" data-id="'+ex.id+'" data-i="'+k+'" data-sec="'+ex.rest+'" data-n="'+n+'" aria-label="Série '+(k+1)+'">'+(k+1)+'</button>';
-      h+='<div class="card ex '+kc+(okEx?' ok':'')+'" style="--c:'+c+'"><div class="exh">'+thumbHtml(ex)+'<div class="exm"><h3><span class="n">'+(i+1)+'</span>'+ex.name+'</h3>'+mgChip(ex.g)+'</div><button class="chk '+(okEx?'on':'')+'" data-a="exdone" data-id="'+ex.id+'" aria-pressed="'+okEx+'" aria-label="Exercice terminé">'+ICN.check+'</button></div><div class="rx"><span class="big">'+rx+'</span>'+(load?'<span class="load">'+load+'</span>':'')+'</div><p class="rest">'+(ex.rounds?rep+'. ':'')+(ex.note?ex.note+'. ':'')+'Repos '+restTxt(ex.rest)+'</p><div class="sets">'+sets+'</div><p class="cue">'+ex.cue+'</p></div>';
+      const meta=[ex.rounds?rep:'',ex.note||'',ex.rest?'Repos '+restTxt(ex.rest):''].filter(Boolean).join(' · ');
+      h+='<div class="card ex '+kc+(ex.g==='cardio'?' cardio':'')+(okEx?' ok':'')+'" style="--c:'+c+'"><div class="exh">'+tileHtml(ex,i)+'<div class="exm"><h3>'+ex.name+'</h3>'+mgChip(ex.g)+'</div><button class="chk '+(okEx?'on':'')+'" data-a="exdone" data-id="'+ex.id+'" aria-pressed="'+okEx+'" aria-label="'+ex.name+' terminé">'+ICN.check+'</button></div><div class="rx"><span class="big">'+rx+'</span>'+(load?'<span class="load">'+load+'</span>':'')+'</div>'+(meta?'<p class="rest">'+meta+'</p>':'')+'<div class="sets">'+sets+'</div><p class="cue">'+ex.cue+'</p>'+demoHtml(ex)+'</div>';
     });
     return h+finishBtn(key,c);
   }
   const R=runInfo(d,w),dp=R.dplus||0;
-  h+='<div class="card hero '+kc+'" style="--c:'+c+'"><h2>'+R.title+'</h2><div class="kmrow"><div class="km">'+fmt(R.km)+'<small>km</small></div>'+(dp>0?'<div class="elev"><b>'+dp+'\u00a0m D+</b>'+elevSvg(dp)+'</div>':'')+'</div><div class="pills"><span>'+R.dur+'</span><span>≈\u00a0'+kcalRun(R.km,dp)+'\u00a0kcal</span></div></div><div class="card"><p class="muted goal">'+R.goal+'</p>'+R.steps.map(function(s){return '<div class="step"><b>'+s.h+'</b>'+s.t+'</div>'}).join('')+'</div>';
+  if(R.missed)h+='<div class="banner missed">'+R.missed+'</div>';
+  h+='<div class="card hero '+kc+'" style="--c:'+c+'"><h2>'+R.title+'</h2><div class="kmrow"><div class="km">'+fmt(R.km)+'<small>km</small></div>'+(dp>0?'<div class="elev"><b>'+dp+'\u00a0m D+</b>'+elevSvg(dp)+'</div>':'')+'</div><div class="pills"><span>'+R.dur+'</span><span>≈\u00a0'+kcalRun(R.km,dp)+'\u00a0kcal</span></div>'+(R.route?'<button class="routebtn" data-a="route"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4zM9 4v14M15 6v14"/></svg>Voir le parcours</button>':'')+'</div><div class="card"><p class="muted goal">'+R.goal+'</p>'+R.steps.map(function(s){return '<div class="step"><b>'+s.h+'</b>'+s.t+'</div>'}).join('')+'</div>';
   return h+finishBtn(key,c);
 }
 function finishBtn(key,c){
@@ -735,10 +800,110 @@ function renderSet(){
 }
 function render(){
   const y=window.scrollY;head();
-  document.getElementById('view').innerHTML=({session:renderSession,week:renderWeek,chrono:renderChrono,set:function(){return '<details class="tips"><summary>Conseils : course, nutrition, règles</summary>'+renderRules()+'</details>'+renderSet()}})[S.tab]();
+  const route=S.tab==='session'&&S.view==='route';
+  document.getElementById('view').innerHTML=route?renderRoute():({session:renderSession,week:renderWeek,chrono:renderChrono,set:function(){return '<details class="tips"><summary>Conseils : course, nutrition, règles</summary>'+renderRules()+'</details>'+renderSet()}})[S.tab]();
   window.scrollTo(0,y);
+  if(route)drawRoute();
 }
 
+
+const RT={p:[[45.75908,4.82406,225],[45.76092,4.82496,205],[45.7615,4.82532,199],[45.76184,4.82562,195],[45.76203,4.8259,192],[45.76204,4.82606,191],[45.76199,4.82615,189],[45.76194,4.82615,189],[45.76156,4.82597,185],[45.76108,4.82579,182],[45.76096,4.82627,180],[45.76097,4.82636,180],[45.76105,4.82647,180],[45.76109,4.82662,181],[45.7611,4.82682,180],[45.76099,4.8275,179],[45.76108,4.82757,179],[45.76103,4.82776,177],[45.76094,4.82775,177],[45.76087,4.8279,175],[45.76079,4.828,174],[45.76066,4.82804,173],[45.76063,4.82831,170],[45.76131,4.82851,171],[45.7613,4.82871,170],[45.76188,4.82891,170],[45.7623,4.82919,169],[45.76315,4.82949,169],[45.76321,4.82963,169],[45.76316,4.83162,167],[45.76313,4.83176,169],[45.76306,4.83181,170],[45.76275,4.83172,170],[45.76156,4.83129,172],[45.76128,4.8311,171],[45.76125,4.83101,171],[45.76127,4.83094,170],[45.76098,4.83081,170],[45.76056,4.83055,170],[45.75975,4.82977,168],[45.75946,4.82952,169],[45.75912,4.82927,170],[45.75903,4.82923,171],[45.75804,4.82807,171],[45.75699,4.82692,173],[45.7562,4.82614,172],[45.75511,4.82566,176],[45.75481,4.82558,175],[45.75216,4.82417,171],[45.75182,4.82379,171],[45.75148,4.82346,170],[45.75138,4.82333,170],[45.751,4.82296,168],[45.75096,4.82312,169],[45.75109,4.82309,169],[45.75153,4.82174,168],[45.7515,4.82164,168],[45.75125,4.82122,169],[45.75121,4.82109,169],[45.75128,4.82092,170],[45.75131,4.82064,172],[45.75138,4.82059,173],[45.75153,4.82024,176],[45.75166,4.82009,178],[45.75187,4.81995,182],[45.75206,4.81991,185],[45.75225,4.81996,187],[45.75226,4.81987,188],[45.75221,4.81975,190],[45.75214,4.81968,190],[45.75197,4.81966,189],[45.75197,4.81953,191],[45.75186,4.81949,191],[45.75165,4.81885,201],[45.75114,4.81807,202],[45.75111,4.81795,204],[45.75112,4.81731,217],[45.75109,4.81699,222],[45.75077,4.81609,228],[45.7506,4.81572,227],[45.75058,4.81509,236],[45.75061,4.81466,244],[45.75048,4.81455,244],[45.75001,4.81466,237],[45.74987,4.81467,235],[45.74967,4.81464,234],[45.74935,4.81449,235],[45.74884,4.81433,231],[45.74817,4.8135,242],[45.74779,4.81324,242],[45.74755,4.81289,244],[45.74741,4.81245,248],[45.74736,4.81239,249],[45.74707,4.81235,244],[45.74676,4.81223,241],[45.7465,4.81224,237],[45.74634,4.81232,233],[45.74616,4.81233,231],[45.74594,4.81223,230],[45.74646,4.81097,262],[45.74634,4.81083,262],[45.74628,4.81065,264],[45.7462,4.81026,268],[45.74613,4.81011,269],[45.74567,4.80936,272],[45.74645,4.808,307],[45.74482,4.80647,302],[45.74461,4.80649,301],[45.7446,4.80667,302],[45.7445,4.80679,300],[45.74429,4.80694,297],[45.74403,4.80687,296],[45.74397,4.80717,291],[45.74383,4.80731,288],[45.74332,4.80742,282],[45.74307,4.80757,277],[45.74279,4.80769,271],[45.74172,4.80754,268],[45.74148,4.80768,265],[45.74128,4.80794,261],[45.7411,4.80833,255],[45.74102,4.80866,249],[45.73965,4.80895,241],[45.73896,4.80871,243],[45.739,4.80812,255],[45.73882,4.80726,268],[45.73852,4.80702,270],[45.73766,4.80677,275],[45.73788,4.80668,277],[45.73785,4.8065,280],[45.73737,4.80616,287],[45.73722,4.80574,293],[45.73727,4.80558,295],[45.73733,4.80571,293],[45.738,4.80588,292],[45.73821,4.80571,295],[45.73852,4.80555,298],[45.73874,4.80561,298],[45.7389,4.80573,297],[45.73901,4.80592,294],[45.73923,4.80649,287],[45.73949,4.80654,286],[45.73986,4.80635,289],[45.73973,4.80602,293],[45.74023,4.80532,302],[45.74034,4.8053,302],[45.74082,4.80544,299],[45.74087,4.80525,301],[45.74086,4.80517,301],[45.74069,4.80508,302],[45.74058,4.80488,304],[45.7406,4.80461,305],[45.74102,4.80367,304],[45.74127,4.80334,303],[45.74163,4.80326,303],[45.74174,4.80295,302],[45.74196,4.80296,303],[45.74197,4.80276,303],[45.74203,4.80268,303],[45.74207,4.80247,303],[45.74213,4.80234,303],[45.74217,4.80206,301],[45.74228,4.80203,302],[45.74234,4.80197,302],[45.74239,4.80165,300],[45.74254,4.80161,300],[45.74272,4.80183,301],[45.74281,4.80178,300],[45.74287,4.80166,300],[45.74288,4.80077,294],[45.74339,4.80098,295],[45.74416,4.80116,293],[45.74462,4.80178,288],[45.74461,4.80257,289],[45.74327,4.80426,301],[45.74306,4.80486,302],[45.74332,4.80523,301],[45.74424,4.80596,300],[45.74426,4.80584,300],[45.74445,4.80557,298],[45.74461,4.80541,297],[45.74495,4.80528,295],[45.74525,4.80494,293],[45.74539,4.80488,293],[45.74548,4.80489,293],[45.74556,4.80468,293],[45.74608,4.80416,293],[45.74618,4.80423,294],[45.74624,4.80436,295],[45.74624,4.80457,295],[45.74632,4.80473,296],[45.74658,4.80509,298],[45.74669,4.80533,300],[45.74694,4.80557,302],[45.747,4.80568,302],[45.74705,4.80624,305],[45.74693,4.80661,306],[45.74726,4.80654,306],[45.74739,4.80667,306],[45.74742,4.8066,306],[45.74761,4.80653,305],[45.74993,4.80733,306],[45.75003,4.8073,305],[45.75015,4.80742,306],[45.75116,4.80802,309],[45.75184,4.80886,308],[45.75196,4.80882,307],[45.7521,4.80908,307],[45.75231,4.80926,307],[45.75315,4.80977,305],[45.75331,4.80995,305],[45.75348,4.8098,304],[45.75392,4.80899,298],[45.75401,4.80916,299],[45.75435,4.8092,298],[45.75442,4.80924,298],[45.75449,4.80952,299],[45.75459,4.80958,298],[45.75455,4.80974,299],[45.75446,4.80985,300],[45.75433,4.8099,301],[45.75421,4.80985,302],[45.75412,4.80989,302],[45.754,4.81004,303],[45.75392,4.81038,303],[45.75388,4.81103,300],[45.75411,4.81113,299],[45.75394,4.81249,285],[45.75449,4.81236,284],[45.75477,4.81247,281],[45.75412,4.81344,276],[45.75392,4.81413,269],[45.75349,4.81515,253],[45.75298,4.81705,230],[45.75352,4.81687,231],[45.75373,4.81704,230],[45.75442,4.81794,229],[45.75446,4.81811,228],[45.75456,4.81828,228],[45.75454,4.81807,230],[45.75459,4.81812,231],[45.7546,4.81836,229],[45.75454,4.81856,227],[45.75452,4.81873,227],[45.75456,4.81876,228],[45.75491,4.81777,244],[45.75497,4.8177,246],[45.75598,4.81857,258],[45.75602,4.81904,257],[45.75607,4.81901,258],[45.75608,4.81908,258],[45.75615,4.81922,258],[45.75756,4.81789,284],[45.75781,4.81749,288],[45.75842,4.81575,290],[45.75879,4.81521,289],[45.75908,4.8149,292],[45.75939,4.81441,293],[45.75937,4.81427,293],[45.75933,4.81424,293],[45.75916,4.81427,292],[45.75908,4.81434,291],[45.75903,4.81443,290],[45.75879,4.81497,287],[45.75874,4.81501,286],[45.75864,4.81502,285],[45.75858,4.81498,283],[45.75854,4.81491,282],[45.75852,4.81482,281],[45.75853,4.81472,281],[45.75861,4.81458,282],[45.75891,4.81422,286],[45.75895,4.81406,287],[45.75892,4.81395,285],[45.75888,4.81388,284],[45.75876,4.81383,282],[45.75863,4.8139,279],[45.75834,4.81418,273],[45.75802,4.81386,272],[45.75835,4.8132,273],[45.75856,4.81289,274],[45.75877,4.81231,270],[45.75887,4.81214,268],[45.75934,4.81152,261],[45.76004,4.81068,256],[45.76116,4.81036,255],[45.76169,4.81018,257],[45.76212,4.81022,264],[45.76243,4.81012,268],[45.76275,4.8099,267],[45.76369,4.80962,268],[45.76433,4.80936,267],[45.76449,4.80973,274],[45.76469,4.81049,278],[45.76476,4.81095,276],[45.76478,4.81166,271],[45.76488,4.81157,270],[45.76518,4.81072,272],[45.76593,4.81,264],[45.76687,4.80942,252],[45.76718,4.80935,248],[45.76721,4.80928,249],[45.76748,4.80911,245],[45.76755,4.80891,241],[45.76764,4.80889,239],[45.76772,4.80894,239],[45.76855,4.80898,228],[45.76951,4.8091,220],[45.76968,4.80917,219],[45.76983,4.80905,214],[45.7701,4.80905,210],[45.77042,4.80894,202],[45.77078,4.80891,196],[45.77102,4.80879,192],[45.77108,4.8088,192],[45.77107,4.80897,195],[45.77109,4.80906,196],[45.77113,4.80918,198],[45.77119,4.80924,198],[45.77135,4.80931,197],[45.77171,4.80937,195],[45.77189,4.80935,194],[45.77215,4.80928,193],[45.77224,4.80937,193],[45.77209,4.80976,193],[45.77144,4.80961,198],[45.7715,4.80988,198],[45.77144,4.80993,199],[45.77092,4.81004,204],[45.77089,4.81007,204],[45.77079,4.81007,205],[45.77069,4.81001,208],[45.77067,4.80989,207],[45.77071,4.8095,204],[45.77035,4.80941,209],[45.7702,4.8093,212],[45.77,4.80922,215],[45.76996,4.80923,216],[45.76992,4.80932,216],[45.76993,4.80941,216],[45.77009,4.80968,215],[45.77011,4.80977,215],[45.7701,4.80994,215],[45.76999,4.81005,215],[45.76987,4.8101,215],[45.76958,4.81015,217],[45.76935,4.81014,220],[45.76928,4.8101,222],[45.76923,4.81023,219],[45.76906,4.81032,219],[45.76888,4.81023,223],[45.76853,4.81017,227],[45.76772,4.81059,221],[45.76708,4.81107,221],[45.76673,4.8115,225],[45.76677,4.81192,217],[45.76706,4.81207,204],[45.76721,4.81177,204],[45.76725,4.81145,209],[45.76788,4.81111,205],[45.76831,4.811,205],[45.76832,4.81122,197],[45.76809,4.81154,189],[45.76741,4.81198,193],[45.76733,4.81235,189],[45.76741,4.81269,182],[45.76779,4.81312,173],[45.76756,4.8134,174],[45.7674,4.81376,173],[45.76725,4.81466,172],[45.76586,4.81416,212],[45.76528,4.81407,237],[45.76538,4.81416,233],[45.76546,4.81441,231],[45.7659,4.81491,217],[45.76593,4.81501,216],[45.76584,4.81513,219],[45.76592,4.81552,215],[45.766,4.81525,212],[45.76664,4.8157,185],[45.76667,4.81562,184],[45.76686,4.81578,180],[45.76676,4.81616,180],[45.76647,4.81778,174],[45.7664,4.81849,173],[45.76632,4.81864,175],[45.76627,4.81944,176],[45.76634,4.81982,176],[45.76557,4.82,196],[45.76541,4.81982,201],[45.76497,4.81991,217],[45.76499,4.82021,219],[45.76492,4.8202,221],[45.76481,4.82007,222],[45.76469,4.81974,223],[45.76411,4.81999,240],[45.76407,4.82029,245],[45.76388,4.82045,254],[45.76385,4.82062,256],[45.76395,4.82106,262],[45.76384,4.82106,265],[45.76378,4.82068,259],[45.76366,4.82057,262],[45.76354,4.81988,260],[45.76399,4.81722,256],[45.76409,4.81706,253],[45.76417,4.81711,250],[45.76422,4.81709,248],[45.76428,4.8172,246],[45.76423,4.81732,247],[45.76423,4.8179,243],[45.76435,4.8185,236],[45.7645,4.81827,234],[45.76447,4.81804,236],[45.76456,4.81763,236],[45.76484,4.8178,228],[45.76495,4.81799,224],[45.76523,4.8177,216],[45.76561,4.81711,209],[45.76554,4.81704,212],[45.76538,4.81734,214],[45.76534,4.81729,215],[45.7655,4.81698,213],[45.76533,4.81686,219],[45.76526,4.81698,220],[45.76402,4.81589,263],[45.76351,4.81598,277],[45.76304,4.81422,288],[45.76287,4.81428,289],[45.76327,4.81681,281],[45.76331,4.81879,273],[45.76296,4.82006,274],[45.76329,4.8214,289],[45.76347,4.82156,289],[45.76359,4.8219,290],[45.76357,4.82223,292],[45.76374,4.82226,289],[45.76384,4.82271,286],[45.7641,4.82263,283],[45.76443,4.82273,275],[45.76463,4.82291,269],[45.76524,4.82364,249],[45.76603,4.82451,218],[45.76615,4.82455,212],[45.76587,4.82683,190],[45.76351,4.82609,209],[45.76254,4.82511,220],[45.76212,4.82437,238],[45.76193,4.82418,242],[45.76174,4.82412,243],[45.76179,4.82373,260],[45.76199,4.82377,259],[45.762,4.82372,261],[45.76205,4.82373,261],[45.76207,4.8236,266],[45.76126,4.82364,261],[45.76116,4.82359,262],[45.76109,4.82365,260],[45.7607,4.82355,260],[45.7604,4.82314,265],[45.76032,4.8229,267],[45.76027,4.82257,271],[45.75987,4.82246,265],[45.75972,4.82193,264],[45.75969,4.82164,265],[45.75973,4.82157,266],[45.75987,4.8211,271],[45.75988,4.82078,272],[45.75991,4.8206,272],[45.76,4.82062,274],[45.76005,4.82039,274],[45.75968,4.8202,269]],cl:[[2.76,3.61,76,9],[4.16,4.61,74,16],[5.5,6.15,57,9],[10.08,11.08,61,6],[14.81,15.15,59,17],[15.58,16.19,85,14],[16.85,17.32,79,17],[18.53,19.13,76,13]]};
+/* ---------- parcours du 7 novembre ---------- */
+let RTD=null,RTC=0,RTSEL=-1;
+function rtPrep(){
+  if(RTD)return RTD;
+  const p=RT.p,n=p.length,W=256*Math.pow(2,14),d=[0],X=[],Y=[],e=[],es=[],sl=[],cum=[0];
+  for(let i=0;i<n;i++){
+    X.push((p[i][1]+180)/360*W);
+    const s=Math.sin(p[i][0]*Math.PI/180);
+    Y.push((0.5-Math.log((1+s)/(1-s))/(4*Math.PI))*W);
+    e.push(p[i][2]);
+    if(i){const r=Math.PI/180,a=p[i-1],b=p[i],dl=(b[1]-a[1])*r,dp=(b[0]-a[0])*r,h=Math.sin(dp/2)**2+Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin(dl/2)**2;d.push(d[i-1]+2*6371000*Math.asin(Math.sqrt(h)))}
+  }
+  for(let i=0;i<n;i++){let s=0,c=0;for(let j=0;j<n;j++)if(Math.abs(d[j]-d[i])<=75){s+=e[j];c++}es.push(s/c)}
+  for(let i=0;i<n;i++){let a=i,b=i;while(a>0&&d[i]-d[a-1]<=100)a--;while(b<n-1&&d[b+1]-d[i]<=100)b++;sl.push(d[b]>d[a]?(es[b]-es[a])/(d[b]-d[a])*100:0)}
+  let up=0,ref=e[0];for(let i=1;i<n;i++){if(e[i]-ref>=5){up+=e[i]-ref;ref=e[i]}else if(ref-e[i]>=5)ref=e[i];cum.push(up)}
+  RTD={n,d,X,Y,e,es,sl,cum,up};return RTD;
+}
+function rtIdx(m){const d=rtPrep().d;let lo=0,hi=d.length-1;while(hi-lo>1){const mid=(lo+hi)>>1;if(d[mid]<m)lo=mid;else hi=mid}return m-d[lo]<d[hi]-m?lo:hi}
+function renderRoute(){
+  const R=rtPrep(),emax=Math.max.apply(null,R.e);
+  const cls=RT.cl.map(function(c,k){return '<button class="clb'+(c[3]>=12?' steep':'')+'" data-a="climb" data-k="'+k+'"><span class="cn">'+(k+1)+'</span><span><b>km '+fmt(c[0].toFixed(1))+' → '+fmt(c[1].toFixed(1))+'</b><small>+'+c[2]+' m · '+c[3]+' % de moyenne'+(c[3]>=12?' · marche active':'')+'</small></span></button>'}).join('');
+  return '<button class="back" data-a="routeback"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Retour</button>'
+  +'<div class="card rt"><h2>Parcours du 7 novembre</h2>'
+  +'<div class="rt-stats"><div><b>'+fmt((R.d[R.n-1]/1000).toFixed(1))+'</b><span>km</span></div><div><b>'+Math.round(R.up/10)*10+'</b><span>m D+</span></div><div><b>'+emax+'</b><span>m alt. max</span></div><div><b>'+RT.cl.length+'</b><span>montées</span></div></div>'
+  +'<div class="map" id="map"></div>'
+  +'<div class="rt-read" id="rread"></div>'
+  +'<div class="prof" id="prof"></div>'
+  +'<p class="attr">Glisse le doigt sur le profil ou touche le tracé. Fond de carte © OpenStreetMap, © CARTO.</p></div>'
+  +'<div class="card"><h3 class="sec">Les montées</h3><div class="clbs">'+cls+'</div></div>'
+  +'<div class="card"><h3 class="sec">Ta stratégie</h3><ul>'
+  +'<li>Les 5 derniers km concentrent 4 montées raides (≈ 300 m D+) : c’est là que la course se joue. Garde des forces jusqu’au km 14.</li>'
+  +'<li>Montées 2, 5, 6, 7 et 8 (12 % et plus) : marche active, petits pas, mains sur les cuisses.</li>'
+  +'<li>Montée 4 (km 10 à 11) est longue mais douce : cours-la tranquille, sans te mettre dans le rouge.</li>'
+  +'<li>Mange un gel vers le km 8 et le km 13, avant les grosses montées.</li></ul></div>';
+}
+function rtSvg(tag,attrs){let s='<'+tag;for(const k in attrs)s+=' '+k+'="'+attrs[k]+'"';return s+'/>'}
+function drawRoute(){
+  const R=rtPrep(),map=document.getElementById('map'),prof=document.getElementById('prof');if(!map||!prof)return;
+  const dark=curTheme()==='dark';
+  // carte
+  const W=map.clientWidth||340;let x0=Math.min.apply(null,R.X),x1=Math.max.apply(null,R.X),y0=Math.min.apply(null,R.Y),y1=Math.max.apply(null,R.Y);
+  let bw=x1-x0,bh=y1-y0;const pad=0.08;x0-=bw*pad;x1+=bw*pad;y0-=bh*pad;y1+=bh*pad;bw=x1-x0;bh=y1-y0;
+  const H=Math.round(Math.max(W*0.85,Math.min(W*1.2,W*bh/bw)));
+  if(bh/bw<H/W){const nh=bw*H/W;y0-=(nh-bh)/2;bh=nh}else{const nw=bh*W/H;x0-=(nw-bw)/2;bw=nw}
+  map.style.height=H+'px';
+  const k=bw/W;let tiles='';
+  for(let tx=Math.floor(x0/256);tx<=Math.floor((x0+bw)/256);tx++)for(let ty=Math.floor(y0/256);ty<=Math.floor((y0+bh)/256);ty++)
+    tiles+='<image href="https://'+'abc'[(tx+ty)%3]+'.basemaps.cartocdn.com/'+(dark?'dark_all':'light_all')+'/14/'+tx+'/'+ty+'@2x.png" x="'+tx*256+'" y="'+ty*256+'" width="256" height="256" onerror="this.remove()"/>';
+  const pts=function(a,b){let s='';for(let i=a;i<=b;i++)s+=R.X[i].toFixed(1)+','+R.Y[i].toFixed(1)+' ';return s};
+  let steep='',i=0;
+  while(i<R.n){if(R.sl[i]>=10){let j=i;while(j<R.n-1&&R.sl[j+1]>=10)j++;if(j>i)steep+='<polyline points="'+pts(Math.max(0,i-1),j)+'" fill="none" stroke="var(--race)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>';i=j+1}else i++}
+  const r=k*8;
+  map.innerHTML='<svg viewBox="'+x0+' '+y0+' '+bw+' '+bh+'" role="img" aria-label="Tracé du parcours sur la carte"><rect x="'+x0+'" y="'+y0+'" width="'+bw+'" height="'+bh+'" fill="var(--surface2)"/><g class="tiles">'+tiles+'</g>'
+    +'<polyline points="'+pts(0,R.n-1)+'" fill="none" stroke="var(--bg)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity=".55"/>'
+    +'<polyline points="'+pts(0,R.n-1)+'" fill="none" stroke="var(--acc)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>'
+    +steep+'<polyline id="msel" points="" fill="none" stroke="var(--race)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity=".55"/>'
+    +'<circle cx="'+R.X[0]+'" cy="'+R.Y[0]+'" r="'+r*1.1+'" fill="var(--ok)" stroke="#0B0B0F" stroke-width="'+k*2.5+'"/>'
+    +'<circle id="mcur" cx="'+R.X[0]+'" cy="'+R.Y[0]+'" r="'+r+'" fill="#fff" stroke="var(--blue)" stroke-width="'+k*4+'"/></svg>';
+  map.firstChild._k={x0,y0,k};
+  // profil
+  const PW=prof.clientWidth||340,PH=170,top=22,bot=24,h=PH-top-bot,dm=R.d[R.n-1],emin=Math.min.apply(null,R.es)-10,emx=Math.max.apply(null,R.es)+10;
+  const px=function(m){return m/dm*PW},py=function(v){return top+(emx-v)/(emx-emin)*h};
+  let line='';for(let j=0;j<R.n;j++)line+=(j?'L':'M')+px(R.d[j]).toFixed(1)+' '+py(R.es[j]).toFixed(1);
+  let zones='';RT.cl.forEach(function(c,q){const a=px(c[0]*1000),b=px(c[1]*1000);zones+='<rect class="clz" data-k="'+q+'" x="'+a.toFixed(1)+'" y="'+top+'" width="'+Math.max(2,b-a).toFixed(1)+'" height="'+h+'"/><text class="cln" x="'+((a+b)/2).toFixed(1)+'" y="'+(top-7)+'">'+(q+1)+'</text>'});
+  let ax='';[0,5,10,15].forEach(function(km){const x=px(km*1000);ax+='<line class="grid" x1="'+x+'" x2="'+x+'" y1="'+top+'" y2="'+(top+h)+'"/><text class="ax" x="'+(x+3)+'" y="'+(PH-6)+'">'+km+' km</text>'});
+  ax+='<text class="ax" x="'+(PW-2)+'" y="'+(top+10)+'" text-anchor="end">'+Math.round(emx-10)+' m</text><text class="ax" x="'+(PW-2)+'" y="'+(top+h-4)+'" text-anchor="end">'+Math.round(emin+10)+' m</text>';
+  prof.innerHTML='<svg viewBox="0 0 '+PW+' '+PH+'" height="'+PH+'" role="img" aria-label="Profil altimétrique, glisse pour explorer">'+zones+ax+'<path class="area" d="'+line+'L'+PW+' '+(top+h)+'L0 '+(top+h)+'Z"/><path class="line" d="'+line+'"/><line id="pcur" class="cur" x1="0" x2="0" y1="'+top+'" y2="'+(top+h)+'"/><circle id="pdot" class="dot" r="5" cx="0" cy="0"/></svg>';
+  prof._g={px,py};
+  if(!prof._bound){prof._bound=1;
+    const mv=function(ev){const rc=prof.getBoundingClientRect();const m=Math.max(0,Math.min(1,(ev.clientX-rc.left)/rc.width))*dm;rtCur(rtIdx(m))};
+    prof.addEventListener('pointerdown',function(ev){try{prof.setPointerCapture(ev.pointerId)}catch(e){}mv(ev)});
+    prof.addEventListener('pointermove',function(ev){if(ev.buttons||ev.pointerType!=='mouse'||prof.hasPointerCapture&&prof.hasPointerCapture(ev.pointerId))mv(ev)});
+  }
+  if(!map._bound){map._bound=1;
+    map.addEventListener('click',function(ev){const sv=map.querySelector('svg');if(!sv)return;const ctm=sv.getScreenCTM();if(!ctm)return;const pt=sv.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const q=pt.matrixTransform(ctm.inverse());let bi=0,bd=1e18;for(let j=0;j<R.n;j++){const dd=(R.X[j]-q.x)**2+(R.Y[j]-q.y)**2;if(dd<bd){bd=dd;bi=j}}rtCur(bi)});
+  }
+  rtCur(RTC);if(RTSEL>=0)rtClimb(RTSEL,true);
+}
+function rtCur(i){
+  const R=rtPrep();RTC=i;
+  const mc=document.getElementById('mcur');if(mc){mc.setAttribute('cx',R.X[i]);mc.setAttribute('cy',R.Y[i])}
+  const prof=document.getElementById('prof');
+  if(prof&&prof._g){const x=prof._g.px(R.d[i]),y=prof._g.py(R.es[i]);const l=document.getElementById('pcur'),dt=document.getElementById('pdot');l.setAttribute('x1',x);l.setAttribute('x2',x);dt.setAttribute('cx',x);dt.setAttribute('cy',y)}
+  const rd=document.getElementById('rread');
+  if(rd){const s=Math.round(R.sl[i]);rd.innerHTML='<div><b>'+fmt((R.d[i]/1000).toFixed(1))+'</b><span>km</span></div><div><b>'+R.e[i]+'</b><span>m d’altitude</span></div><div class="'+(s>=8?'up':'')+'"><b>'+(s>0?'+':'')+s+' %</b><span>pente</span></div><div><b>'+R.cum[i]+'</b><span>m D+ cumulé</span></div>'}
+}
+function rtClimb(k,keep){
+  const R=rtPrep(),c=RT.cl[k];RTSEL=k;
+  const a=rtIdx(c[0]*1000),b=rtIdx(c[1]*1000);
+  let s='';for(let i=a;i<=b;i++)s+=R.X[i].toFixed(1)+','+R.Y[i].toFixed(1)+' ';
+  const ms=document.getElementById('msel');if(ms)ms.setAttribute('points',s);
+  document.querySelectorAll('.clz').forEach(function(z){z.classList.toggle('sel',+z.dataset.k===k)});
+  document.querySelectorAll('.clb').forEach(function(z){z.classList.toggle('sel',+z.dataset.k===k)});
+  if(!keep){rtCur(a);const m=document.getElementById('map');if(m&&m.scrollIntoView)m.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'})}
+}
+let rtRs=null;window.addEventListener('resize',function(){clearTimeout(rtRs);rtRs=setTimeout(function(){if(S.view==='route')drawRoute();moveInd()},150)});
 
 /* ---------- minuteur ---------- */
 let tEnd=0,tInt=null;
@@ -754,7 +919,11 @@ function tick(){
 document.addEventListener('click',e=>{
   const t=e.target.closest('[data-a]');if(!t)return;
   const a=t.dataset.a;
+  if(a!=='climb'&&a!=='route'&&a!=='set'&&a!=='exdone'&&a!=='chgo'&&a!=='chlap'&&a!=='t+'&&a!=='t0')S.view='';
   if(a==='tab'){S.tab=t.dataset.v;S.confirm='';window.scrollTo(0,0)}
+  else if(a==='route'){S.view='route';RTSEL=-1;RTC=0;window.scrollTo(0,0)}
+  else if(a==='routeback'){S.view='';window.scrollTo(0,0)}
+  else if(a==='climb'){rtClimb(+t.dataset.k);return}
   else if(a==='prev'){S.w=Math.max(1,S.w-1)}
   else if(a==='next'){S.w=Math.min(WEEKS,S.w+1)}
   else if(a==='today'){const tk=todayKey();if(tk){const [w,d]=tk.split('-').map(Number);S.w=w;S.d=d}else{S.w=now<START?1:WEEKS;S.d=0}S.tab='session'}
@@ -794,6 +963,7 @@ function paintTheme(){
 tbtn.addEventListener('click',()=>{
   const n=curTheme()==='dark'?'light':'dark';
   root.setAttribute('data-theme',n);store.set('hyb.theme',n);paintTheme();
+  if(S.view==='route')drawRoute();
 });
 paintTheme();
 wakeSync();
