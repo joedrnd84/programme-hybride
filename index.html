@@ -277,8 +277,8 @@ const DN=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
 const DF=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 const BLOCKS=[
   {n:'Prépa course 20 km',from:1,to:4,col:'rest',goal:'Arriver frais et prêt le samedi 7 novembre : 20 km, D+ 700 m. Volume en hausse, puis affûtage.'},
-  {n:'Construction',from:5,to:16,col:'lift',goal:'Monter les charges et le volume de course. Déficit modéré.'},
-  {n:'Définition',from:17,to:33,col:'run',goal:'Garder la force, affiner la silhouette, finir sec en juin.'}
+  {n:'Machine hybride',from:5,to:16,col:'lift',goal:'Force, explosivité, abdos béton et cardio. Séances d’1 h max, sorties jusqu’à 15 km.'},
+  {n:'Machine hybride : définition',from:17,to:33,col:'run',goal:'Garder la force, gagner en vitesse, abdos tracés en juin.'}
 ];
 const blockOf=w=>w<=4?0:w<=16?1:2;
 const isDl=w=>w%4===0||w===5;
@@ -376,7 +376,7 @@ hipflex:{n:'Relevés de genou kettlebell (fléchisseurs de hanche)',ref:8,step:4
 calfw:{n:'Mollets lestés unilatéraux',ref:16,step:2,unit:'one',sets:[3,3,3],reps:['12–15','12–15','12–15'],rest:60,note:'par jambe',cue:'Une jambe, charge dans la main du même côté, main libre au mur. Montée lente, amplitude complète.'},
 latbend:{n:'Flexion latérale sur banc (hip-supported)',ref:12,step:2,unit:'one',sets:[2,2,2],reps:['12','12','12'],rest:30,note:'par côté',cue:'Hanche calée sur le banc, charge modérée. Reste lent et contrôlé : la tension va directement dans les obliques.'},
 plankdip:{n:'Plank dips lestés',kind:'bw',sets:[2,2,2],reps:['20','20','20'],rest:30,note:'par côté',cue:'En planche, fais descendre la hanche d’un côté puis de l’autre, avec une charge sur le dos si possible. Contrôle, pas d’élan.'},
-hkwood:{n:'Woodchop à demi-genou',ref:12,step:2.5,unit:'cable',sets:[2,2,2],reps:['12','12','12'],rest:30,note:'par côté',cue:'Un genou au sol, tire en diagonale en tournant le buste. Hanches stables, bras tendus.'},
+hkwood:{n:'Bûcheron à demi-genou',ref:12,step:2.5,unit:'cable',sets:[2,2,2],reps:['12','12','12'],rest:30,note:'par côté',cue:'Un genou au sol, tire en diagonale en tournant le buste. Hanches stables, bras tendus.'},
 latdl:{n:'Lateral deadlift',ref:12,step:2,unit:'one',sets:[2,2,2],reps:['12','12','12'],rest:30,cue:'Charge modérée, mouvement lent et contrôlé : tu cherches les obliques sans contrainte sur le dos. Trajectoire exacte : voir la vidéo du post.'},
 starfish:{n:'Starfish hold',kind:'time',sets:[2,2,2],reps:['45 s','45 s','45 s'],rest:30,cue:'Gainage en position étoile : corps aligné, abdos et obliques serrés. Respire. Position exacte : voir la vidéo du post.'},
 pendulum:{n:'Pendulum lesté',ref:6,step:2,unit:'one',sets:[2,2,2],reps:['20','20','20'],rest:30,note:'au total',cue:'Bras au-dessus de la tête, alignés avec les oreilles : ça active les obliques et protège la colonne. Mouvement contrôlé.'},
@@ -471,6 +471,7 @@ function withFin(L,d,w){
 }
 function gymSession(d,w){
   var pg=prepGym(w,d);if(pg)return pg;
+  if(w>=5)return hybGym(d,w);
   var sg=specialGym(d,w);if(sg)return withFin(sg,d,w);
   var b=blockOf(w),used={},ids=[];
   function take(pool,o,s){
@@ -488,6 +489,29 @@ function gymSession(d,w){
   return withFin({title:g.title,dur:g.dur,warm:g.warm,focus:focus,goal:'Au programme : '+focus+'.',ex:ids.map(function(id){return LIB[id]})},d,w);
 }
 
+/* ---------- salle après la course : 1 h max, 3–4 séries ---------- */
+const HYB={
+ 0:{title:'Haut du corps et abdos',met:5,goal:'Force du haut, abdos, et 10 min de cardio pour finir en sueur.',warm:['5 min de rameur, facile','2 × 10 rotations d’épaules à l’élastique','Approches sur le 1er exercice : barre vide ×10, 50 % ×6, 70 % ×3'],v:[
+  [['bench',4,'6–8'],['pullup',4,'6–10'],['incdb',3,'10'],['woodchop',3,'12'],['legraise',3,'10–12'],['stairs',1,'10 min',{note:'Rythme soutenu, sans te tenir'}]],
+  [['benchdb',4,'8–10'],['row',4,'8–10'],['flydb',3,'12'],['cablecrunch',3,'12–15'],['sideplank',3,'40 s'],['finbike',1,'10 min',{note:'30 s fort, 30 s facile'}]],
+  [['incbar',4,'6–8'],['pullneutral',4,'6–10'],['pushupfeet',3,'12'],['woodchop',3,'12'],['wheel',3,'8–10'],['finincl',1,'12 min']],
+  [['bench',4,'5–6'],['lat',4,'10'],['cablepress',3,'12'],['hollow',3,'30 s'],['vup',3,'10'],['finrow',1,'8 × 40 s']]]},
+ 2:{title:'Jambes : force et pliométrie',met:5.5,goal:'Explosivité et force des jambes : ton moteur de coureur.',warm:['5 min de vélo, facile','Mobilité chevilles et hanches : 2 × 8 de chaque côté','Avant la pliométrie : 2 sauts légers pour réveiller les tendons'],v:[
+  [['boxjump',4,'5'],['squat',4,'6'],['sldl',3,'8'],['calf',3,'15'],['pallof',3,'10'],['finbike',1,'10 min',{note:'Modéré, jambes qui tournent vite'}]],
+  [['squatjump',4,'5'],['bulg',3,'8'],['rdl',4,'8'],['copen',3,'20 s'],['calfsl',3,'12'],['incwalk',1,'10 min']],
+  [['broad',4,'4'],['squat',4,'5'],['stepup',3,'10'],['nordic',3,'5'],['hkwood',3,'12'],['stairs',1,'10 min',{note:'Rythme modéré'}]],
+  [['skater',4,'8'],['revlunge',3,'8'],['kbrdl',3,'10'],['calfw',3,'12'],['tib',3,'15'],['finbike',1,'10 min',{note:'Modéré, jambes qui tournent vite'}]]]},
+ 4:{title:'Abdos béton, explosivité et cardio',met:6,goal:'Le tronc à fond, de la puissance et du cardio. Tu sors trempé.',warm:['5 min de rameur','10 genoux hauts, 10 talons-fesses, 5 pompes lentes','5 respirations abdominales, côtes basses rentrées'],v:[
+  [['swing',4,'15'],['plyopush',4,'5'],['woodchop',4,'12'],['legraise',4,'10'],['farmer',3,'40 m'],['finrow',1,'8 × 40 s']],
+  [['mbslam',4,'10'],['woodchop',4,'12'],['cablecrunch',4,'12'],['bodysaw',3,'10'],['suitcase',3,'30 m'],['finincl',1,'12 min']],
+  [['swing',4,'15'],['hkwood',4,'12'],['vup',4,'10'],['pallof',3,'12'],['taps',3,'16'],['finbike',1,'10 min',{note:'30 s fort, 30 s facile'}]],
+  [['kbhalo',4,'10'],['kbtrident',4,'10'],['kblegs',4,'10'],['kbscissors',4,'10'],['woodchop',3,'12'],['finrope',1,'8 × 45 s']]]}
+};
+function hybGym(d,w){
+  var g=HYB[d]||HYB[4],L=gx(g.title,g.goal,'60 min',g.warm,g.v[(w-1)%g.v.length]);
+  L.met=g.met;L.fin=1;return L;
+}
+
 /* ---------- séances de course ---------- */
 const RUNQ=[
  [
@@ -502,7 +526,8 @@ const RUNQ=[
   {t:'Seuil 3 × 8 min',m:['3 × 8 min allure semi (quelques mots possibles), 2 min de trot','2 × 8 min allure semi, 2 min de trot'],km:[8,6],d:['50 min','40 min']},
   {t:'Pyramide',m:['200-400-600-800-600-400-200 m rapides, récup en trot égale à l’effort','200-400-600-400-200 m rapides, récup en trot égale'],km:[7,5],d:['45 min','40 min']},
   {t:'Fartlek 10 × 1 min',m:['10 × 1 min vite, 1 min lent','6 × 1 min vite, 1 min lent'],km:[7,5],d:['45 min','35 min']},
-  {t:'4 × 1 000 m allure 10 km',m:['4 × 1 000 m allure 10 km, 2 min de trot','3 × 1 000 m allure 10 km, 2 min de trot'],km:[8,6],d:['50 min','40 min']}
+  {t:'4 × 1 000 m allure 10 km',m:['4 × 1 000 m allure 10 km, 2 min de trot','3 × 1 000 m allure 10 km, 2 min de trot'],km:[8,6],d:['50 min','40 min']},
+  {t:'Côtes courtes',m:['8 × 45 s en côte (6–8 %), fort mais relâché, retour en trottant','5 × 45 s en côte, retour en trottant'],km:[7,5],d:['45 min','35 min']}
  ],
  [
   {t:'5 × 1 000 m allure 10 km',m:['5 × 1 000 m allure 10 km, 2 min de trot','3 × 1 000 m allure 10 km, 2 min de trot'],km:[9,6],d:['55 min','40 min']},
@@ -511,9 +536,11 @@ const RUNQ=[
   {t:'Pyramide longue',m:['800-1 200-1 600-1 200-800 m allure 10 km, 2 min de trot','800-1 200-800 m allure 10 km, 2 min de trot'],km:[10,7],d:['60 min','45 min']},
   {t:'Fractionné 1 200 m',m:['4 × 1 200 m allure 10 km, 2 min de trot','3 × 1 200 m allure 10 km, 2 min de trot'],km:[9,6],d:['55 min','40 min']},
   {t:'Tempo continu 25 min',m:['25 min à allure semi, bien régulier','15 min à allure semi, bien régulier'],km:[10,7],d:['55 min','45 min']},
-  {t:'6 × 800 m allure 10 km',m:['6 × 800 m allure 10 km, 400 m de trot','4 × 800 m allure 10 km, 400 m de trot'],km:[8,6],d:['50 min','40 min']}
+  {t:'6 × 800 m allure 10 km',m:['6 × 800 m allure 10 km, 400 m de trot','4 × 800 m allure 10 km, 400 m de trot'],km:[8,6],d:['50 min','40 min']},
+  {t:'Côtes longues',m:['6 × 1 min 30 en côte (5–7 %), retour en trottant','4 × 1 min 30 en côte, retour en trottant'],km:[9,6],d:['55 min','40 min']}
  ]
 ];
+const PACE='Footing 6:00–6:30/km · seuil (semi) 5:15–5:30 · allure 10 km 5:00–5:15 · allure 5 km 4:45–5:00. Estimées depuis ton LUT : le test 5 km les affinera.';
 const THU=[
   {title:'Footing et lignes droites',h:'Lignes droites',t:'4 × 80 m progressives, 1 min de marche entre chaque.'},
   {title:'Footing et éducatifs',h:'Éducatifs',t:'Montées de genoux, talons-fesses, pas chassés : 2 × 20 m de chaque.'},
@@ -551,6 +578,7 @@ function restInfo(w,d){
   var M=MOB[(w+2)%MOB.length];
   if(w===4&&d===2)return {goal:'Trois jours avant la course : tu fais le plein d’énergie.',a:{h:'Marche 30 min',t:'Tranquille, à l’air libre. Bois bien, mange normalement.'},m:{h:'Souplesse 10 min : '+MOB[1].t,t:mobHtml(MOB[1])}};
   if(w===4&&d===4)return {goal:'Veille de course : le moins de fatigue, le plus d’énergie.',a:{h:'Conseillé : 15 min de footing + 4 lignes droites',t:'Très facile, puis 4 × 60 m relâchées. Ça réveille les jambes sans les fatiguer. Pas envie ? 20 min de marche.'},m:{h:'Ce soir',t:'Repas riche en glucides (pâtes, riz), tenue, dossard et gels prêts. Coucher tôt.'}};
+  if(w===5&&d===0)return {goal:'Deux jours après la course : repos complet, c’est validé.',a:{h:'Récupération',t:'Marche si tu en as envie, bois bien, mange bien.'},m:{h:'Souplesse douce : '+MOB[1].t,t:mobHtml(MOB[1])}};
   if(w===4)return {goal:'La course est derrière toi. Le corps répare.',a:{h:'Récupération',t:'Marche 20–30 min, étirements doux, bois et mange bien. Aucune course avant jeudi.'},m:{h:'Souplesse douce : '+MOB[1].t,t:mobHtml(MOB[1])}};
   return {goal:'Pas de séance. Le corps construit pendant que tu ne fais rien.',a:SUN[(w-1)%SUN.length],m:{h:'Souplesse 10–15 min : '+M.t,t:mobHtml(M)}};
 }
@@ -563,19 +591,19 @@ function runInfo(d,w){
     return {q:1,title:q.t,km:q.km[dl],dur:q.d[dl],goal:'Ta qualité de la semaine : un format différent à chaque fois.',
       steps:[{h:'Échauffement',t:'10 min de trot lent, puis 3 lignes droites progressives de 60 m.'},
              {h:'Corps de séance',t:q.m[dl]+'.'},
-             {h:'Retour au calme',t:'10 min de trot lent, puis marche 3 min.'}]};
+             {h:'Retour au calme',t:'10 min de trot lent, puis marche 3 min.'}].concat(w>=5?[{h:'Tes allures',t:PACE}]:[])};
   }
   if(d===3){
-    var raw=Math.min(9,4+0.15*(w-1)),km=half(dl?raw*0.7:raw),V=THU[(w-1)%THU.length],M=MOB[(w-1)%MOB.length];
+    var raw=w>=6?Math.min(8,6+0.2*(w-6)):Math.min(9,4+0.15*(w-1)),km=half(dl?raw*0.7:raw),V=THU[(w-1)%THU.length],M=MOB[(w-1)%MOB.length];
     return {title:V.title,km:km,dur:durTxt(km),goal:'Récupérer en courant, et travailler tes amplitudes.',
       steps:[{h:'Footing facile',t:'Allure conversationnelle : tu parles en phrases complètes (≈ 125–145 bpm).'},
              {h:V.h,t:V.t},
              {h:'Après la course : tibial',t:'2 × 15 relevés de pointes de pied contre un mur.'},
              {h:'Souplesse : '+M.t,t:mobHtml(M)}]};
   }
-  var raw2=Math.min(15,5+0.32*(w-1)),km2=half(dl?raw2*0.7:raw2),pool=b===0?SAT.slice(0,3):SAT,S2=pool[(w-1)%pool.length];
+  var raw2=w>=6?Math.min(15,10+0.5*(w-6)):Math.min(15,5+0.32*(w-1)),km2=half(dl?raw2*0.75:raw2),pool=b===0?SAT.slice(0,3):SAT,S2=pool[(w-1)%pool.length];
   if(dl&&S2.title.indexOf('blocs')>=0)S2=pool[0];
-  return {title:S2.title,km:km2,dur:durTxt(km2),goal:'Construire ton endurance de base : c’est ton moteur hybride.',
+  return {title:S2.title,km:km2,dur:durTxt(km2),goal:'Ton endurance de base, 15 km maximum : c’est ton moteur hybride.',
     steps:[{h:'Le plan du jour',t:S2.t},{h:'Pense à',t:'Boire avant et après, et manger dans l’heure qui suit.'}]};
 }
 
@@ -588,6 +616,7 @@ function gx(title,goal,dur,warm,list){
 }
 function prepGym(w,d){
   var M=function(o,m){o.met=m;return o};
+  if(w===5&&d===2)return M(gx('Séance libre avec ton pote','Faites la séance que vous voulez, 1 h max. Évite les jambes lourdes : les courbatures sont encore là. Si tu peux, finis par ces deux-là.','60 min',['5 min de cardio facile'],[['woodchop',3,'12'],['bikez2',1,'10 min']]),5);
   var WA=['5 min de rameur ou de vélo, facile','2 × 10 rotations d’épaules à l’élastique'];
   var WB=['5 min de vélo, facile','Mobilité chevilles et hanches : 2 × 8 de chaque côté','30 s de planche, 10 ponts fessiers'];
   var WC=['5 min de rameur','5 respirations abdominales, côtes basses rentrées'];
@@ -617,10 +646,11 @@ function prepRun(w,d){
    '3-3':{q:1,title:'Footing et allure course',km:7,dur:'45 min',goal:'Mémoriser l’effort du jour J, sans te fatiguer.',steps:[{h:'Échauffement',t:'10 min de trot lent.'},{h:'Corps de séance',t:'3 × 4 min à allure course (environ 6:00/km sur le plat), 2 min de trot entre chaque.'},{h:'Retour au calme',t:'10 min de trot lent.'}]},
    '3-5':{title:'Reconnaissance du parcours',km:11,dplus:250,route:1,dur:'1 h 10–1 h 20',goal:'Ta dernière sortie longue : facile, et sur la fin du tracé pour connaître les montées décisives.',steps:[{h:'Parcours',t:'Si tu peux, enchaîne la fin du tracé (km 14 à 19) : ce sont les 4 montées les plus raides. Ouvre « Voir le parcours » pour les repérer.'},{h:'Allure',t:'Facile du début à la fin. Marche les montées à plus de 12 %.'},{h:'Matériel',t:'Dernier test : chaussures, vêtements, gel. Rien de nouveau à partir de maintenant.'}]},
    '4-1':{q:1,title:'Rappels d’allure : 4 × 1 min',km:5,dur:'30–35 min',goal:'Réveiller les jambes. Pas plus.',steps:[{h:'Footing',t:'15 min facile.'},{h:'Rappels',t:'4 × 1 min à allure course, 1 min 30 de trot entre chaque.'},{h:'Retour au calme',t:'5 min de trot lent.'}]},
-   '5-1':{title:'Footing de récupération',km:4,dur:'25–30 min',goal:'Trois jours après la course : tu fais circuler le sang, rien de plus.',steps:[{h:'Footing',t:'Très lent et très facile. Si les jambes sont lourdes, marche.'},{h:'Après',t:'10 min de souplesse douce.'}]},
-   '5-3':{title:'Footing facile',km:5,dur:'30–35 min',goal:'Tu retrouves les sensations. Aucun chrono.',steps:[{h:'Footing facile',t:'6:15/km ou plus lent, tu parles sans effort.'},{h:'Après',t:'2 × 15 relevés de pointes de pied, puis 10 min de souplesse.'}]},
-   '5-5':{title:'Reprise douce',km:6,dur:'35–40 min',goal:'Une semaine après la course, tu reprends en douceur avant la suite du plan.',steps:[{h:'Footing facile',t:'Allure conversationnelle, terrain plat ou peu vallonné.'},{h:'Pense à',t:'Dors bien, mange assez : tu reprends le programme normal.'}]},
-   '4-5':{q:1,title:'Jour J',km:20,dplus:700,route:1,dur:'2 h 30–2 h 50',goal:'Le jour J. Tu as fait le travail, tu profites.',steps:[{h:'Avant',t:'Petit-déjeuner 3 h avant (glucides, rien de nouveau). 10 min de trot et 3 lignes droites avant le départ.'},{h:'Départ',t:'Les 5 premiers km doivent te sembler trop faciles (6:15/km ou plus lent). Laisse partir les autres.'},{h:'Montées',t:'Marche dès que la pente dépasse 10 %, petits pas, mains sur les cuisses si besoin. Marcher bien vaut mieux que courir mal.'},{h:'Descentes',t:'Foulées courtes, pieds sous le bassin, regard 3 m devant. Relâche les épaules.'},{h:'Ravitaillement',t:'30 à 40 g de glucides par heure dès 40 min, 400–500 ml d’eau par heure. Mange avant d’avoir faim.'},{h:'Dernier tiers',t:'Si les jambes répondent, accélère doucement. Sinon, tiens ton rythme et finis propre.'},{h:'Après',t:'Marche 10 min, mange, bois et couvre-toi. Pas de course demain.'}]}
+   '5-1':{title:'Footing de récupération',km:5,dur:'30–35 min',goal:'Trois jours après la course : tu fais circuler le sang, rien de plus.',steps:[{h:'Footing',t:'Très lent, 6:30/km ou plus. Si les jambes tirent, marche 1 min et repars.'},{h:'Après',t:'10 min de souplesse : jambes libres.'}]},
+   '5-3':{title:'Footing et lignes droites',km:6,dur:'35–40 min',goal:'Tu retrouves les sensations. Aucun chrono.',steps:[{h:'Footing facile',t:'6:15/km ou plus lent, tu parles sans effort.'},{h:'Lignes droites',t:'4 × 80 m progressives, retour en marchant.'},{h:'Après',t:'2 × 15 relevés de pointes de pied, puis 10 min de souplesse.'}]},
+   '5-5':{title:'Sortie facile',km:10,dur:'1 h–1 h 05',goal:'Une semaine après la course : du volume tranquille, sans forcer.',steps:[{h:'Footing facile',t:'Allure conversationnelle, terrain plat.'},{h:'Pense à',t:'Boire avant et après, manger dans l’heure qui suit.'}]},
+   '6-1':{q:1,title:'Test 5 km',km:8,dur:'45 min',goal:'Tu mesures ta forme pour recaler toutes tes allures.',steps:[{h:'Échauffement',t:'15 min de trot, puis 3 lignes droites.'},{h:'Le test',t:'5 km le plus vite possible, sur du plat. Pars régulier, accélère sur le dernier km.'},{h:'Retour au calme',t:'10 min de trot lent.'},{h:'Ensuite',t:'Envoie-moi ton temps : j’ajuste toutes tes allures.'}]},
+   '4-5':{done:'Fait : 20 km en 2:08:42, 735 m D+, 6:31/km de moyenne. Tu as kiffé, et ça se voit.',q:1,title:'Jour J',km:20,dplus:735,route:1,dur:'2:08:42',goal:'Le jour J. Tu as fait le travail, tu profites.',steps:[{h:'Avant',t:'Petit-déjeuner 3 h avant (glucides, rien de nouveau). 10 min de trot et 3 lignes droites avant le départ.'},{h:'Départ',t:'Les 5 premiers km doivent te sembler trop faciles (6:15/km ou plus lent). Laisse partir les autres.'},{h:'Montées',t:'Marche dès que la pente dépasse 10 %, petits pas, mains sur les cuisses si besoin. Marcher bien vaut mieux que courir mal.'},{h:'Descentes',t:'Foulées courtes, pieds sous le bassin, regard 3 m devant. Relâche les épaules.'},{h:'Ravitaillement',t:'30 à 40 g de glucides par heure dès 40 min, 400–500 ml d’eau par heure. Mange avant d’avoir faim.'},{h:'Dernier tiers',t:'Si les jambes répondent, accélère doucement. Sinon, tiens ton rythme et finis propre.'},{h:'Après',t:'Marche 10 min, mange, bois et couvre-toi. Pas de course demain.'}]}
   };
   return R[w+'-'+d]||null;
 }
@@ -668,7 +698,7 @@ let S={tab:'session',w:1,d:0,pre:false,confirm:'',view:''};
 })();
 const todayKey=()=>{const di=dayIdx();if(di<0||di>=WEEKS*7)return null;return (Math.floor(di/7)+1)+'-'+((now.getDay()+6)%7)};
 
-const KOVR={'2-4':'run','2-6':'lift','4-2':'rest','4-3':'lift','4-4':'rest'};
+const KOVR={'2-4':'run','2-6':'lift','4-2':'rest','4-3':'lift','4-4':'rest','5-0':'rest'};
 const kindOf=(d,w)=>{w=w||S.w;return KOVR[w+'-'+d]||(d===6?'rest':[0,2,4].includes(d)?'lift':'run')};
 const colOf=d=>raceDay(S.w,d)?'var(--race)':({lift:'var(--lift)',run:'var(--run)',rest:'var(--rest)'})[kindOf(d)];
 
@@ -736,7 +766,7 @@ function renderSession(){
   const d=S.d,w=S.w,c=colOf(d),key=w+'-'+d,race=raceDay(w,d),kc='k-'+(race?'race':kindOf(d));
   let h='';
   if(S.pre) h+='<div class="banner">Le programme démarre <b>lundi 12 octobre</b>. Voici la première séance.</div>';
-  if(isDl(w)) h+='<div class="banner">Semaine allégée : une série en moins, charges −15\u00a0%. Tu récupères.</div>';
+  if(isDl(w)) h+='<div class="banner">Semaine allégée : '+(w>=5?'charges −15\u00a0%, sorties plus courtes':'une série en moins, charges −15\u00a0%')+'. Tu récupères.</div>';
   const kd=kindOf(d);
   if(kd==='rest'){
     const Rr=restInfo(w,d),kr=Math.round(3.5*KG*0.5/10)*10;
@@ -784,9 +814,9 @@ function renderWeek(){
 }
 function renderRules(){
   const sec=function(t,b){return '<div class="card"><h3 class="sec">'+t+'</h3>'+b+'</div>'};
-  return sec('Course du 7 novembre : 20 km, D+ 700 m','<ul><li>Objectif réaliste : finir bien, en 2 h 30–2 h 50.</li><li>Départ prudent : les 5 premiers km doivent te sembler trop faciles.</li><li>Marche dès que la pente dépasse 10 % : c’est une stratégie, pas un échec.</li><li>Descentes : foulées courtes, pieds sous le bassin, regard 3 m devant.</li><li>30–40 g de glucides par heure dès 40 min, 400–500 ml d’eau par heure.</li><li>Veille et matin : repas léger et pauvre en fibres, toilettes avant le départ.</li><li>Rien de nouveau le jour J : chaussures, tenue et gels déjà testés.</li><li>Douleur qui augmente en courant (genou, tibia, tendon) : tu marches ou tu t’arrêtes.</li></ul>')
+  return sec('Tes allures','<p>'+PACE+'</p>')
   +sec('Lire une séance','<p>Les charges sont calculées pour la semaine en cours. Finis chaque série avec 1 à 3 répétitions en réserve.</p><p>Trop facile ou trop lourd ? Ajuste la charge de référence dans Réglages.</p>')
-  +sec('Semaines allégées','<p>S4, S8, S12… : une série en moins, charges −15 %. Tu récupères, tu repars plus fort.</p>')
+  +sec('Semaines allégées','<p>S8, S12, S16… : charges −15 %, même nombre de séries. Tu récupères, tu repars plus fort.</p>')
   +sec('Pecs sans bras','<ul><li>Pousser : omoplates serrées, coudes à 45°, pense « rapprocher les coudes ».</li><li>Tirer : coudes vers les hanches, sangles si l’avant-bras lâche avant le dos.</li><li>Aucune séance bras : ils travaillent déjà assez.</li></ul>')
   +sec('Pliométrie et tendons','<ul><li>Pliométrie en début de séance, toujours frais, jamais à froid.</li><li>Mollets lents, step-ups, fentes : ta protection pour la course.</li><li>Un tendon qui tire plus de 48 h : allège la semaine suivante. Si ça persiste, vois un pro.</li></ul>')
   +sec('Course','<ul><li>Facile : tu tiens une conversation (≈ 125–145 bpm).</li><li>Rapide : 2–3 mots maximum.</li><li>Allure 5 km : ce que tu tiendrais 20–25 min. Allure 10 km : un cran en dessous.</li><li>Pas de montre ? L’effort ressenti suffit.</li></ul>')
