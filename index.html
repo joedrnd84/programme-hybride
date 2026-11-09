@@ -285,16 +285,17 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 p,li,.meta,.cue,.rest,.goal{font-weight:400}
 
 /* en-tête sans coupure */
-.top{position:relative;top:auto;background:none;-webkit-backdrop-filter:none;backdrop-filter:none;border:0}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:none;-webkit-backdrop-filter:none;backdrop-filter:none;border:0}
 .top::after{display:none}
 .top::before{display:none}
-.seg{background:linear-gradient(150deg,rgba(255,255,255,.34),rgba(255,255,255,.14));box-shadow:none;border:1px solid rgba(255,255,255,.45);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
-.seg button{color:#fff}
-.seg .today{background:#fff;color:var(--navy);font-weight:600;font-size:15px;letter-spacing:-.01em;padding:0 16px;box-shadow:0 4px 14px rgba(16,26,78,.18)}
+.seg{background:linear-gradient(150deg,rgba(255,255,255,.62),rgba(255,255,255,.4));box-shadow:none;border:1px solid rgba(255,255,255,.45);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
+.seg button{color:var(--ink)}
+.wk{transition:opacity .2s linear}
+.seg .today{background:var(--g-cta);color:#fff;font-weight:600;font-size:15px;letter-spacing:-.01em;padding:0 16px;box-shadow:inset 0 1px 1px rgba(255,255,255,.6),0 4px 14px rgba(122,108,255,.3)}
 .seg button:active:not(:disabled){background:rgba(255,255,255,.5)}
 
 /* jours */
-.day{background:linear-gradient(150deg,rgba(255,255,255,.42),rgba(255,255,255,.16));box-shadow:var(--gloss);color:var(--ink);border:1px solid rgba(255,255,255,.55);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);transition:flex .35s cubic-bezier(.22,1,.36,1),background .25s}
+.day{background:linear-gradient(150deg,rgba(255,255,255,.62),rgba(255,255,255,.4));box-shadow:var(--gloss);color:var(--ink);border:1px solid rgba(255,255,255,.55);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);transition:flex .35s cubic-bezier(.22,1,.36,1),background .25s}
 .day small{color:var(--muted);font-weight:600;letter-spacing:.03em;font-size:10.5px}
 .day b{font-weight:700;font-size:21px;letter-spacing:-.03em}
 .day i,.day.on i,.day.done i{display:none}
@@ -310,12 +311,12 @@ p,li,.meta,.cue,.rest,.goal{font-weight:400}
 .day.k-race:not(.on):not(.done){background:rgba(255,214,150,.6);color:var(--ink)}
 .day.k-race:not(.on):not(.done) small{color:var(--muted);opacity:1}
 .day.k-race:not(.on):not(.done) i{background:var(--race)}
-.day.done,.day.k-race.done{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:0 6px 18px rgba(16,26,78,.3)}
-.day.done small{color:rgba(255,255,255,.7);opacity:1}
+.day.done,.day.k-race.done{background:#fff;color:var(--navy);border-color:#fff;box-shadow:0 6px 18px rgba(16,26,78,.18)}
+.day.done small{color:var(--muted);opacity:1}
 .day.done i{background:var(--c)}
 .day.done b .icn{width:22px;height:22px;stroke-width:3}
-.day.done.on{background:var(--navy);color:#fff;box-shadow:0 0 0 3px #fff,0 8px 22px rgba(16,26,78,.35)}
-.day.done.on small{color:rgba(255,255,255,.75)}
+.day.done.on,.day.done.on.k-run,.day.done.on.k-lift,.day.done.on.k-race{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 3px var(--c),0 8px 22px rgba(16,26,78,.22)}
+.day.done.on small{color:var(--muted)}
 .day.istoday:not(.done):not(.on){box-shadow:inset 0 0 0 2px #fff}
 
 /* cartes en verre */
@@ -787,7 +788,7 @@ function gx(title,goal,dur,warm,list){
 }
 function prepGym(w,d){
   var M=function(o,m){o.met=m;return o};
-  if(w===5&&d===6){var dx=function(id,nm,cue,toi,mam){return [id,3,'40 s',{name:nm,cue:cue,kind:'time',load:'Ensemble',rest:20,note:'',duo:[toi,mam]}]};return M(gx('Séance duo avec Maman','Mêmes exercices, mêmes chronos : 40 s d’effort, 20 s de pause, 3 tours. Chacun à son niveau. Maman s’arrête dès que ça tire, sans forcer. Finissez par 10 min d’étirements ensemble.','45 min',['5 min de marche rapide ensemble','Cercles de bras, de hanches et de chevilles : 10 de chaque','10 squats lents, amplitude confortable'],[dx('squat','Squat','Pieds largeur d’épaules, poitrine haute, les genoux suivent les pointes de pied.','Squat sauté, ou squat gobelet avec un haltère de 10 kg','Assis-debout sur une chaise, sans les mains'),dx('pushup','Pompes','Corps gainé de la tête aux talons, coudes à 45°.','Pompes classiques, descente lente sur 3 s','Pompes contre un mur, bras tendus à hauteur d’épaules'),dx('revlunge','Fente arrière','Le genou avant reste au-dessus de la cheville. Alternez les jambes.','Fentes arrière avec les 2 haltères de 10 kg','Fente arrière en se tenant au dossier d’une chaise, petite amplitude'),dx('dbrow','Rowing','Dos plat, une main en appui, tire le coude vers la hanche.','Haltère de 10 kg, un bras puis l’autre','Une bouteille d’eau de 1,5 L, un bras puis l’autre'),dx('plank','Planche','Ventre rentré, fesses serrées, on respire.','Planche sur les avant-bras, 40 s','Planche sur les genoux, 15 à 20 s, puis repos'),dx('deadbug','Dead bug','Le bas du dos reste collé au tapis.','Bras et jambe opposés, lentement','Bras seulement, pieds au sol'),dx('climber','Cardio : genoux hauts','On finit le tour ensemble, en rythme.','Mountain climbers rapides','Marche sur place, genoux hauts')]),4);}
+  if(w===5&&d===6){var dx=function(id,nm,cue,toi,mam){return [id,3,'40 s',{name:nm,cue:cue,kind:'time',load:'Ensemble',rest:20,note:'',duo:[toi,mam]}]};return M(gx('Séance duo avec Maman','À la salle, mêmes exercices, mêmes chronos : 40 s d’effort, 20 s de pause, 3 tours. Chacun règle sa charge. Finissez par 10 min de vélo côte à côte, puis 10 min d’étirements ensemble.','50 min',['5 min de vélo côte à côte, facile','Cercles de bras, de hanches et de chevilles : 10 de chaque','10 squats lents au poids du corps'],[dx('squat','Presse à cuisses','Pieds largeur de hanches au milieu du plateau, le bas du dos reste collé au dossier.','Charge lourde, 12 à 15 reps contrôlées','Charge légère, amplitude confortable'),dx('lat','Tirage vertical','Poitrine haute, tire la barre vers le haut de la poitrine, coudes vers le bas.','Prise large, charge lourde','Charge légère, prise confortable'),dx('goblet','Squat gobelet','Haltère contre la poitrine, descends entre les talons, dos droit.','Haltère de 20 à 24 kg','Haltère de 4 à 6 kg'),dx('woodchop','Bûcheron à la poulie','Les bras restent tendus, c’est le buste qui tourne. Changez de côté à chaque tour.','Charge moyenne, rotation explosive','Charge très légère, mouvement lent'),dx('revlunge','Fente arrière','Le genou avant reste au-dessus de la cheville. Alternez les jambes.','Avec 2 haltères de 12 à 16 kg','Sans charge, une main sur un support si besoin'),dx('plank','Planche','Ventre rentré, fesses serrées, on respire.','Sur les avant-bras, pieds serrés','Sur les genoux, puis sur les pieds si ça va'),['bikez2',1,'10 min',{name:'Vélo côte à côte',cue:'Vous finissez ensemble, en discutant.',load:'Ensemble',rest:0,note:'',duo:['Fractionné : 30 s fort, 30 s facile','Rythme tranquille, elle peut te parler']}]]),4.5);}
   if(w===5&&d===2)return M(gx('Séance libre avec ton pote','Faites la séance que vous voulez, 1 h max. Évite les jambes lourdes : les courbatures sont encore là. Si tu peux, finis par ces deux-là.','60 min',['5 min de cardio facile'],[['woodchop',3,'12'],['bikez2',1,'10 min']]),5);
   var WA=['5 min de rameur ou de vélo, facile','2 × 10 rotations d’épaules à l’élastique'];
   var WB=['5 min de vélo, facile','Mobilité chevilles et hanches : 2 × 8 de chaque côté','30 s de planche, 10 ponts fessiers'];
@@ -972,7 +973,7 @@ function renderSession(){
 }
 function finishBtn(key,c){
   const kc='k-'+(raceDay(S.w,S.d)?'race':kindOf(S.d));
-  return done[key]?'<button class="finish undo '+kc+'" style="--c:'+c+'" data-a="done" aria-pressed="true"><span class="fv">'+ICN.check+'Séance validée</span><small>Touche pour annuler</small></button>':'<button class="finish '+kc+'" style="--c:'+c+'" data-a="done">Valider la séance</button>';
+  return done[key]?'<button class="finish undo '+kc+'" style="--c:'+c+'" data-a="done" aria-pressed="true"><span class="fv">'+ICN.check+'Séance validée</span></button>':'<button class="finish '+kc+'" style="--c:'+c+'" data-a="done">Valider la séance</button>';
 }
 function renderWeek(){
   const w=S.w;
@@ -1163,6 +1164,7 @@ const root=document.documentElement;
 const curTheme=()=>'light';
 wakeSync();
 render();
+(function(){const wk=document.getElementById('wk');let raf=0;function up(){raf=0;const k=Math.min(1,Math.max(0,window.scrollY)/70);wk.style.opacity=String(1-k);wk.style.transform='translateY('+(-k*12)+'px)';wk.style.visibility=k>=1?'hidden':''}window.addEventListener('scroll',function(){if(!raf)raf=requestAnimationFrame(up)},{passive:true});up()})();
 </script>
 </body>
 </html>
