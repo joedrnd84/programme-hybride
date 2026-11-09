@@ -277,7 +277,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 /* typo : une seule famille, des graisses */
 .wk b,.seg .today,.day b,.hero h2,.km,.tile .num,.rx .big,.set,.finish,.list .r,.total span,.ct,.cb,#timer .tm,.elev b,.rt h2,.rt-stats b,.rt-read b,.clb .cn,.sec{font-family:var(--sf);font-style:normal;text-transform:none}
 .wk b{font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1;color:#fff}
-.wk b em{font-style:normal;font-weight:300;letter-spacing:-.02em}
+.wk b em{font-style:normal;font-weight:700;letter-spacing:-.03em}
 .wk span{color:rgba(255,255,255,.82);font-weight:500}
 .sec{font-size:21px;font-weight:700;letter-spacing:-.025em;line-height:1.15;margin-bottom:10px}
 .rt h2{font-size:clamp(28px,8vw,34px);font-weight:700;letter-spacing:-.03em}
@@ -285,7 +285,9 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 p,li,.meta,.cue,.rest,.goal{font-weight:400}
 
 /* en-tête sans coupure */
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:none;-webkit-backdrop-filter:none;backdrop-filter:none;border:0}
+#strip{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6px);z-index:5}
+#strip .days{margin-top:4px}
+.top{position:relative;top:auto;padding-bottom:4px;background:none;-webkit-backdrop-filter:none;backdrop-filter:none;border:0}
 .top::after{display:none}
 .top::before{display:none}
 .seg{background:linear-gradient(150deg,rgba(255,255,255,.62),rgba(255,255,255,.4));box-shadow:none;border:1px solid rgba(255,255,255,.45);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
@@ -431,7 +433,8 @@ details.warm ul{box-shadow:none}
       <button id="bnext" data-a="next" aria-label="Semaine suivante"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
   </div>
-</div><div class="wrap" id="strip"></div></header>
+</div></header>
+<div class="wrap" id="strip"></div>
 <div class="wrap"><main id="view"></main></div>
 <div id="timer"><div class="box"><span class="tm" id="tm"></span><button data-a="t+">+30 s</button><button data-a="t0">Passer</button></div></div>
 <nav class="tabs"><div class="in" id="tabs"></div></nav>
@@ -902,7 +905,7 @@ function head(){
   document.getElementById('strip').innerHTML=S.tab==='session'&&S.view!=='route'?dayStrip():'';
   const tb=document.getElementById('tabs');
   if(!tb.dataset.built){
-    tb.innerHTML='<span class="ind" aria-hidden="true"></span>'+[['session','Séance'],['week','Semaine'],['chrono','Chrono'],['set','Réglages']].map(function(t){return '<button data-a="tab" data-v="'+t[0]+'">'+TI[t[0]]+'<span>'+t[1]+'</span></button>'}).join('');
+    tb.innerHTML='<span class="ind" aria-hidden="true"></span>'+[['session','Séance'],['chrono','Chrono']].map(function(t){return '<button data-a="tab" data-v="'+t[0]+'">'+TI[t[0]]+'<span>'+t[1]+'</span></button>'}).join('');
     tb.dataset.built='1';
   }
   tb.querySelectorAll('button').forEach(function(b){const on=b.dataset.v===S.tab;b.classList.toggle('on',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
@@ -1136,7 +1139,7 @@ document.addEventListener('click',e=>{
   else if(a==='prev'){S.w=Math.max(1,S.w-1)}
   else if(a==='next'){S.w=Math.min(WEEKS,S.w+1)}
   else if(a==='today'){const tk=todayKey();if(tk){const [w,d]=tk.split('-').map(Number);S.w=w;S.d=d}else{S.w=now<START?1:WEEKS;S.d=0}S.tab='session'}
-  else if(a==='day'){S.d=+t.dataset.d}
+  else if(a==='day'){S.d=+t.dataset.d;requestAnimationFrame(function(){window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})})}
   else if(a==='open'){S.d=+t.dataset.d;S.tab='session';window.scrollTo(0,0)}
   else if(a==='goweek'){S.w=+t.dataset.w;S.tab='week';window.scrollTo(0,0)}
   else if(a==='set'){
