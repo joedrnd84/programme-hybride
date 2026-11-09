@@ -291,7 +291,7 @@ p,li,.meta,.cue,.rest,.goal{font-weight:400}
 .seg{background:linear-gradient(150deg,rgba(255,255,255,.62),rgba(255,255,255,.4));box-shadow:none;border:1px solid rgba(255,255,255,.45);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
 .seg button{color:var(--ink)}
 .wk{transition:opacity .2s linear}
-.seg .today{background:var(--g-cta);color:#fff;font-weight:600;font-size:15px;letter-spacing:-.01em;padding:0 16px;box-shadow:inset 0 1px 1px rgba(255,255,255,.6),0 4px 14px rgba(122,108,255,.3)}
+.seg .today{background:#fff;color:var(--navy);font-weight:600;font-size:15px;letter-spacing:-.01em;padding:0 16px;box-shadow:0 4px 14px rgba(16,26,78,.16)}
 .seg button:active:not(:disabled){background:rgba(255,255,255,.5)}
 
 /* jours */
@@ -374,6 +374,7 @@ details.warm ul{box-shadow:none}
 .finish.k-run:not(.undo){background:var(--g-run);box-shadow:var(--gloss),0 12px 28px rgba(242,96,74,.35)}
 .finish.k-lift:not(.undo){background:var(--g-lift);box-shadow:var(--gloss),0 12px 28px rgba(77,94,255,.35)}
 .finish.k-race:not(.undo){background:var(--g-race);box-shadow:var(--gloss),0 12px 28px rgba(242,118,58,.35)}
+.finish.k-rest:not(.undo){background:#fff;color:var(--navy);box-shadow:var(--gloss),var(--shadow)}
 .finish.undo{background:rgba(255,255,255,.92);color:var(--navy);box-shadow:var(--shadow)}
 .finish .fv{display:inline-flex;align-items:center;gap:8px}
 .finish .icn{width:20px;height:20px;stroke-width:3}
@@ -408,9 +409,9 @@ details.warm ul{box-shadow:none}
 .duo b{font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--c)}
 #timer .tm{font-weight:700;letter-spacing:-.03em}
 .tabs .in{background:linear-gradient(150deg,rgba(255,255,255,.62),rgba(255,255,255,.34));border:1px solid var(--edge);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);box-shadow:var(--gloss),0 14px 40px rgba(16,26,78,.2)}
-.tabs .ind{background:var(--g-cta);box-shadow:inset 0 1px 1px rgba(255,255,255,.7),0 8px 22px rgba(122,108,255,.38),0 4px 12px rgba(255,143,122,.3)}
+.tabs .ind{background:#fff;box-shadow:0 6px 18px rgba(16,26,78,.18)}
 .tabs button{color:var(--muted);font-weight:600}
-.tabs button.on{color:#fff;text-shadow:0 1px 8px rgba(60,40,120,.2)}
+.tabs button.on{color:var(--navy)}
 
 /* parcours */
 .map{background:rgba(255,255,255,.4)}
@@ -896,7 +897,7 @@ const TI={
 };
 function head(){
   const b=BLOCKS[blockOf(S.w)], s=wkStart(S.w), e=new Date(s.getFullYear(),s.getMonth(),s.getDate()+6);
-  document.getElementById('wk').innerHTML='<b><em>Semaine</em> '+S.w+'</b><span>'+b.n+(isDl(S.w)?', semaine allégée':'')+', du '+fd(s)+' au '+fd(e)+'</span>';
+  document.getElementById('wk').innerHTML='<b><em>Semaine</em> '+S.w+'</b>';
   document.getElementById('bprev').disabled=S.w<=1;document.getElementById('bnext').disabled=S.w>=WEEKS;
   document.getElementById('strip').innerHTML=S.tab==='session'&&S.view!=='route'?dayStrip():'';
   const tb=document.getElementById('tabs');
