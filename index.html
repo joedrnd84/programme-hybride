@@ -422,41 +422,13 @@ details.warm ul{box-shadow:none}
 .clb{border-color:var(--line);background:rgba(255,255,255,.4)}
 .clb .cn{font-weight:700}
 .prof .dot{stroke:#fff}
-/* boutons en verre */
-:root{
-  --sheen:linear-gradient(180deg,rgba(255,255,255,.45) 0%,rgba(255,255,255,.1) 52%,rgba(255,255,255,0) 100%);
-  --gl-run:var(--sheen),linear-gradient(165deg,rgba(255,172,122,.85),rgba(242,96,74,.72));
-  --gl-lift:var(--sheen),linear-gradient(165deg,rgba(146,160,255,.85),rgba(77,94,255,.74));
-  --gl-race:var(--sheen),linear-gradient(165deg,rgba(255,208,135,.88),rgba(242,118,58,.74));
-  --gl-white:var(--sheen),linear-gradient(165deg,rgba(255,255,255,.82),rgba(255,255,255,.5));
-  --gl-clear:var(--sheen),linear-gradient(165deg,rgba(255,255,255,.34),rgba(255,255,255,.1));
-  --btnfx:inset 0 1px 1px rgba(255,255,255,.95),inset 0 -1px 2px rgba(255,255,255,.3),0 8px 22px rgba(22,30,90,.16);
-  --gb:blur(12px) saturate(160%);
-}
-.finish,.cb,.seg .today,.tabs .ind,.demo,.back,.btn,.ref button,.routebtn,.set,.chk,#timer .box,#timer button{border:1px solid rgba(255,255,255,.65);-webkit-backdrop-filter:var(--gb);backdrop-filter:var(--gb);box-shadow:var(--btnfx)}
-.finish.k-run:not(.undo){background:var(--gl-run);color:#fff;box-shadow:var(--btnfx)}
-.finish.k-lift:not(.undo){background:var(--gl-lift);color:#fff;box-shadow:var(--btnfx)}
-.finish.k-race:not(.undo){background:var(--gl-race);color:#fff;box-shadow:var(--btnfx)}
-.finish.k-rest:not(.undo),.finish.undo{background:var(--gl-white);color:var(--navy);box-shadow:var(--btnfx)}
-.finish:not(.undo){text-shadow:0 1px 10px rgba(60,30,60,.15)}
-.seg .today,.tabs .ind{background:var(--gl-white);color:var(--navy)}
-.demo,.back,.btn,.ref button,.routebtn{background:var(--gl-white);color:var(--ink)}
-.set{background:var(--gl-clear)}
-.set.d,.ex.ok .set.d,.chk.on{background:var(--sheen),var(--c);border-color:rgba(255,255,255,.7);color:#fff}
-#timer.k-run .box{background:var(--gl-run)}
-#timer.k-lift .box{background:var(--gl-lift)}
-#timer.k-race .box{background:var(--gl-race)}
-#timer.k-rest .box{background:var(--gl-white)}
-#timer button{background:var(--gl-clear);color:inherit}
-/* chrono : chiffres blancs, boutons en verre */
+/* chrono : chiffres blancs, boutons blancs */
 .chrono{background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;padding:8px 4px 22px}
 .ct{color:#fff;text-shadow:0 2px 24px rgba(20,30,90,.22)}
-.cb,.cb.go,.cb.pause{background:var(--gl-clear);color:#fff;text-shadow:0 1px 8px rgba(20,30,90,.2)}
-.cb.go,.cb.pause{background:var(--sheen),linear-gradient(165deg,rgba(255,255,255,.5),rgba(255,255,255,.2))}
-.cb:disabled{opacity:.5}
-.cb svg{filter:drop-shadow(0 1px 6px rgba(20,30,90,.2))}
+.cb,.cb.go,.cb.pause{background:#fff;color:var(--navy);border:0;box-shadow:0 10px 26px rgba(16,26,78,.18)}
+.cb:disabled{opacity:.55}
 .lap{color:#fff;border-top-color:rgba(255,255,255,.35)}
-.lap.best span:last-child{background:var(--gl-white);color:var(--navy)}
+.lap.best span:last-child{background:#fff;color:var(--navy)}
 .lap.worst{color:#FFE1DA}
 </style>
 </head>
